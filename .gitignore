@@ -22,4 +22,5 @@ go.sum
 *.html
 
 # Visual Studio
-*.vs/
+*./src/WineSales/bin
+*./src/WineSales/obj
