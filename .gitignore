@@ -20,7 +20,3 @@
 go.mod
 go.sum
 *.html
-
-# Visual Studio
-*./src/WineSales/bin
-*./src/WineSales/obj
