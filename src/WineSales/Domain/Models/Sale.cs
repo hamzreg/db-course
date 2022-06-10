@@ -1,4 +1,4 @@
-﻿namespace WineSales.BusinessLogic.Models
+﻿namespace WineSales.Domain.Models
 {
     public class Sale
     {
