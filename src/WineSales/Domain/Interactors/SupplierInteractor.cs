@@ -1,11 +1,20 @@
-﻿using WineSales.Domain.RepositoryInterfaces;
-using WineSales.Domain.Models;
+﻿using WineSales.Domain.Models;
+using WineSales.Domain.RepositoryInterfaces;
+using WineSales.Domain.Exceptions;
 
 namespace WineSales.Domain.Interactors
 {
-    public class SupplierInteractor
+    public interface ISupplierInteractor
     {
-        ISupplierRepository supplierRepository;
+        void Create(Supplier supplier);
+        Supplier GetByWine(int wineID);
+        void Update(Supplier supplier);
+        void Delete(Supplier supplier);
+    }
+
+    public class SupplierInteractor : ISupplierInteractor
+    {
+        private readonly ISupplierRepository supplierRepository;
 
         public SupplierInteractor(ISupplierRepository supplierRepository)
         {
@@ -14,28 +23,36 @@ namespace WineSales.Domain.Interactors
 
         public void Create(Supplier supplier)
         {
+            if (Exist(supplier.Name))
+                throw new SupplierException("This supplier already exists.");
+
             supplierRepository.Create(supplier);
         }
 
-        public List<Supplier> GetByFilter(int filter)
+        public Supplier GetByWine(int wineID)
         {
-            return supplierRepository.GetByFilter(filter);
+            return supplierRepository.GetByWine(wineID);
         }
-        public List<Supplier> GetByWine(Wine wine)
-        {
-            return supplierRepository.GetByWine(wine);
-        }
+
         public void Update(Supplier supplier)
         {
+            if (!Exist(supplier.Name))
+                throw new SupplierException("This supplier doesn't exist.");
+
             supplierRepository.Update(supplier);
         }
+
         public void Delete(Supplier supplier)
         {
+            if (!Exist(supplier.Name))
+                throw new SupplierException("This supplier doesn't exist.");
+
             supplierRepository.Delete(supplier);
         }
-        public List<Supplier> SortByFilter(int filter)
+
+        private bool Exist(string name)
         {
-            return supplierRepository.SortByFilter(filter);
+            return supplierRepository.GetByName(name) != null;
         }
     }
 }
