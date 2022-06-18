@@ -8,6 +8,7 @@
         public double Margin { get; set; }
         public double Costs { get; set; }
         public double Profit { get; set; }
-        public DateOnly Date { get; set; }
+        public int WineNumber { get; set; }
+        public DateOnly Date { get; set; } 
     }
 }

@@ -1,94 +1,101 @@
 ﻿using WineSales.Domain.Models;
 using WineSales.Domain.RepositoryInterfaces;
 using WineSales.Config;
+using WineSales.Domain.Exceptions;
 
 namespace WineSales.Domain.Interactors
 {
-    public class BonusCardInteractor
+    public interface IBonusCardInteractor
     {
-        IBonusCardRepository bonusCardRepository;
+        void Create(string phone);
+        double GetBonuses(string phone);
+        void AddBonuses(string phone, double bonuses);
+        void WriteOffBonuses(string phone, double bonuses);
+        void Delete(string phone);
+    }
+
+    public class BonusCardInteractor : IBonusCardInteractor
+    {
+        private readonly IBonusCardRepository bonusCardRepository;
 
         public BonusCardInteractor(IBonusCardRepository bonusCardRepository)
         {
             this.bonusCardRepository = bonusCardRepository;
         }
-        public bool CheckPhone(string phone)
+
+        public void Create(string phone)
+        {
+            if (!CheckPhone(phone))
+                throw new BonusCardException("Invalid input of phone.");
+            else if (Exist(phone))
+                throw new BonusCardException("The bonus card is already linked to this phone.");
+                
+            bonusCardRepository.AddByPhone(phone);
+        }
+
+        public double GetBonuses(string phone)
+        {
+            if (!CheckPhone(phone))
+                throw new BonusCardException("Invalid input of phone.");
+            else if (!Exist(phone))
+                throw new BonusCardException("This bonus card doesn't exist.");
+
+            return bonusCardRepository.GetBonuses(phone);
+        }
+
+        public void AddBonuses(string phone, double bonuses)
+        {
+            if (bonuses < 0)
+                throw new BonusCardException("Wrong number of bonuses.");
+            else if (!CheckPhone(phone))
+                throw new BonusCardException("Invalid input of phone.");
+            else if (!Exist(phone))
+                throw new BonusCardException("This bonus card doesn't exist.");
+
+            bonusCardRepository.AddBonuses(phone, bonuses);
+        }
+
+        public void WriteOffBonuses(string phone, double bonuses)
+        {
+            if (bonuses < 0)
+                throw new BonusCardException("Wrong number of bonuses.");
+            else if (!CheckPhone(phone))
+                throw new BonusCardException("Invalid input of phone.");
+            else if (!Exist(phone))
+                throw new BonusCardException("This bonus card doesn't exist.");
+
+            double state = GetBonuses(phone);
+
+            if (state < bonuses)
+                throw new BonusCardException("Not enough bonuses to write off.");
+
+            bonusCardRepository.WriteOffBonuses(phone, bonuses);
+        } 
+
+        public void Delete(string phone)
+        {
+            if (!CheckPhone(phone))
+                throw new BonusCardException("Invalid input of phone.");
+            else if (!Exist(phone))
+                throw new BonusCardException("This bonus card doesn't exist.");
+            
+            bonusCardRepository.DeleteByPhone(phone);
+        }
+
+        public bool Exist(string phone)
+        {
+            return bonusCardRepository.GetByPhone(phone) != null;
+        }
+
+        private bool CheckPhone(string phone)
         {
             if (phone == null)
                 return false;
             else if (!int.TryParse(phone, out int num))
                 return false;
-            else if (phone.Length != Constants.MaxPhoneLen)
+            else if (phone.Length != CustomerConfig.PhoneLen)
                 return false;
             return true;
-        }
-        public bool ExistsPhone(string phone)
-        {
-            return bonusCardRepository.ExistsPhone(phone);
-        }
-        public int Create(string phone)
-        {
-            if (CheckPhone(phone) && !ExistsPhone(phone))
-            {
-                bonusCardRepository.AddByPhone(phone);
-                return (int)ReturnCodes.Codes.OK;
-            }
-
-            return (int)ReturnCodes.Codes.InvalidInput;
-        }
-        public int CreditBonuses(double bonuses, string phone)
-        {
-            if (bonuses < 0)
-                return (int)ReturnCodes.Codes.InvalidInput;
-
-            if (!CheckPhone(phone))
-                return (int)ReturnCodes.Codes.InvalidInput;
-
-            bonusCardRepository.CreditBonuses(bonuses, phone);
-
-            return (int)ReturnCodes.Codes.OK;
-        }
-        public (int, double) GetBonuses(string phone)
-        {
-            if (!CheckPhone(phone))
-                return ((int)ReturnCodes.Codes.InvalidInput, Constants.ErrorValue);
-
-            double bonuses = bonusCardRepository.GetBonuses(phone);
-
-            return ((int)ReturnCodes.Codes.OK, bonuses);
-        }
-        public int WriteOffBonuses(double bonuses, string phone)
-        {
-            if (bonuses < 0)
-                return (int)ReturnCodes.Codes.InvalidInput;
-
-            if (!CheckPhone(phone))
-                return (int)ReturnCodes.Codes.InvalidInput;
-
-            (int code, double value) state = GetBonuses(phone);
-
-            if (state.code != (int)ReturnCodes.Codes.OK)
-                return state.code;
-            else if (state.value <= Constants.MinBonusCard)
-                return (int)ReturnCodes.Codes.Empty;
-
-            bonusCardRepository.WriteOffBonuses(bonuses, phone);
-
-            return (int)ReturnCodes.Codes.OK;
-        }
-        public bool Exists(BonusCard bonusCard)
-        {
-            return bonusCardRepository.Exists(bonusCard);
-        }
-        public int Delete(BonusCard bonusCard)
-        {
-            if (Exists(bonusCard))
-            {
-                bonusCardRepository.Delete(bonusCard);
-                return (int)ReturnCodes.Codes.OK;
-            }
-
-            return (int)ReturnCodes.Codes.NotExists;
         }
     }
 }
