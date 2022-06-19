@@ -7,10 +7,10 @@ namespace WineSales.Domain.Interactors
 {
     public interface IPurchaseInteractor
     {
-        void Create(Purchase purchase);
+        void CreatePurchase(Purchase purchase);
         (List<Wine>, List<double>) GetByCustomer(Customer customer);
         void ChangeStatus(Purchase purchase);
-        void Delete(Purchase purchase);
+        void DeletePurchase(Purchase purchase);
     }
 
     public class PurchaseInteractor : IPurchaseInteractor
@@ -22,7 +22,7 @@ namespace WineSales.Domain.Interactors
             this.purchaseRepository = purchaseRepository;
         }
 
-        public void Create(Purchase purchase)
+        public void CreatePurchase(Purchase purchase)
         {
             if (!CheckStatus(purchase.Status))
                 throw new PurchaseException("Invalid input of status.");
@@ -47,7 +47,7 @@ namespace WineSales.Domain.Interactors
             purchaseRepository.Update(purchase);
         }
 
-        public void Delete(Purchase purchase)
+        public void DeletePurchase(Purchase purchase)
         {
             if (!Exist(purchase.ID))
                 throw new PurchaseException("This purchase doesn't exist.");
