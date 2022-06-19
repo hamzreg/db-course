@@ -4,12 +4,12 @@ namespace WineSales.Domain.RepositoryInterfaces
 {
     public interface IBonusCardRepository : ICrudRepository<BonusCard>
     {
-        List<BonusCard> GetByBonuses(double bonuses);
+        List<BonusCard> GetByBonuses(int bonuses);
         void AddByPhone(string phone);
-        BonusCard GetByPhone(string phone);
-        double GetBonuses(string phone);
-        void AddBonuses(string phone, double bonuses);
-        void WriteOffBonuses(string phone, double bonuses);
+        BonusCard? GetByPhone(string phone);
+        int GetBonuses(string phone);
+        void AddBonuses(string phone, int bonuses);
+        void WriteOffBonuses(string phone, int bonuses);
         void DeleteByPhone(string phone);
     }
 }

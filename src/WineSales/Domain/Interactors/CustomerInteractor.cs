@@ -62,7 +62,7 @@ namespace WineSales.Domain.Interactors
                 return false;
             else if (!int.TryParse(phone, out int num))
                 return false;
-            else if (phone.Length != CustomerConfig.PhoneLen)
+            else if (phone.Length != BonusCardConfig.PhoneLen)
                 return false;
             return true;
         }

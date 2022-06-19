@@ -7,11 +7,11 @@ namespace WineSales.Domain.Interactors
 {
     public interface IBonusCardInteractor
     {
-        void Create(string phone);
-        double GetBonuses(string phone);
-        void AddBonuses(string phone, double bonuses);
-        void WriteOffBonuses(string phone, double bonuses);
-        void Delete(string phone);
+        void CreateBonusCard(string phone);
+        int GetBonuses(string phone);
+        void AddBonuses(string phone, int bonuses);
+        void WriteOffBonuses(string phone, int bonuses);
+        void DeleteBonusCard(string phone);
     }
 
     public class BonusCardInteractor : IBonusCardInteractor
@@ -23,17 +23,17 @@ namespace WineSales.Domain.Interactors
             this.bonusCardRepository = bonusCardRepository;
         }
 
-        public void Create(string phone)
+        public void CreateBonusCard(string phone)
         {
             if (!CheckPhone(phone))
                 throw new BonusCardException("Invalid input of phone.");
             else if (Exist(phone))
                 throw new BonusCardException("The bonus card is already linked to this phone.");
-                
+
             bonusCardRepository.AddByPhone(phone);
         }
 
-        public double GetBonuses(string phone)
+        public int GetBonuses(string phone)
         {
             if (!CheckPhone(phone))
                 throw new BonusCardException("Invalid input of phone.");
@@ -43,7 +43,7 @@ namespace WineSales.Domain.Interactors
             return bonusCardRepository.GetBonuses(phone);
         }
 
-        public void AddBonuses(string phone, double bonuses)
+        public void AddBonuses(string phone, int bonuses)
         {
             if (bonuses < 0)
                 throw new BonusCardException("Wrong number of bonuses.");
@@ -55,7 +55,7 @@ namespace WineSales.Domain.Interactors
             bonusCardRepository.AddBonuses(phone, bonuses);
         }
 
-        public void WriteOffBonuses(string phone, double bonuses)
+        public void WriteOffBonuses(string phone, int bonuses)
         {
             if (bonuses < 0)
                 throw new BonusCardException("Wrong number of bonuses.");
@@ -70,19 +70,19 @@ namespace WineSales.Domain.Interactors
                 throw new BonusCardException("Not enough bonuses to write off.");
 
             bonusCardRepository.WriteOffBonuses(phone, bonuses);
-        } 
+        }
 
-        public void Delete(string phone)
+        public void DeleteBonusCard(string phone)
         {
             if (!CheckPhone(phone))
                 throw new BonusCardException("Invalid input of phone.");
             else if (!Exist(phone))
                 throw new BonusCardException("This bonus card doesn't exist.");
-            
+
             bonusCardRepository.DeleteByPhone(phone);
         }
 
-        public bool Exist(string phone)
+        private bool Exist(string phone)
         {
             return bonusCardRepository.GetByPhone(phone) != null;
         }
@@ -91,9 +91,12 @@ namespace WineSales.Domain.Interactors
         {
             if (phone == null)
                 return false;
-            else if (!int.TryParse(phone, out int num))
+            else if (phone.Length != BonusCardConfig.PhoneLen)
                 return false;
-            else if (phone.Length != CustomerConfig.PhoneLen)
+            else if (!int.TryParse(phone.Substring(0, BonusCardConfig.PhoneLen / 2),
+                                   out int _) ||
+                     !int.TryParse(phone.Substring(BonusCardConfig.PhoneLen / 2),
+                                   out int _))
                 return false;
             return true;
         }

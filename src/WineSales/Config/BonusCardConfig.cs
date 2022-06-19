@@ -1,6 +1,6 @@
 ﻿namespace WineSales.Config
 {
-    public class CustomerConfig
+    public class BonusCardConfig
     {
         public const int PhoneLen = 11;
     }

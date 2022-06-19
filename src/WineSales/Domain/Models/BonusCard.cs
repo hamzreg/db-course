@@ -4,5 +4,6 @@
     {
         public int ID { get; set; }
         public int Bonuses { get; set; }
+        public string? Phone { get; set; }
     }
 }
