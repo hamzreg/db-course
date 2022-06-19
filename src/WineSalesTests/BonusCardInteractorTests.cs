@@ -59,7 +59,7 @@ namespace DomainTests
                 (string phone) =>
                 {
                     var bonusCard = mockBonusCards.Find(x => x.Phone == phone);
-                    return bonusCard.Bonuses;
+                    return bonusCard?.Bonuses;
                 }
                 );
             mockRepository.Setup(obj => obj.AddBonuses(It.IsAny<string>(), 
@@ -249,7 +249,7 @@ namespace DomainTests
         public void DeleteBonusCardTest()
         {
             var expectedCount = mockBonusCards.Count - 1;
-            string phone = mockBonusCards[0].Phone;
+            string? phone = mockBonusCards[0].Phone;
 
             _interactor.DeleteBonusCard(phone);
             Assert.Equal(expectedCount, mockBonusCards.Count);

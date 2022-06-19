@@ -6,6 +6,5 @@ namespace WineSales.Domain.RepositoryInterfaces
     {
         List<Customer> GetByName(string name);
         List<Customer> GetBySurname(string surname);
-        Customer GetByPhone(string phone);
     }
 }
