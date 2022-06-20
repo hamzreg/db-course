@@ -15,7 +15,8 @@ namespace DomainTests
         private readonly IPurchaseRepository _mockRepository;
 
         private readonly List<Purchase> mockPurchases;
-        private readonly List<Customer> mockCustomers;
+        private readonly List<Sale> mockSales;
+        private readonly List<Wine> mockWines;
 
         public PurchaseInteractorTests()
         {
@@ -25,43 +26,90 @@ namespace DomainTests
                 {
                     ID = 1,
                     Price = 500,
-                    Status = (int)PurchaseConfig.Statuses.Active
+                    Status = (int)PurchaseConfig.Statuses.Active,
+                    CustomerID = 2
                 },
                 new Purchase
                 {
                     ID = 2,
                     Price = 1000,
-                    Status = (int)PurchaseConfig.Statuses.Canceled
+                    Status = (int)PurchaseConfig.Statuses.Canceled,
+                    CustomerID = 10
                 },
                 new Purchase
                 {
                     ID = 3,
                     Price = 700,
-                    Status = (int)PurchaseConfig.Statuses.Active
+                    Status = (int)PurchaseConfig.Statuses.Active,
+                    CustomerID = 10
+                },
+                new Purchase
+                {
+                    ID = 4,
+                    Price = 300,
+                    Status = (int)PurchaseConfig.Statuses.Active,
+                    CustomerID = 10
                 }
             };
 
-/*            mockCustomers = new List<Customer>
+            mockSales = new List<Sale>
             {
-                new Customer
+                new Sale
                 {
                     ID = 1,
-                    Name = "Regina",
-                    Surname = "Khamzina"
+                    SellingPrice = 500,
+                    PurchaseID = 1,
+                    WineID = 2
                 },
-                new Customer
+                new Sale
                 {
                     ID = 2,
-                    Name = "Anna",
-                    Surname = "Timoshenko"
+                    SellingPrice = 700,
+                    PurchaseID = 3,
+                    WineID = 1
                 },
-                new Customer
+                new Sale
                 {
                     ID = 3,
-                    Name = "Marina",
-                    Surname = "Maslova"
+                    SellingPrice = 300,
+                    PurchaseID = 4,
+                    WineID = 3
                 }
-            };*/
+            };
+
+            mockWines = new List<Wine>
+            {
+                new Wine
+                {
+                    ID = 1,
+                    Kind = "lambrusco",
+                    Color = "red",
+                    Sugar = "dry",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                },
+                new Wine
+                {
+                    ID = 2,
+                    Kind = "lambrusco",
+                    Color = "white",
+                    Sugar = "semi-sweet",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                },
+                new Wine
+                {
+                    ID = 3,
+                    Kind = "lambrusco",
+                    Color = "rose",
+                    Sugar = "sweet",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                }
+            };
 
             var mockRepository = new Mock<IPurchaseRepository>();
             mockRepository.Setup(obj => obj.GetByID(It.IsAny<int>())).Returns(
@@ -73,13 +121,27 @@ namespace DomainTests
                     mockPurchases.Add(purchase);
                 }
                 );
-/*            mockRepository.Setup(obj => obj.GetByCustomer(It.IsAny<int>())).Returns(
+            mockRepository.Setup(obj => obj.GetByCustomerID(It.IsAny<int>())).Returns(
                 (int id) =>
                 {
-                    purchase.ID = mockPurchases.Count + 1;
-                    mockPurchases.Add(purchase);
+                    var purchasesList = mockPurchases.FindAll(x => 
+                                        (x.CustomerID == id &&
+                                         x.Status == (int)PurchaseConfig.Statuses.Active));
+
+                    var pricesList = new List<double>();
+                    var winesList = new List<Wine>();
+
+                    for(int i = 0; i < purchasesList.Count; i++)
+                    {
+                        pricesList.Add(purchasesList[i].Price);
+
+                        var sale = mockSales.Find(x => x.PurchaseID == purchasesList[i].ID);
+                        winesList.Add(mockWines.Find(x => x.ID == sale.WineID));
+                    }
+
+                    return (winesList, pricesList);
                 }
-                );*/
+                );
             mockRepository.Setup(obj => obj.Update(It.IsAny<Purchase>())).Callback(
                 (Purchase purchase) =>
                 {
@@ -106,7 +168,8 @@ namespace DomainTests
             var purchase = new Purchase
             {
                 Price = 600,
-                Status = (int)PurchaseConfig.Statuses.Active
+                Status = (int)PurchaseConfig.Statuses.Active,
+                CustomerID = 4
             };
 
             _interactor.CreatePurchase(purchase);
@@ -121,8 +184,10 @@ namespace DomainTests
         {
             var purchase = new Purchase
             {
+                ID = 5,
                 Price = 600,
-                Status = 3
+                Status = 3,
+                CustomerID = 4
             };
 
             void action() => _interactor.CreatePurchase(purchase);
@@ -144,6 +209,39 @@ namespace DomainTests
         }
 
         [Fact]
+        public void GetByCustomerTest()
+        {
+            var customer = new Customer
+            {
+                ID = mockPurchases[1].CustomerID
+            };
+        
+            var purchasesList = mockPurchases.FindAll(x =>
+                                                    (x.CustomerID == customer.ID &&
+                                                     x.Status == (int)PurchaseConfig.Statuses.Active));
+            var expectedCount = purchasesList.Count;
+
+            var expectedPrices = new List<double>();
+            var expectedWines = new List<Wine>();
+
+            for (int i = 0; i < purchasesList.Count; i++)
+            {
+                expectedPrices.Add(purchasesList[i].Price);
+
+                var sale = mockSales.Find(x => x.PurchaseID == purchasesList[i].ID);
+                expectedWines.Add(mockWines.Find(x => x.ID == sale.WineID));
+            }
+
+            var (wines, prices) = _interactor.GetByCustomer(customer);
+
+            Assert.Equal(expectedCount, wines.Count);
+            Assert.Equal(expectedCount, prices.Count);
+
+            Assert.Equal(expectedWines, wines);
+            Assert.Equal(expectedPrices, prices);
+        }
+
+        [Fact]
         public void ChangeStatusTest()
         {
             var expectedCount = mockPurchases.Count;
@@ -152,7 +250,8 @@ namespace DomainTests
             {
                 ID = 3,
                 Price = 700,
-                Status = (int)PurchaseConfig.Statuses.Canceled
+                Status = (int)PurchaseConfig.Statuses.Canceled,
+                CustomerID = 10
             };
 
             _interactor.ChangeStatus(purchase);
@@ -173,8 +272,10 @@ namespace DomainTests
         {
             var purchase = new Purchase
             {
+                ID = 5,
                 Price = 600,
-                Status = 3
+                Status = 3,
+                CustomerID = 4
             };
 
             void action() => _interactor.ChangeStatus(purchase);
@@ -189,9 +290,10 @@ namespace DomainTests
         {
             var purchase = new Purchase
             {
-                ID = 4,
+                ID = 5,
                 Price = 1000,
-                Status = (int)PurchaseConfig.Statuses.Active
+                Status = (int)PurchaseConfig.Statuses.Active,
+                CustomerID = 4
             };
 
             void action() => _interactor.ChangeStatus(purchase);
@@ -210,8 +312,9 @@ namespace DomainTests
             var purchase = new Purchase
             {
                 ID = 2,
-                Price = 600,
-                Status = 3
+                Price = 1000,
+                Status = (int)PurchaseConfig.Statuses.Canceled,
+                CustomerID = 10
             };
 
             _interactor.DeletePurchase(purchase);
@@ -225,9 +328,10 @@ namespace DomainTests
         {
             var purchase = new Purchase
             {
-                ID = 4,
+                ID = 5,
                 Price = 1000,
-                Status = (int)PurchaseConfig.Statuses.Active
+                Status = (int)PurchaseConfig.Statuses.Active,
+                CustomerID = 4
             };
 
             void action() => _interactor.DeletePurchase(purchase);

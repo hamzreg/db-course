@@ -34,7 +34,7 @@ namespace WineSales.Domain.Interactors
 
         public (List<Wine>, List<double>) GetByCustomer(Customer customer)
         {
-            return purchaseRepository.GetByCustomer(customer.ID);
+            return purchaseRepository.GetByCustomerID(customer.ID);
         }
 
         public void ChangeStatus(Purchase purchase)

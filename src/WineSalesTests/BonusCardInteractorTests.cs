@@ -59,7 +59,7 @@ namespace DomainTests
                 (string phone) =>
                 {
                     var bonusCard = mockBonusCards.Find(x => x.Phone == phone);
-                    return bonusCard?.Bonuses;
+                    return bonusCard.Bonuses;
                 }
                 );
             mockRepository.Setup(obj => obj.AddBonuses(It.IsAny<string>(), 
