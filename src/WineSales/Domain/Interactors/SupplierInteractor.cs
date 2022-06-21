@@ -6,10 +6,10 @@ namespace WineSales.Domain.Interactors
 {
     public interface ISupplierInteractor
     {
-        void Create(Supplier supplier);
-        Supplier GetByWine(int wineID);
-        void Update(Supplier supplier);
-        void Delete(Supplier supplier);
+        void CreateSupplier(Supplier supplier);
+        Supplier GetByWineID(int wineID);
+        void UpdateSupplier(Supplier supplier);
+        void DeleteSupplier(Supplier supplier);
     }
 
     public class SupplierInteractor : ISupplierInteractor
@@ -21,38 +21,38 @@ namespace WineSales.Domain.Interactors
             this.supplierRepository = supplierRepository;
         }
 
-        public void Create(Supplier supplier)
+        public void CreateSupplier(Supplier supplier)
         {
-            if (Exist(supplier.Name))
+            if (Exist(supplier.ID))
                 throw new SupplierException("This supplier already exists.");
 
             supplierRepository.Create(supplier);
         }
 
-        public Supplier GetByWine(int wineID)
+        public Supplier GetByWineID(int wineID)
         {
-            return supplierRepository.GetByWine(wineID);
+            return supplierRepository.GetByWineID(wineID);
         }
 
-        public void Update(Supplier supplier)
+        public void UpdateSupplier(Supplier supplier)
         {
-            if (!Exist(supplier.Name))
+            if (!Exist(supplier.ID))
                 throw new SupplierException("This supplier doesn't exist.");
 
             supplierRepository.Update(supplier);
         }
 
-        public void Delete(Supplier supplier)
+        public void DeleteSupplier(Supplier supplier)
         {
-            if (!Exist(supplier.Name))
+            if (!Exist(supplier.ID))
                 throw new SupplierException("This supplier doesn't exist.");
 
             supplierRepository.Delete(supplier);
         }
 
-        private bool Exist(string name)
+        private bool Exist(int id)
         {
-            return supplierRepository.GetByName(name) != null;
+            return supplierRepository.GetByID(id) != null;
         }
     }
 }

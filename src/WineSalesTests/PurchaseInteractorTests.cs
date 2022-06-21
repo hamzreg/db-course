@@ -17,7 +17,6 @@ namespace DomainTests
         private readonly List<Purchase> mockPurchases;
         private readonly List<Sale> mockSales;
         private readonly List<Wine> mockWines;
-
         public PurchaseInteractorTests()
         {
             mockPurchases = new List<Purchase>

@@ -9,6 +9,6 @@ namespace WineSales.Domain.RepositoryInterfaces
         List<Supplier> GetByExperience(double experience, bool sign);
         List<Supplier> GetByLicense(bool license);
         List<Supplier> GetByRating(double rating, bool sign);
-        Supplier GetByWine(int wineID);
+        Supplier GetByWineID(int wineID);
     }
 }

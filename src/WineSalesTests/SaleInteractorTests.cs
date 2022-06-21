@@ -18,7 +18,6 @@ namespace DomainTests
         private readonly List<Wine> mockWines;
         private readonly List<Supplier> mockSuppliers;
         private readonly List<Tuple<int, int>> mockSupplierWine;
-
         public SaleInteractorTests()
         {
             mockSales = new List<Sale>

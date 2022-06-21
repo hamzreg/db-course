@@ -14,7 +14,6 @@ namespace DomainTests
         private readonly ICustomerRepository _mockRepository;
 
         private readonly List<Customer> mockCustomers;
-
         public CustomerInteractorTests()
         {
             mockCustomers = new List<Customer>

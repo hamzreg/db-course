@@ -14,7 +14,6 @@ namespace DomainTests
         private readonly IBonusCardRepository _mockRepository;
 
         private readonly List<BonusCard> mockBonusCards;
-
         public BonusCardInteractorTests()
         {
             mockBonusCards = new List<BonusCard>
