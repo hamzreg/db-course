@@ -11,7 +11,7 @@ namespace WineSales.Domain.RepositoryInterfaces
         List<Sale> GetByProfit(double profit);
         List<Sale> GetByWineNumer(int wineNumber);
         List<Sale> GetByDate(DateOnly date);
-        (List<Wine>, List<double>) GetBySupplier(int supplierID);
-        (List<Wine>, List<string>, List<Sale>) GetByAdmin(int adminID);
+        (List<Wine>, List<double>) GetBySupplierID(int supplierID);
+        (List<Wine>, List<string>, List<Sale>) GetByAdminID(int adminID);
     }
 }
