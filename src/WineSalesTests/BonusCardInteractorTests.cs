@@ -113,7 +113,7 @@ namespace DomainTests
         [Fact]
         public void AlreadyExistsCreateBonusCardTest()
         {
-            void action() => _interactor.CreateBonusCard(mockBonusCards[0].Phone);
+            void action() => _interactor.CreateBonusCard("88005553535");
             Assert.Throws<BonusCardException>(action);
 
             var exception = Assert.Throws<BonusCardException>(action);
@@ -124,8 +124,8 @@ namespace DomainTests
         [Fact]
         public void GetBonusesTest()
         {
-            var expectedBonuses = mockBonusCards[2].Bonuses;
-            var bonuses = _interactor.GetBonuses(mockBonusCards[2].Phone);
+            var expectedBonuses = 100;
+            var bonuses = _interactor.GetBonuses("89005553535");
             Assert.Equal(expectedBonuses, bonuses);
         }
 
@@ -154,9 +154,9 @@ namespace DomainTests
         public void AddBonusesTest()
         {
             int bonuses = 10;
-            var beforeBonuses = _interactor.GetBonuses(mockBonusCards[1].Phone);
-            _interactor.AddBonuses(mockBonusCards[1].Phone, bonuses);
-            var afterBonuses = _interactor.GetBonuses(mockBonusCards[1].Phone);
+            var beforeBonuses = _interactor.GetBonuses("81005553535");
+            _interactor.AddBonuses("81005553535", bonuses);
+            var afterBonuses = _interactor.GetBonuses("81005553535");
 
             Assert.Equal(afterBonuses - beforeBonuses, bonuses);
         }
@@ -164,7 +164,7 @@ namespace DomainTests
         [Fact]
         public void WrongBonusesNumAddBonusesTest()
         {
-            void action() => _interactor.AddBonuses(mockBonusCards[1].Phone, -10);
+            void action() => _interactor.AddBonuses("81005553535", -10);
             Assert.Throws<BonusCardException>(action);
 
             var exception = Assert.Throws<BonusCardException>(action);
@@ -196,9 +196,9 @@ namespace DomainTests
         public void WriteOffBonusesTest()
         {
             int bonuses = 10;
-            var beforeBonuses = _interactor.GetBonuses(mockBonusCards[1].Phone);
-            _interactor.WriteOffBonuses(mockBonusCards[1].Phone, bonuses);
-            var afterBonuses = _interactor.GetBonuses(mockBonusCards[1].Phone);
+            var beforeBonuses = _interactor.GetBonuses("89005553535");
+            _interactor.WriteOffBonuses("89005553535", bonuses);
+            var afterBonuses = _interactor.GetBonuses("89005553535");
 
             Assert.Equal(beforeBonuses - afterBonuses, bonuses);
         }
@@ -206,7 +206,7 @@ namespace DomainTests
         [Fact]
         public void WrongBonusesNumWriteOffBonusesTest()
         {
-            void action() => _interactor.WriteOffBonuses(mockBonusCards[1].Phone, -10);
+            void action() => _interactor.WriteOffBonuses("89005553535", -10);
             Assert.Throws<BonusCardException>(action);
 
             var exception = Assert.Throws<BonusCardException>(action);
@@ -237,7 +237,7 @@ namespace DomainTests
         [Fact]
         public void NotEnoughBonusesWriteOffBonusesTest()
         {
-            void action() => _interactor.WriteOffBonuses(mockBonusCards[2].Phone, 60);
+            void action() => _interactor.WriteOffBonuses("81005553535", 60);
             Assert.Throws<BonusCardException>(action);
 
             var exception = Assert.Throws<BonusCardException>(action);
@@ -248,7 +248,7 @@ namespace DomainTests
         public void DeleteBonusCardTest()
         {
             var expectedCount = mockBonusCards.Count - 1;
-            string? phone = mockBonusCards[0].Phone;
+            string phone = "88005553535";
 
             _interactor.DeleteBonusCard(phone);
             Assert.Equal(expectedCount, mockBonusCards.Count);

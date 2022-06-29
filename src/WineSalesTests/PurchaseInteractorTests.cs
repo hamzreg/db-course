@@ -130,11 +130,12 @@ namespace DomainTests
                     var pricesList = new List<double>();
                     var winesList = new List<Wine>();
 
-                    for(int i = 0; i < purchasesList.Count; i++)
+                    foreach(Purchase purchase in purchasesList)
                     {
-                        pricesList.Add(purchasesList[i].Price);
+                        pricesList.Add(purchase.Price);
 
-                        var sale = mockSales.Find(x => x.PurchaseID == purchasesList[i].ID);
+                        var sale = mockSales.Find(x => x.PurchaseID == purchase.ID &&
+                                                       x.SellingPrice == purchase.Price);
                         winesList.Add(mockWines.Find(x => x.ID == sale.WineID));
                     }
 
@@ -183,7 +184,6 @@ namespace DomainTests
         {
             var purchase = new Purchase
             {
-                ID = 5,
                 Price = 600,
                 Status = 3,
                 CustomerID = 4
@@ -199,7 +199,15 @@ namespace DomainTests
         [Fact]
         public void AlreadyExistsCreatePurchaseTest()
         {
-            void action() => _interactor.CreatePurchase(mockPurchases[0]);
+            var purchase = new Purchase
+            {
+                ID = 1,
+                Price = 500,
+                Status = (int)PurchaseConfig.Statuses.Active,
+                CustomerID = 2
+            };
+
+            void action() => _interactor.CreatePurchase(purchase);
             Assert.Throws<PurchaseException>(action);
 
             var exception = Assert.Throws<PurchaseException>(action);
@@ -212,32 +220,53 @@ namespace DomainTests
         {
             var customer = new Customer
             {
-                ID = mockPurchases[1].CustomerID
+                ID = 10
             };
-        
-            var purchasesList = mockPurchases.FindAll(x =>
-                                                    (x.CustomerID == customer.ID &&
-                                                     x.Status == (int)PurchaseConfig.Statuses.Active));
-            var expectedCount = purchasesList.Count;
 
-            var expectedPrices = new List<double>();
-            var expectedWines = new List<Wine>();
+            var expectedPrices = new List<double> {700, 300};
 
-            for (int i = 0; i < purchasesList.Count; i++)
+            var expectedWines = new List<Wine>
             {
-                expectedPrices.Add(purchasesList[i].Price);
-
-                var sale = mockSales.Find(x => x.PurchaseID == purchasesList[i].ID);
-                expectedWines.Add(mockWines.Find(x => x.ID == sale.WineID));
-            }
+                new Wine
+                {
+                    ID = 1,
+                    Kind = "lambrusco",
+                    Color = "red",
+                    Sugar = "dry",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                },
+                new Wine
+                {
+                    ID = 3,
+                    Kind = "lambrusco",
+                    Color = "rose",
+                    Sugar = "sweet",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                }
+            };
 
             var (wines, prices) = _interactor.GetByCustomer(customer);
 
-            Assert.Equal(expectedCount, wines.Count);
-            Assert.Equal(expectedCount, prices.Count);
+            Assert.Equal(expectedWines.Count, wines.Count);
+            Assert.Equal(expectedPrices.Count, prices.Count);
 
-            Assert.Equal(expectedWines, wines);
-            Assert.Equal(expectedPrices, prices);
+            for (int i = 0; i < expectedWines.Count; i++)
+            {
+                Assert.Equal(wines[i].ID, expectedWines[i].ID);
+                Assert.Equal(wines[i].Kind, expectedWines[i].Kind);
+                Assert.Equal(wines[i].Color, expectedWines[i].Color);
+                Assert.Equal(wines[i].Sugar, expectedWines[i].Sugar);
+                Assert.Equal(wines[i].Volume, expectedWines[i].Volume);
+                Assert.Equal(wines[i].Alcohol, expectedWines[i].Alcohol);
+                Assert.Equal(wines[i].Aging, expectedWines[i].Aging);
+            }
+
+            for (int i = 0; i < expectedPrices.Count; i++)
+                Assert.Equal(prices[i], expectedPrices[i]);
         }
 
         [Fact]
@@ -271,10 +300,10 @@ namespace DomainTests
         {
             var purchase = new Purchase
             {
-                ID = 5,
-                Price = 600,
+                ID = 3,
+                Price = 700,
                 Status = 3,
-                CustomerID = 4
+                CustomerID = 10
             };
 
             void action() => _interactor.ChangeStatus(purchase);

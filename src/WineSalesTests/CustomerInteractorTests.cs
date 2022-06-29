@@ -91,7 +91,14 @@ namespace DomainTests
         [Fact]
         public void AlreadyExistsCreateCustomerTest()
         {
-            void action() => _interactor.CreateCustomer(mockCustomers[0]);
+            var customer = new Customer
+            {
+                ID = 1,
+                Name = "Regina",
+                Surname = "Khamzina"
+            };
+
+            void action() => _interactor.CreateCustomer(customer);
             Assert.Throws<CustomerException>(action);
 
             var exception = Assert.Throws<CustomerException>(action);
