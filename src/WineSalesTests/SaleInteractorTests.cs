@@ -17,7 +17,8 @@ namespace DomainTests
         private readonly List<Sale> mockSales;
         private readonly List<Wine> mockWines;
         private readonly List<Supplier> mockSuppliers;
-        private readonly List<Tuple<int, int>> mockSupplierWine;
+        private readonly List<SupplierWine> mockSupplierWine;
+
         public SaleInteractorTests()
         {
             mockSales = new List<Sale>
@@ -26,19 +27,19 @@ namespace DomainTests
                 {
                     ID = 1,
                     PurchasePrice = 500,
-                    WineID = 2
+                    SupplierWineID = 2
                 },
                 new Sale
                 {
                     ID = 2,
                     PurchasePrice = 700,
-                    WineID = 1
+                    SupplierWineID = 1
                 },
                 new Sale
                 {
                     ID = 3,
                     PurchasePrice = 300,
-                    WineID = 3
+                    SupplierWineID = 3
                 }
             };
 
@@ -90,11 +91,29 @@ namespace DomainTests
                 }
             };
 
-            mockSupplierWine = new List<Tuple<int, int>>
+            mockSupplierWine = new List<SupplierWine>
             {
-                new Tuple<int, int>(1, 2),
-                new Tuple<int, int>(1, 3),
-                new Tuple<int, int>(2, 1)
+                new SupplierWine
+                {
+                    ID = 1,
+                    SupplierID = 1,
+                    WineID = 1,
+                    Percent = 50
+                },
+                new SupplierWine
+                {
+                    ID = 2,
+                    SupplierID = 2,
+                    WineID = 1,
+                    Percent = 50
+                },
+                new SupplierWine
+                {
+                    ID = 3,
+                    SupplierID = 1,
+                    WineID = 2,
+                    Percent = 50
+                }
             };
 
             var mockRepository = new Mock<ISaleRepository>();
@@ -113,17 +132,16 @@ namespace DomainTests
                     var winesList = new List<Wine>();
                     var pricesList = new List<double>();
 
-                    for (int i = 0; i < mockSupplierWine.Count; i++)
+                    foreach(SupplierWine supplierWine in mockSupplierWine)
                     {
-                        if (mockSupplierWine[i].Item1 == id)
+                        if (supplierWine.SupplierID == id)
                         {
-                            var wine = mockWines.Find(x => x.ID == mockSupplierWine[i].Item2);
+                            var wine = mockWines.Find(x => x.ID == supplierWine.WineID);
                             winesList.Add(wine);
                             
-                            var sale = mockSales.Find(x => x.WineID == wine.ID);
+                            var sale = mockSales.Find(x => x.SupplierWineID == supplierWine.ID);
                             pricesList.Add(sale.PurchasePrice);
                         }
-
                     }
 
                     return (winesList, pricesList);
@@ -134,19 +152,18 @@ namespace DomainTests
                 { 
                     var winesList = new List<Wine>();
                     var supplierList = new List<string>();
-                    var salesList = mockSales;
 
-                    for (int i = 0; i < mockSales.Count; i++)
+                    foreach (Sale sale in mockSales)
                     {
-                        var wine = mockWines.Find(x => x.ID == mockSales[i].WineID);
-                        winesList.Add(wine);
+                        var supplierWine = mockSupplierWine.Find(x => x.ID == sale.SupplierWineID);
 
-                        var supplierWine = mockSupplierWine.Find(x => x.Item2 == wine.ID);
-                        var supplier = mockSuppliers.Find(x => x.ID == supplierWine.Item1);
+                        winesList.Add(mockWines.Find(x => x.ID == supplierWine.WineID));
+
+                        var supplier = mockSuppliers.Find(x => x.ID == supplierWine.SupplierID);
                         supplierList.Add(supplier.Name);
                     }
 
-                    return (winesList, supplierList, salesList);
+                    return (winesList, supplierList, mockSales);
                 }
                 );
             mockRepository.Setup(obj => obj.Delete(It.IsAny<Sale>())).Callback(
@@ -170,14 +187,27 @@ namespace DomainTests
                 PurchasePrice = SaleConfig.MinPurchasePrice + 100,
                 Costs = SaleConfig.MinCosts + 2,
                 WineNumber = SaleConfig.MinWineNumer,
-                WineID = 5
+                SupplierWineID = 5
             };
 
-            _interactor.CreateSale(sale, SaleConfig.MinPercent + 2);
+            int percent = SaleConfig.MinPercent + 7;
+
+            _interactor.CreateSale(sale, percent);
             Assert.Equal(expectedCount, mockSales.Count);
 
             var salesList = mockSales;
             Assert.All(salesList, obj => Assert.InRange(obj.ID, low: 1, high: expectedCount));
+
+            var newSale = _mockRepository.GetByID(sale.ID);
+
+            double expectedSellingPrice = sale.PurchasePrice * (1 + percent / 100);
+            Assert.Equal(expectedSellingPrice, newSale.SellingPrice);
+
+            double expectedMargin = expectedSellingPrice - sale.PurchasePrice;
+            Assert.Equal(expectedMargin, newSale.Margin);
+
+            double expectedProfit = (expectedMargin - sale.Costs) * sale.WineNumber;
+            Assert.Equal(expectedProfit, newSale.Profit);
         }
 
         [Fact]
@@ -188,7 +218,7 @@ namespace DomainTests
                 PurchasePrice = SaleConfig.MinPurchasePrice + 100,
                 Costs = SaleConfig.MinCosts + 2,
                 WineNumber = SaleConfig.MinWineNumer,
-                WineID = 5
+                SupplierWineID = 5
             };
 
             void action() => _interactor.CreateSale(sale, SaleConfig.MinPercent - 2);
@@ -206,7 +236,7 @@ namespace DomainTests
                 PurchasePrice = SaleConfig.MinPurchasePrice - 2,
                 Costs = SaleConfig.MinCosts + 2,
                 WineNumber = SaleConfig.MinWineNumer,
-                WineID = 5
+                SupplierWineID = 5
             };
 
             void action() => _interactor.CreateSale(sale, SaleConfig.MinPercent + 2);
@@ -224,7 +254,7 @@ namespace DomainTests
                 PurchasePrice = SaleConfig.MinPurchasePrice + 2,
                 Costs = SaleConfig.MinCosts - 2,
                 WineNumber = SaleConfig.MinWineNumer,
-                WineID = 5
+                SupplierWineID = 5
             };
 
             void action() => _interactor.CreateSale(sale, SaleConfig.MinPercent + 2);
@@ -242,7 +272,7 @@ namespace DomainTests
                 PurchasePrice = SaleConfig.MinPurchasePrice + 2,
                 Costs = SaleConfig.MinCosts + 2,
                 WineNumber = SaleConfig.MinWineNumer - 1,
-                WineID = 5
+                SupplierWineID = 5
             };
 
             void action() => _interactor.CreateSale(sale, SaleConfig.MinPercent + 2);
@@ -258,10 +288,10 @@ namespace DomainTests
             var sale = new Sale
             {
                 ID = 1,
-                PurchasePrice = SaleConfig.MinPurchasePrice + 100,
+                PurchasePrice = 500,
                 Costs = SaleConfig.MinCosts + 2,
                 WineNumber = SaleConfig.MinWineNumer,
-                WineID = 1
+                SupplierWineID = 2
             };
 
             void action() => _interactor.CreateSale(sale, SaleConfig.MinPercent);
@@ -276,33 +306,53 @@ namespace DomainTests
         [Fact]
         public void GetBySupplierIDTest()
         {
-            var supplier = new Supplier
+            int supplierID = 1;
+
+            var expectedPrices = new List<double> {700, 300};
+            var expectedWines = new List<Wine>
             {
-                ID = mockSuppliers[0].ID
+                new Wine
+                {
+                    ID = 1,
+                    Kind = "lambrusco",
+                    Color = "red",
+                    Sugar = "dry",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                },
+                new Wine
+                {
+                    ID = 2,
+                    Kind = "lambrusco",
+                    Color = "white",
+                    Sugar = "semi-sweet",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                }
             };
 
-            var supplierWine = mockSupplierWine.FindAll(x => x.Item1 == supplier.ID);
-            var expectedCount = supplierWine.Count;
+            var expectedCount = expectedPrices.Count();
 
-            var expectedPrices = new List<double>();
-            var expectedWines = new List<Wine>();
-
-            for (int i = 0; i < supplierWine.Count; i++)
-            {
-                var wine = mockWines.Find(x => x.ID == mockSupplierWine[i].Item2);
-                expectedWines.Add(wine);
-
-                var sale = mockSales.Find(x => x.WineID == wine.ID);
-                expectedPrices.Add(sale.PurchasePrice);
-            }
-
-            var (wines, prices) = _interactor.GetBySupplierID(supplier.ID);
+            var (wines, prices) = _interactor.GetBySupplierID(supplierID);
 
             Assert.Equal(expectedCount, wines.Count);
             Assert.Equal(expectedCount, prices.Count);
 
-            Assert.Equal(expectedWines, wines);
-            Assert.Equal(expectedPrices, prices);
+            for (int i = 0; i < expectedWines.Count; i++)
+            {
+                Assert.Equal(wines[i].ID, expectedWines[i].ID);
+                Assert.Equal(wines[i].Kind, expectedWines[i].Kind);
+                Assert.Equal(wines[i].Color, expectedWines[i].Color);
+                Assert.Equal(wines[i].Sugar, expectedWines[i].Sugar);
+                Assert.Equal(wines[i].Volume, expectedWines[i].Volume);
+                Assert.Equal(wines[i].Alcohol, expectedWines[i].Alcohol);
+                Assert.Equal(wines[i].Aging, expectedWines[i].Aging);
+            }
+
+            for (int i = 0; i < expectedPrices.Count; i++)
+                Assert.Equal(prices[i], expectedPrices[i]);
         }
 
         [Fact]
@@ -313,18 +363,40 @@ namespace DomainTests
             var expectedCount = mockSales.Count;
 
             var expectedSales = mockSales;
-            var expectedSuppliers = new List<string>();
-            var expectedWines = new List<Wine>();
-
-            for (int i = 0; i < mockSales.Count; i++)
+            var expectedSuppliers = new List<string> {"Agora", "Fanagoria", "Fanagoria"};
+            var expectedWines = new List<Wine>
             {
-                var wine = mockWines.Find(x => x.ID == mockSales[i].WineID);
-                expectedWines.Add(wine);
-
-                var supplierWine = mockSupplierWine.Find(x => x.Item2 == wine.ID);
-                var supplier = mockSuppliers.Find(x => x.ID == supplierWine.Item1);
-                expectedSuppliers.Add(supplier.Name);
-            }
+                new Wine
+                {
+                    ID = 1,
+                    Kind = "lambrusco",
+                    Color = "red",
+                    Sugar = "dry",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                },
+                new Wine
+                {
+                    ID = 1,
+                    Kind = "lambrusco",
+                    Color = "red",
+                    Sugar = "dry",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                },
+                new Wine
+                {
+                    ID = 2,
+                    Kind = "lambrusco",
+                    Color = "white",
+                    Sugar = "semi-sweet",
+                    Volume = 0.75,
+                    Alcohol = 7.5,
+                    Aging = 2
+                }
+            };
 
             var (wines, suppliers, sales) = _interactor.GetByAdminID(adminID);
 
@@ -332,9 +404,22 @@ namespace DomainTests
             Assert.Equal(expectedCount, suppliers.Count);
             Assert.Equal(expectedCount, sales.Count);
 
-            Assert.Equal(expectedWines, wines);
-            Assert.Equal(expectedSuppliers, suppliers);
-            Assert.Equal(expectedSales, sales);
+            for (int i = 0; i < expectedWines.Count; i++)
+            {
+                Assert.Equal(wines[i].ID, expectedWines[i].ID);
+                Assert.Equal(wines[i].Kind, expectedWines[i].Kind);
+                Assert.Equal(wines[i].Color, expectedWines[i].Color);
+                Assert.Equal(wines[i].Sugar, expectedWines[i].Sugar);
+                Assert.Equal(wines[i].Volume, expectedWines[i].Volume);
+                Assert.Equal(wines[i].Alcohol, expectedWines[i].Alcohol);
+                Assert.Equal(wines[i].Aging, expectedWines[i].Aging);
+            }
+
+            for (int i = 0; i < expectedSuppliers.Count; i++)
+                Assert.Equal(suppliers[i], expectedSuppliers[i]);
+
+            for (int i = 0; i < expectedSales.Count; i++)
+                Assert.Equal(sales[i], expectedSales[i]);
         }
 
         [Fact]
@@ -346,9 +431,7 @@ namespace DomainTests
             {
                 ID = 1,
                 PurchasePrice = 500,
-                Costs = SaleConfig.MinCosts + 2,
-                WineNumber = SaleConfig.MinWineNumer,
-                WineID = 2
+                SupplierWineID = 2
             };
 
             _interactor.DeleteSale(sale);
@@ -364,9 +447,7 @@ namespace DomainTests
             {
                 ID = 6,
                 PurchasePrice = 500,
-                Costs = SaleConfig.MinCosts + 2,
-                WineNumber = SaleConfig.MinWineNumer,
-                WineID = 2
+                SupplierWineID = 2
             };
 
             void action() => _interactor.DeleteSale(sale);

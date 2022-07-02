@@ -11,6 +11,6 @@
         public int WineNumber { get; set; }
         public DateOnly Date { get; set; }
         public int PurchaseID { get; set; }
-        public int WineID { get; set; }
+        public int SupplierWineID { get; set; }
     }
 }

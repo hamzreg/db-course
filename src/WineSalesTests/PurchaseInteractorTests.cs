@@ -17,6 +17,8 @@ namespace DomainTests
         private readonly List<Purchase> mockPurchases;
         private readonly List<Sale> mockSales;
         private readonly List<Wine> mockWines;
+        private readonly List<SupplierWine> mockSupplierWine;
+
         public PurchaseInteractorTests()
         {
             mockPurchases = new List<Purchase>
@@ -58,21 +60,21 @@ namespace DomainTests
                     ID = 1,
                     SellingPrice = 500,
                     PurchaseID = 1,
-                    WineID = 2
+                    SupplierWineID = 2
                 },
                 new Sale
                 {
                     ID = 2,
                     SellingPrice = 700,
                     PurchaseID = 3,
-                    WineID = 1
+                    SupplierWineID = 1
                 },
                 new Sale
                 {
                     ID = 3,
                     SellingPrice = 300,
                     PurchaseID = 4,
-                    WineID = 3
+                    SupplierWineID = 3
                 }
             };
 
@@ -110,6 +112,31 @@ namespace DomainTests
                 }
             };
 
+            mockSupplierWine = new List<SupplierWine>
+            {
+                new SupplierWine
+                {
+                    ID = 1,
+                    SupplierID = 1,
+                    WineID = 1,
+                    Percent = 50
+                },
+                new SupplierWine
+                {
+                    ID = 2,
+                    SupplierID = 2,
+                    WineID = 1,
+                    Percent = 50
+                },
+                new SupplierWine
+                {
+                    ID = 3,
+                    SupplierID = 1,
+                    WineID = 2,
+                    Percent = 50
+                }
+            };
+
             var mockRepository = new Mock<IPurchaseRepository>();
             mockRepository.Setup(obj => obj.GetByID(It.IsAny<int>())).Returns(
                 (int id) => mockPurchases.Find(x => x.ID == id));
@@ -136,7 +163,8 @@ namespace DomainTests
 
                         var sale = mockSales.Find(x => x.PurchaseID == purchase.ID &&
                                                        x.SellingPrice == purchase.Price);
-                        winesList.Add(mockWines.Find(x => x.ID == sale.WineID));
+                        var supplierWine = mockSupplierWine.Find(x => x.ID == sale.SupplierWineID);
+                        winesList.Add(mockWines.Find(x => x.ID == supplierWine.WineID));
                     }
 
                     return (winesList, pricesList);
@@ -239,10 +267,10 @@ namespace DomainTests
                 },
                 new Wine
                 {
-                    ID = 3,
+                    ID = 2,
                     Kind = "lambrusco",
-                    Color = "rose",
-                    Sugar = "sweet",
+                    Color = "white",
+                    Sugar = "semi-sweet",
                     Volume = 0.75,
                     Alcohol = 7.5,
                     Aging = 2
