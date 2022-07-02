@@ -14,7 +14,8 @@ namespace DomainTests
         private readonly ISupplierRepository _mockRepository;
 
         private readonly List<Supplier> mockSuppliers;
-        private readonly List<Tuple<int, int>> mockSupplierWine;
+        private readonly List<SupplierWine> mockSupplierWine;
+
         public SupplierInteractorTests()
         {
             mockSuppliers = new List<Supplier>
@@ -22,25 +23,55 @@ namespace DomainTests
                 new Supplier
                 {
                     ID = 1,
-                    Name = "Fanagoria"
+                    Name = "Fanagoria",
+                    Country = "Russia",
+                    Experience = 65,
+                    License = true,
+                    Rating = 10
                 },
                 new Supplier
                 {
                     ID = 2,
-                    Name = "Agora"
+                    Name = "Agora",
+                    Country = "Russia",
+                    Experience = 25,
+                    License = true,
+                    Rating = 10
                 },
                 new Supplier
                 {
                     ID = 3,
-                    Name = "Alianta"
+                    Name = "Alianta",
+                    Country = "Russia",
+                    Experience = 29,
+                    License = true,
+                    Rating = 10
                 }
             };
 
-            mockSupplierWine = new List<Tuple<int, int>>
+            mockSupplierWine = new List<SupplierWine>
             {
-                new Tuple<int, int>(1, 2),
-                new Tuple<int, int>(1, 3),
-                new Tuple<int, int>(2, 1)
+                new SupplierWine
+                {
+                    ID = 1,
+                    SupplierID = 1,
+                    WineID = 1,
+                    Percent = 50
+                },
+                new SupplierWine
+                {
+                    ID = 2,
+                    SupplierID = 2,
+                    WineID = 1,
+                    Percent = 50
+                },
+                new SupplierWine
+                {
+                    ID = 3,
+                    SupplierID = 1,
+                    WineID = 2,
+                    Percent = 50
+                }
             };
 
             var mockRepository = new Mock<ISupplierRepository>();
@@ -53,11 +84,11 @@ namespace DomainTests
                     mockSuppliers.Add(supplier);
                 }
                 );
-            mockRepository.Setup(obj => obj.GetByWineID(It.IsAny<int>())).Returns(
+            mockRepository.Setup(obj => obj.GetBySupplierWineID(It.IsAny<int>())).Returns(
                 (int id) =>
                 {
-                    var supplierWine = mockSupplierWine.Find(x => x.Item2 == id);
-                    return mockSuppliers.Find(x => x.ID == supplierWine.Item1);
+                    var supplierWine = mockSupplierWine.Find(x => x.ID == id);
+                    return mockSuppliers.Find(x => x.ID == supplierWine.SupplierID);
                 }
                 );
             mockRepository.Setup(obj => obj.Update(It.IsAny<Supplier>())).Callback(
@@ -93,7 +124,10 @@ namespace DomainTests
             var supplier = new Supplier
             {
                 Name = "Castel",
-                Country = "France"
+                Country = "France",
+                Experience = 73,
+                License = true,
+                Rating = 10
             };
 
             _interactor.CreateSupplier(supplier);
@@ -115,14 +149,12 @@ namespace DomainTests
         }
 
         [Fact]
-        public void GetByWineIDTest()
+        public void GetBySupplierWineIDTest()
         {
-            int wineID = 3;
+            int supplierWineID = 1;
+            var expectedSupplier = _mockRepository.GetByID(1);
 
-            var supplierWine = mockSupplierWine.Find(x => x.Item2 == wineID);
-            var expectedSupplier = _mockRepository.GetByID(supplierWine.Item1);
-
-            var supplier = _interactor.GetByWineID(wineID);
+            var supplier = _interactor.GetBySupplierWineID(supplierWineID);
             Assert.Equal(expectedSupplier, supplier);
         }
 
@@ -186,9 +218,9 @@ namespace DomainTests
             var supplier = new Supplier
             {
                 ID = 2,
-                Name = "Castel",
-                Country = "France",
-                Experience = 20,
+                Name = "Agora",
+                Country = "Russia",
+                Experience = 25,
                 License = true,
                 Rating = 10
             };

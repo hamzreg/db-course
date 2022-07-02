@@ -7,7 +7,7 @@ namespace WineSales.Domain.Interactors
     public interface ISupplierInteractor
     {
         void CreateSupplier(Supplier supplier);
-        Supplier GetByWineID(int wineID);
+        Supplier GetBySupplierWineID(int supplierWineID);
         void UpdateSupplier(Supplier supplier);
         void DeleteSupplier(Supplier supplier);
     }
@@ -29,9 +29,9 @@ namespace WineSales.Domain.Interactors
             supplierRepository.Create(supplier);
         }
 
-        public Supplier GetByWineID(int wineID)
+        public Supplier GetBySupplierWineID(int supplierWineID)
         {
-            return supplierRepository.GetByWineID(wineID);
+            return supplierRepository.GetBySupplierWineID(supplierWineID);
         }
 
         public void UpdateSupplier(Supplier supplier)
