@@ -9,5 +9,6 @@
         public double Volume { get; set; }
         public double Alcohol { get; set; }
         public int Aging { get; set; }
+        public int Number { get; set; }
     }
 }

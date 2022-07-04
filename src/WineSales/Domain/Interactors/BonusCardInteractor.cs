@@ -1,7 +1,7 @@
 ﻿using WineSales.Domain.Models;
 using WineSales.Domain.RepositoryInterfaces;
-using WineSales.Config;
 using WineSales.Domain.Exceptions;
+using WineSales.Config;
 
 namespace WineSales.Domain.Interactors
 {

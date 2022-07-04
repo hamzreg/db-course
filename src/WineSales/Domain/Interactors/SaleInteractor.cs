@@ -34,7 +34,7 @@ namespace WineSales.Domain.Interactors
             else if (Exist(sale.ID))
                 throw new SaleException("This sale already exists.");
 
-            sale.SellingPrice = sale.PurchasePrice * (1 + percent / 100);
+            sale.SellingPrice = sale.PurchasePrice * (1 + percent / 100.0);
             sale.Margin = sale.SellingPrice - sale.PurchasePrice;
             sale.Profit = (sale.Margin - sale.Costs) * sale.WineNumber;
 

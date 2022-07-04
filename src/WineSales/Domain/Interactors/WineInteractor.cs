@@ -7,17 +7,11 @@ namespace WineSales.Domain.Interactors
 {
     public interface IWineInteractor
     {
-        void Create(Wine wine, double purchasePrice, int percent);
-        (List<Wine>, List<double>) GetBySupplier(int supplierID);
-        List<Wine> GetAll();
-        (List<Wine>, List<double>) GetCart(int customerID);
-        (List<Wine>, List<string>, List<double>) GetByAdmin();
-        (List<Wine>, List<double>) GetRating();
-        void Update(Wine wine);
-        void Delete(Wine wine);
+        void CreateWine(Wine wine);
+        void DeleteWine(Wine wine);
     }
 
-    public class WineInteractor
+    public class WineInteractor : IWineInteractor
     {
         private readonly IWineRepository wineRepository;
 
@@ -26,68 +20,51 @@ namespace WineSales.Domain.Interactors
             this.wineRepository = wineRepository;
         }
 
-        public void Create(Wine wine, double purchasePrice, int percent)
+        public void CreateWine(Wine wine)
         {
-            if (percent < SaleConfig.MinPercent)
-                throw new WineException("Invalid input of percent.");
-            else if (purchasePrice < SaleConfig.MinPurchasePrice)
-                throw new WineException("Invalid input of purchase price.");
-            else if (!CheckWine(wine))
+            if (!CheckWine(wine))
                 throw new WineException("Invalid input of wine.");
-            else if (Exist(wine.ID))
-                throw new WineException("This wine already exists.");
+            else if (Exist(wine))
+            {
+                var existingWine = wineRepository.GetByID(wine.ID);
+                existingWine.Number++;
+                return;
+            }
 
-            wineRepository.Add(wine, purchasePrice, percent);
+            wine.Number = WineConfig.MinNumber;
+            wineRepository.Create(wine);
         }
 
-        public (List<Wine>, List<double>) GetBySupplier(int supplierID)
+        public void DeleteWine(Wine wine)
         {
-            return wineRepository.GetBySupplier(supplierID);
-        }
-
-        public List<Wine> GetAll()
-        {
-            return wineRepository.GetAll();
-        }
-
-        public (List<Wine>, List<double>) GetCart(int customerID)
-        {
-            return wineRepository.GetCart(customerID);
-        }
-
-        public (List<Wine>, List<string>, List<double>) GetByAdmin()
-        {
-            return wineRepository.GetByAdmin();
-        }
-
-        public (List<Wine>, List<double>) GetRating()
-        {
-            return wineRepository.GetRating();
-        }
-
-        public void Update(Wine wine)
-        {
-            if (!Exist(wine.ID))
+            if (NotExist(wine.ID))
                 throw new WineException("This wine doesn't exist.");
             else if (!CheckWine(wine))
                 throw new WineException("Invalid input of wine.");
-
-            wineRepository.Update(wine);
-        }
-
-        public void Delete(Wine wine)
-        {
-            if (!Exist(wine.ID))
-                throw new WineException("This wine doesn't exist.");
-            else if (!CheckWine(wine))
-                throw new WineException("Invalid input of wine.");
+            else if (wine.Number > WineConfig.MinNumber)
+            {
+                var existingWine = wineRepository.GetByID(wine.ID);
+                existingWine.Number--;
+                return;
+            }
 
             wineRepository.Delete(wine);
         }
 
-        private bool Exist(int id)
+        private bool Exist(Wine wine)
         {
-            return wineRepository.GetByID(id) != null;
+            return wineRepository.GetAll().Any(obj =>
+                                               obj.Kind == wine.Kind &&
+                                               obj.Color == wine.Color &&
+                                               obj.Sugar == wine.Sugar &&
+                                               obj.Volume == wine.Volume &&
+                                               obj.Alcohol == wine.Alcohol &&
+                                               obj.Aging == wine.Aging);
+        }
+
+        private bool NotExist(int id)
+        {
+            return wineRepository.GetByID(id) == null;
         }
 
         private bool CheckWine(Wine wine)

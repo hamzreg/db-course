@@ -198,9 +198,9 @@ namespace DomainTests
             var salesList = mockSales;
             Assert.All(salesList, obj => Assert.InRange(obj.ID, low: 1, high: expectedCount));
 
-            var newSale = _mockRepository.GetByID(sale.ID);
+            var newSale = _mockRepository.GetByID(mockSales.Count);
 
-            double expectedSellingPrice = sale.PurchasePrice * (1 + percent / 100);
+            double expectedSellingPrice = sale.PurchasePrice * (1 + percent / 100.0);
             Assert.Equal(expectedSellingPrice, newSale.SellingPrice);
 
             double expectedMargin = expectedSellingPrice - sale.PurchasePrice;
