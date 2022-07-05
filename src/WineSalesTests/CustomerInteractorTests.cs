@@ -127,9 +127,9 @@ namespace DomainTests
 
             var updatedCustomer = mockCustomers.Find(x => x.ID == customer.ID);
             Assert.NotNull(updatedCustomer);
-            Assert.Equal(updatedCustomer?.ID, customer.ID);
-            Assert.Equal(updatedCustomer?.Name, customer.Name);
-            Assert.Equal(updatedCustomer?.Surname, customer.Surname);
+            Assert.Equal(customer.ID, updatedCustomer?.ID);
+            Assert.Equal(customer.Name, updatedCustomer?.Name);
+            Assert.Equal(customer.Surname, updatedCustomer?.Surname);
         }
 
         [Fact]

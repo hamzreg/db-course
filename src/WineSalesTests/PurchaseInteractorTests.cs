@@ -284,17 +284,16 @@ namespace DomainTests
 
             for (int i = 0; i < expectedWines.Count; i++)
             {
-                Assert.Equal(wines[i].ID, expectedWines[i].ID);
-                Assert.Equal(wines[i].Kind, expectedWines[i].Kind);
-                Assert.Equal(wines[i].Color, expectedWines[i].Color);
-                Assert.Equal(wines[i].Sugar, expectedWines[i].Sugar);
-                Assert.Equal(wines[i].Volume, expectedWines[i].Volume);
-                Assert.Equal(wines[i].Alcohol, expectedWines[i].Alcohol);
-                Assert.Equal(wines[i].Aging, expectedWines[i].Aging);
-            }
+                Assert.Equal(expectedWines[i].ID, wines[i].ID);
+                Assert.Equal(expectedWines[i].Kind, wines[i].Kind);
+                Assert.Equal(expectedWines[i].Color, wines[i].Color);
+                Assert.Equal(expectedWines[i].Sugar, wines[i].Sugar);
+                Assert.Equal(expectedWines[i].Volume, wines[i].Volume);
+                Assert.Equal(expectedWines[i].Alcohol, wines[i].Alcohol);
+                Assert.Equal(expectedWines[i].Aging, wines[i].Aging);
 
-            for (int i = 0; i < expectedPrices.Count; i++)
-                Assert.Equal(prices[i], expectedPrices[i]);
+                Assert.Equal(expectedPrices[i], prices[i]);
+            }
         }
 
         [Fact]
@@ -318,9 +317,9 @@ namespace DomainTests
 
             var updatedPurchase = mockPurchases.Find(x => x.ID == purchase.ID);
             Assert.NotNull(updatedPurchase);
-            Assert.Equal(updatedPurchase?.ID, purchase.ID);
-            Assert.Equal(updatedPurchase?.Price, purchase.Price);
-            Assert.Equal(updatedPurchase?.Status, purchase.Status);
+            Assert.Equal(purchase.ID, updatedPurchase?.ID);
+            Assert.Equal(purchase.Price, updatedPurchase?.Price);
+            Assert.Equal(purchase.Status, updatedPurchase?.Status);
         }
 
         [Fact]

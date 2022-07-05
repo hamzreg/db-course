@@ -99,7 +99,7 @@ namespace DomainTests
             Assert.All(winesList, obj => Assert.InRange(obj.ID, low: 1, high: expectedCount));
 
             var newWine = _mockRepository.GetByID(mockWines.Count);
-            Assert.Equal(newWine.Number, WineConfig.MinNumber);
+            Assert.Equal(WineConfig.MinNumber, newWine.Number);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace DomainTests
             Assert.Equal(expectedCount, mockWines.Count);
 
             var newWine = _mockRepository.GetByID(wine.ID);
-            Assert.Equal(newWine.Number, WineConfig.MinNumber + 2);
+            Assert.Equal(WineConfig.MinNumber + 2, newWine.Number);
         }
 
         [Fact]

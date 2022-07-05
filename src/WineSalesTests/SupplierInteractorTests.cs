@@ -181,12 +181,12 @@ namespace DomainTests
 
             var updatedSupplier = mockSuppliers.Find(x => x.ID == supplier.ID);
             Assert.NotNull(updatedSupplier);
-            Assert.Equal(updatedSupplier?.ID, supplier.ID);
-            Assert.Equal(updatedSupplier?.Name, supplier.Name);
-            Assert.Equal(updatedSupplier?.Country, supplier.Country);
-            Assert.Equal(updatedSupplier?.Experience, supplier.Experience);
-            Assert.Equal(updatedSupplier?.License, supplier.License);
-            Assert.Equal(updatedSupplier?.Rating, supplier.Rating);
+            Assert.Equal(supplier.ID, updatedSupplier?.ID);
+            Assert.Equal(supplier.Name, updatedSupplier?.Name);
+            Assert.Equal(supplier.Country, updatedSupplier?.Country);
+            Assert.Equal(supplier.Experience, updatedSupplier?.Experience);
+            Assert.Equal(supplier.License, updatedSupplier?.License);
+            Assert.Equal(supplier.Rating, updatedSupplier?.Rating);
         }
 
         [Fact]

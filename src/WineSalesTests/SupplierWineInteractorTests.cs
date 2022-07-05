@@ -140,9 +140,6 @@ namespace DomainTests
                     foreach (SupplierWine wine in mockSupplierWine)
                     {
                         winesList.Add(mockWines.Find(x => x.ID == wine.WineID));
-                        Console.WriteLine(wine.Price + "\n");
-                        Console.WriteLine(wine.Price * (1 + wine.Percent / 100.0) + "\n");
-                        Console.WriteLine(pricesList + "\n");
                         pricesList.Add(wine.Price * (1 + wine.Percent / 100.0));
                     }
 
