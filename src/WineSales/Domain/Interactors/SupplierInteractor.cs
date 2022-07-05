@@ -23,7 +23,7 @@ namespace WineSales.Domain.Interactors
 
         public void CreateSupplier(Supplier supplier)
         {
-            if (Exist(supplier.ID))
+            if (Exist(supplier.Name))
                 throw new SupplierException("This supplier already exists.");
 
             supplierRepository.Create(supplier);
@@ -36,7 +36,7 @@ namespace WineSales.Domain.Interactors
 
         public void UpdateSupplier(Supplier supplier)
         {
-            if (!Exist(supplier.ID))
+            if (NotExist(supplier.ID))
                 throw new SupplierException("This supplier doesn't exist.");
 
             supplierRepository.Update(supplier);
@@ -44,15 +44,20 @@ namespace WineSales.Domain.Interactors
 
         public void DeleteSupplier(Supplier supplier)
         {
-            if (!Exist(supplier.ID))
+            if (NotExist(supplier.ID))
                 throw new SupplierException("This supplier doesn't exist.");
 
             supplierRepository.Delete(supplier);
         }
 
-        private bool Exist(int id)
+        private bool Exist(string name)
         {
-            return supplierRepository.GetByID(id) != null;
+            return supplierRepository.GetByName(name) != null;
+        }
+
+        private bool NotExist(int id)
+        {
+            return supplierRepository.GetByID(id) == null;
         }
     }
 }

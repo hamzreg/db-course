@@ -7,11 +7,11 @@ namespace WineSales.Domain.Interactors
 {
     public interface IUserInteractor
     {
-        void Create(User user);
-        void Update(User user);
-        void Delete(User user);
-        void Register(string login, string password, string role);
-        void SignIn(string login, string password, string role);
+        void CreateUser(User user);
+        void UpdateUser(User user);
+        void DeleteUser(User user);
+        void Register(User user);
+        void SignIn(User user);
         int GetNowUserID();
         User GetNowUser();
         void SetNowUser(User user);
@@ -45,18 +45,20 @@ namespace WineSales.Domain.Interactors
             nowUser = user;
         }
 
-        public void Create(User user)
+        public void CreateUser(User user)
         {
-            if (Exist(user))
+            if (Exist(user.Login))
                 throw new UserException("This user already exists.");
 
             if (!CheckPassword(user.Password))
                 throw new UserException("Invalid input of password.");
+
+            userRepository.Create(user);
         }
 
-        public void Update(User user)
+        public void UpdateUser(User user)
         {
-            if (!Exist(user))
+            if (NotExist(user.ID))
                 throw new UserException("This user doesn't exist.");
 
             if (user.Password != null && !CheckPassword(user.Password))
@@ -65,40 +67,41 @@ namespace WineSales.Domain.Interactors
             userRepository.Update(user);
         }
 
-        public void Delete(User user)
+        public void DeleteUser(User user)
         {
-            if (!Exist(user))
+            if (NotExist(user.ID))
                 throw new UserException("This user doesn't exist.");
+
+            if (user.Password != null && !CheckPassword(user.Password))
+                throw new UserException("Invalid input of password.");
 
             userRepository.Delete(user);
         }
 
-        public void Register(string login, string password, string role)
+        public void Register(User user)
         {
-            if (!CheckPassword(password))
+            if (!CheckPassword(user.Password))
                 throw new UserException("Invalid input of password.");
 
-            var user = new User(login, password, role);
+            var newUser = new User(user.Login, user.Password, user.Role);
 
-            if (Exist(user))
+            if (Exist(newUser.Login))
                 throw new UserException("This user already exists.");
 
-            userRepository.Register(user);
+            userRepository.Register(newUser);
         }
 
-        public void SignIn(string login, string password, string role)
+        public void SignIn(User user)
         {
-            if (!CheckPassword(password))
+            if (!CheckPassword(user.Password))
                 throw new UserException("Invalid input of password.");
 
-            var user = new User(login, password, role);
-
-            var authorizedUser = userRepository.GetByLogin(login);
+            var authorizedUser = userRepository.GetByLogin(user.Login);
 
             if (authorizedUser == null)
                 throw new UserException("This user doesn't exist.");
 
-            if (password != authorizedUser.Password)
+            if (user.Password != authorizedUser.Password)
                 throw new UserException("Invalid password.");
 
             if (!userRepository.ConnectToDataStore(authorizedUser))
@@ -107,14 +110,19 @@ namespace WineSales.Domain.Interactors
             SetNowUser(user);
         }
 
-        private bool Exist(User user)
+        private bool Exist(string login)
         {
-            return userRepository.GetByLogin(user.Login) != null;
+            return userRepository.GetByLogin(login) != null;
+        }
+
+        private bool NotExist(int id)
+        {
+            return userRepository.GetByID(id) == null;
         }
 
         private bool CheckPassword(string password)
         {
-            return UserConfig.MinPasswordLen < password.Length;
+            return UserConfig.MinPasswordLen <= password.Length;
         }
     }
 }

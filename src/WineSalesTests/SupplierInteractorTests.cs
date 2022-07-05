@@ -77,6 +77,8 @@ namespace DomainTests
             var mockRepository = new Mock<ISupplierRepository>();
             mockRepository.Setup(obj => obj.GetByID(It.IsAny<int>())).Returns(
                 (int id) => mockSuppliers.Find(x => x.ID == id));
+            mockRepository.Setup(obj => obj.GetByName(It.IsAny<string>())).Returns(
+                (string name) => mockSuppliers.Find(x => x.Name == name));
             mockRepository.Setup(obj => obj.Create(It.IsAny<Supplier>())).Callback(
                 (Supplier supplier) =>
                 {
