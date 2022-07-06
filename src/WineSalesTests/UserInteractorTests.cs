@@ -73,11 +73,8 @@ namespace DomainTests
                     mockUsers.Add(newUser);
                 }
                 );
-            mockRepository.Setup(obj => obj.ConnectToDataStore(It.IsAny<User>())).Callback(
-                (User user) =>
-                {
-                }
-                );
+            mockRepository.Setup(obj => obj.ConnectToDataStore(It.IsAny<User>())).Returns(
+                (User user) => true);
             _mockRepository = mockRepository.Object;
             _interactor = new UserInteractor(_mockRepository);
         }
@@ -163,6 +160,22 @@ namespace DomainTests
         }
 
         [Fact]
+        public void UsedLoginUpdateUserTest()
+        {
+            var user = new User("r1mok", "password", "admin")
+            {
+                ID = 1
+            };
+
+            void action() => _interactor.UpdateUser(user);
+            Assert.Throws<UserException>(action);
+
+            var exception = Assert.Throws<UserException>(action);
+            Assert.Equal("User: This login is already in use.",
+                         exception.Message);
+        }
+
+        [Fact]
         public void InvalidPasswordUpdateUserTest()
         {
             var user = new User("gerzmah", "pass", "admin")
@@ -211,18 +224,121 @@ namespace DomainTests
         }
 
         [Fact]
-        public void InvalidPasswordDeleteUserTest()
+        public void RegisterTest()
         {
-            var user = new User("hamzreg", "pass", "admin")
+            var expectedCount = mockUsers.Count + 1;
+
+            var info = new LoginDetails
             {
-                ID = 1
+                Login = "MyMiDi",
+                Password = "password"
             };
 
-            void action() => _interactor.DeleteUser(user);
+            _interactor.Register(info, "customer");
+            Assert.Equal(expectedCount, mockUsers.Count);
+
+            var usersList = mockUsers;
+            Assert.All(usersList, obj => Assert.InRange(obj.ID, low: 1, high: expectedCount));
+        }
+
+        [Fact]
+        public void AlreadyExistsRegisterTest()
+        {
+            var info = new LoginDetails
+            {
+                Login = "kovkir",
+                Password = "password"
+            };
+
+            void action() => _interactor.Register(info, "customer");
+            Assert.Throws<UserException>(action);
+
+            var exception = Assert.Throws<UserException>(action);
+            Assert.Equal("User: This user already exists.",
+                         exception.Message);
+        }
+
+        [Fact]
+        public void InvalidPasswordRegisterTest()
+        {
+            var info = new LoginDetails
+            {
+                Login = "MyMiDi",
+                Password = "pass"
+            };
+
+            void action() => _interactor.Register(info, "customer");
             Assert.Throws<UserException>(action);
 
             var exception = Assert.Throws<UserException>(action);
             Assert.Equal("User: Invalid input of password.",
+                         exception.Message);
+        }
+
+        [Fact]
+        public void SignInTest()
+        {
+            var info = new LoginDetails
+            {
+                Login = "hamzreg",
+                Password = "password"
+            };
+
+            _interactor.SignIn(info);
+
+            User nowUser = _interactor.GetNowUser();
+            Assert.Equal(info.Login, nowUser.Login);
+            Assert.Equal(info.Password, nowUser.Password);
+        }
+
+        [Fact]
+        public void NotExistsSignInTest()
+        {
+            var info = new LoginDetails
+            {
+                Login = "gerzmah",
+                Password = "password"
+            };
+
+            void action() => _interactor.SignIn(info);
+            Assert.Throws<UserException>(action);
+
+            var exception = Assert.Throws<UserException>(action);
+            Assert.Equal("User: This user doesn't exist.",
+                         exception.Message);
+        }
+
+        [Fact]
+        public void InvalidPasswordSignInTest()
+        {
+            var info = new LoginDetails
+            {
+                Login = "hamzreg",
+                Password = "pass"
+            };
+
+            void action() => _interactor.SignIn(info);
+            Assert.Throws<UserException>(action);
+
+            var exception = Assert.Throws<UserException>(action);
+            Assert.Equal("User: Invalid input of password.",
+                         exception.Message);
+        }
+
+        [Fact]
+        public void WrongPasswordSignInTest()
+        {
+            var info = new LoginDetails
+            {
+                Login = "hamzreg",
+                Password = "helloworld"
+            };
+
+            void action() => _interactor.SignIn(info);
+            Assert.Throws<UserException>(action);
+
+            var exception = Assert.Throws<UserException>(action);
+            Assert.Equal("User: Invalid password.",
                          exception.Message);
         }
     }

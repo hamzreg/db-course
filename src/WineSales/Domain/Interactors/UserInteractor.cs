@@ -10,8 +10,8 @@ namespace WineSales.Domain.Interactors
         void CreateUser(User user);
         void UpdateUser(User user);
         void DeleteUser(User user);
-        void Register(User user);
-        void SignIn(User user);
+        void Register(LoginDetails info, string role);
+        void SignIn(LoginDetails info);
         int GetNowUserID();
         User GetNowUser();
         void SetNowUser(User user);
@@ -61,6 +61,9 @@ namespace WineSales.Domain.Interactors
             if (NotExist(user.ID))
                 throw new UserException("This user doesn't exist.");
 
+            if (user.Login != null && Exist(user.Login))
+                throw new UserException("This login is already in use.");
+
             if (user.Password != null && !CheckPassword(user.Password))
                 throw new UserException("Invalid input of password.");
 
@@ -72,42 +75,38 @@ namespace WineSales.Domain.Interactors
             if (NotExist(user.ID))
                 throw new UserException("This user doesn't exist.");
 
-            if (user.Password != null && !CheckPassword(user.Password))
-                throw new UserException("Invalid input of password.");
-
             userRepository.Delete(user);
         }
 
-        public void Register(User user)
+        public void Register(LoginDetails info, string role)
         {
-            if (!CheckPassword(user.Password))
-                throw new UserException("Invalid input of password.");
-
-            var newUser = new User(user.Login, user.Password, user.Role);
-
-            if (Exist(newUser.Login))
+            if (Exist(info.Login))
                 throw new UserException("This user already exists.");
 
+            if (!CheckPassword(info.Password))
+                throw new UserException("Invalid input of password.");
+
+            var newUser = new User(info.Login, info.Password, role);
             userRepository.Register(newUser);
         }
 
-        public void SignIn(User user)
+        public void SignIn(LoginDetails info)
         {
-            if (!CheckPassword(user.Password))
+            if (!CheckPassword(info.Password))
                 throw new UserException("Invalid input of password.");
 
-            var authorizedUser = userRepository.GetByLogin(user.Login);
+            var authorizedUser = userRepository.GetByLogin(info.Login);
 
             if (authorizedUser == null)
                 throw new UserException("This user doesn't exist.");
 
-            if (user.Password != authorizedUser.Password)
+            if (info.Password != authorizedUser.Password)
                 throw new UserException("Invalid password.");
 
             if (!userRepository.ConnectToDataStore(authorizedUser))
                 throw new UserException("Failed to connect to data storage.");
 
-            SetNowUser(user);
+            SetNowUser(authorizedUser);
         }
 
         private bool Exist(string login)
