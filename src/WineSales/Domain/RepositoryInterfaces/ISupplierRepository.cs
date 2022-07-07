@@ -8,7 +8,6 @@ namespace WineSales.Domain.RepositoryInterfaces
         List<Supplier> GetByCountry(string country);
         List<Supplier> GetByExperience(double experience, bool sign);
         List<Supplier> GetByLicense(bool license);
-        List<Supplier> GetByRating(double rating, bool sign);
         Supplier GetBySupplierWineID(int supplierWineID);
     }
 }

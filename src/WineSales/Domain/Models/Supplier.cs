@@ -7,6 +7,5 @@
         public string? Country { get; set; }
         public double Experience { get; set; }
         public bool License { get; set; }
-        public double Rating { get; set; }
     }
 }

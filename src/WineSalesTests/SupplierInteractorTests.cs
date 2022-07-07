@@ -26,8 +26,7 @@ namespace DomainTests
                     Name = "Fanagoria",
                     Country = "Russia",
                     Experience = 65,
-                    License = true,
-                    Rating = 10
+                    License = true
                 },
                 new Supplier
                 {
@@ -35,8 +34,7 @@ namespace DomainTests
                     Name = "Agora",
                     Country = "Russia",
                     Experience = 25,
-                    License = true,
-                    Rating = 10
+                    License = true
                 },
                 new Supplier
                 {
@@ -44,8 +42,7 @@ namespace DomainTests
                     Name = "Alianta",
                     Country = "Russia",
                     Experience = 29,
-                    License = true,
-                    Rating = 10
+                    License = true
                 }
             };
 
@@ -103,7 +100,6 @@ namespace DomainTests
                                      x.Country = supplier.Country;
                                      x.Experience = supplier.Experience;
                                      x.License = supplier.License;
-                                     x.Rating = supplier.Rating;
                                  });
                 }
                 );
@@ -128,8 +124,7 @@ namespace DomainTests
                 Name = "Castel",
                 Country = "France",
                 Experience = 73,
-                License = true,
-                Rating = 10
+                License = true
             };
 
             _interactor.CreateSupplier(supplier);
@@ -171,8 +166,7 @@ namespace DomainTests
                 Name = "Castel",
                 Country = "France",
                 Experience = 20,
-                License = true,
-                Rating  = 10
+                License = true
             };
 
             _interactor.UpdateSupplier(supplier);
@@ -188,7 +182,6 @@ namespace DomainTests
             Assert.Equal(supplier.Country, updatedSupplier?.Country);
             Assert.Equal(supplier.Experience, updatedSupplier?.Experience);
             Assert.Equal(supplier.License, updatedSupplier?.License);
-            Assert.Equal(supplier.Rating, updatedSupplier?.Rating);
         }
 
         [Fact]
@@ -200,8 +193,7 @@ namespace DomainTests
                 Name = "Castel",
                 Country = "France",
                 Experience = 20,
-                License = true,
-                Rating = 10
+                License = true
             };
 
             void action() => _interactor.UpdateSupplier(supplier);
@@ -223,8 +215,7 @@ namespace DomainTests
                 Name = "Agora",
                 Country = "Russia",
                 Experience = 25,
-                License = true,
-                Rating = 10
+                License = true
             };
 
             _interactor.DeleteSupplier(supplier);
@@ -242,8 +233,7 @@ namespace DomainTests
                 Name = "Castel",
                 Country = "France",
                 Experience = 20,
-                License = true,
-                Rating = 10
+                License = true
             };
 
             void action() => _interactor.DeleteSupplier(supplier);
