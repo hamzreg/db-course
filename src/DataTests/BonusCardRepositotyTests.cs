@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 using WineSales.Data;
 using WineSales.Domain.Models;
-using WineSales.Domain.Exceptions;
 using WineSales.Data.Repositories;
 
 namespace DataTests
@@ -24,8 +23,8 @@ namespace DataTests
             context.Database.EnsureCreated();
 
             context.BonusCards.AddRange(
-                new BonusCard { Bonuses = 150, Phone = "88005553535"},
-                new BonusCard { Bonuses = 100, Phone = "89005553535"});
+                new BonusCard { Bonuses = 150, Phone = "88005553535" },
+                new BonusCard { Bonuses = 100, Phone = "89005553535" });
 
             context.SaveChanges();
         }
