@@ -6,7 +6,7 @@ namespace WineSales.Data
 {
     public class DataBaseContext : DbContext
     {
-        public DbSet<BonusCard> Cards { get; set; }
+        public DbSet<BonusCard> BonusCards { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Sale> Sales { get; set; }
