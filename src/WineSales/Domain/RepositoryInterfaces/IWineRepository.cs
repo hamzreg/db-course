@@ -10,5 +10,6 @@ namespace WineSales.Domain.RepositoryInterfaces
         List<Wine> GetByVolume(double volume);
         List<Wine> GetByAlcohol(double alcohol);
         List<Wine> GetByAging(int aging);
+        List<Wine> GetByNumber(int number);
     }
 }

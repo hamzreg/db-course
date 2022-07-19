@@ -7,11 +7,11 @@ using WineSales.Data.Repositories;
 
 namespace DataTests
 {
-    public class BonusCardRepositotyTests
+    public class BonusCardRepositoryTests
     {
         private readonly DbContextOptions<DataBaseContext> _contextOptions;
 
-        public BonusCardRepositotyTests()
+        public BonusCardRepositoryTests()
         {
             _contextOptions = new DbContextOptionsBuilder<DataBaseContext>()
                 .UseInMemoryDatabase("BonusCardRepositoryTests")
