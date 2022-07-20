@@ -95,7 +95,7 @@ namespace WineSales.Data.Repositories
             return (wines, prices);
         }
 
-        public (List<Wine>, List<string>, List<Sale>) GetByAdminID(int adminID)
+        public (List<Wine>, List<string>, List<Sale>) GetByAdmin()
         {
             var sales = GetAll();
 

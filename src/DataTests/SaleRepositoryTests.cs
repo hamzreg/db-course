@@ -448,12 +448,12 @@ namespace DataTests
         }
 
         [Fact]
-        public void GetByAdminIDTest()
+        public void GetByAdminTest()
         {
             using var context = CreateContext();
             var repository = new SaleRepository(context);
 
-            var (wines, suppliers, sales) = repository.GetByAdminID(1);
+            var (wines, suppliers, sales) = repository.GetByAdmin();
 
             Assert.Equal(2, wines.Count);
             Assert.Equal(2, suppliers.Count);

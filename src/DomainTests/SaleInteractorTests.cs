@@ -147,8 +147,8 @@ namespace DomainTests
                     return (winesList, pricesList);
                 }
                 );
-            mockRepository.Setup(obj => obj.GetByAdminID(It.IsAny<int>())).Returns(
-                (int id) =>
+            mockRepository.Setup(obj => obj.GetByAdmin()).Returns(
+                () =>
                 { 
                     var winesList = new List<Wine>();
                     var supplierList = new List<string>();
@@ -355,10 +355,8 @@ namespace DomainTests
         }
 
         [Fact]
-        public void GetByAdminIDTest()
+        public void GetByAdminTest()
         {
-            int adminID = 1;
-
             var expectedCount = mockSales.Count;
 
             var expectedSales = mockSales;
@@ -397,7 +395,7 @@ namespace DomainTests
                 }
             };
 
-            var (wines, suppliers, sales) = _interactor.GetByAdminID(adminID);
+            var (wines, suppliers, sales) = _interactor.GetByAdmin();
 
             Assert.Equal(expectedCount, wines.Count);
             Assert.Equal(expectedCount, suppliers.Count);

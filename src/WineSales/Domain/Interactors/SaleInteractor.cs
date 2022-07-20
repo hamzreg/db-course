@@ -9,7 +9,7 @@ namespace WineSales.Domain.Interactors
     {
         void CreateSale(Sale sale, int percent);
         (List<Wine>, List<double>) GetBySupplierID(int supplierID);
-        (List<Wine>, List<string>, List<Sale>) GetByAdminID(int adminID);
+        (List<Wine>, List<string>, List<Sale>) GetByAdmin();
         void DeleteSale(Sale sale);
     }
 
@@ -46,9 +46,9 @@ namespace WineSales.Domain.Interactors
             return saleRepository.GetBySupplierID(supplierID);
         }
 
-        public (List<Wine>, List<string>, List<Sale>) GetByAdminID(int adminID)
+        public (List<Wine>, List<string>, List<Sale>) GetByAdmin()
         {
-            return saleRepository.GetByAdminID(adminID);
+            return saleRepository.GetByAdmin();
         }
 
         public void DeleteSale(Sale sale)
