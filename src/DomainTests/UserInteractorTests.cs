@@ -73,8 +73,6 @@ namespace DomainTests
                     mockUsers.Add(newUser);
                 }
                 );
-            mockRepository.Setup(obj => obj.ConnectToDataStore(It.IsAny<User>())).Returns(
-                (User user) => true);
             _mockRepository = mockRepository.Object;
             _interactor = new UserInteractor(_mockRepository);
         }

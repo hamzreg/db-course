@@ -10,7 +10,6 @@ namespace WineSales.Domain.Interactors
         void CreateSupplierWine(SupplierWine supplierWine);
         (List<Wine>, List<double>) GetBySupplierID(int supplierID);
         (List<Wine>, List<double>) GetAllWine();
-        (List<Wine>, List<double>) GetCart(int customerID);
         (List<Wine>, List<string>, List<double>) GetByAdmin();
         (List<Wine>, List<double>) GetRating();
         void UpdateSupplierWine(SupplierWine supplierWine);
@@ -44,11 +43,6 @@ namespace WineSales.Domain.Interactors
         public (List<Wine>, List<double>) GetAllWine()
         {
             return supplierWineRepository.GetAllWine();
-        }
-
-        public (List<Wine>, List<double>) GetCart(int customerID)
-        {
-            return supplierWineRepository.GetCart(customerID);
         }
 
         public (List<Wine>, List<string>, List<double>) GetByAdmin()

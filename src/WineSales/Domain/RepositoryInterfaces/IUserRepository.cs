@@ -7,6 +7,5 @@ namespace WineSales.Domain.RepositoryInterfaces
         User GetByLogin(string login);
         List<User> GetByRole(string role);
         void Register(User user);
-        bool ConnectToDataStore(User user);
     }
 }

@@ -25,7 +25,6 @@ namespace DataTests
             context.Wines.AddRange(
                 new Wine
                 {
-                    ID = 1,
                     Kind = "lambrusco",
                     Color = "red",
                     Sugar = "dry",
@@ -36,7 +35,6 @@ namespace DataTests
                 },
                 new Wine
                 {
-                    ID = 2,
                     Kind = "lambrusco",
                     Color = "white",
                     Sugar = "semi-sweet",

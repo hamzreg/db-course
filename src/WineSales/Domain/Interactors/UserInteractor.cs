@@ -103,9 +103,6 @@ namespace WineSales.Domain.Interactors
             if (info.Password != authorizedUser.Password)
                 throw new UserException("Invalid password.");
 
-            if (!userRepository.ConnectToDataStore(authorizedUser))
-                throw new UserException("Failed to connect to data storage.");
-
             SetNowUser(authorizedUser);
         }
 
