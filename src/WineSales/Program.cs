@@ -1,6 +1,39 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using WineSales.Data;
+using WineSales.Data.Repositories;
+using WineSales.Domain.Models;
+using WineSales.Domain.Interactors;
+using WineSales.Domain.RepositoryInterfaces;
+
+void ConfigureServices(IServiceCollection services)
+{
+    services.AddScoped<IBonusCardInteractor, BonusCardInteractor>();
+    services.AddScoped<ICustomerInteractor, CustomerInteractor>();
+    services.AddScoped<IPurchaseInteractor, PurchaseInteractor>();
+    services.AddScoped<ISaleInteractor, SaleInteractor>();
+    services.AddScoped<ISupplierInteractor, SupplierInteractor>();
+    services.AddScoped<ISupplierWineInteractor, SupplierWineInteractor>();
+    services.AddScoped<IUserInteractor, UserInteractor>();
+    services.AddScoped<IWineInteractor, WineInteractor>();
+
+    services.AddScoped<IBonusCardRepository, BonusCardRepository>();
+    services.AddScoped<ICustomerRepository, CustomerRepository>();
+    services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+    services.AddScoped<ISaleRepository, SaleRepository>();
+    services.AddScoped<ISupplierRepository, SupplierRepository>();
+    services.AddScoped<ISupplierWineRepository, SupplierWineRepository>();
+    services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<IWineRepository, WineRepository>();
+
+    services.AddDbContext<DataBaseContext>(
+        opts =>
+        {
+            opts.UseNpgsql(@"Server=localhost;Port=5432;Database=wine_sales;
+                User ID=postgres;Password=postgres");
+        });
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +41,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
