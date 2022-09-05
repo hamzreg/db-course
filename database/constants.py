@@ -1,14 +1,14 @@
 NUM_RECORDS = 1000
 
 # Файлы таблиц
-BONUS_CARDS_FILE = 'data/bonusCards.csw'
-CUSTOMERS_FILE = 'data/customers.csw'
-PURCHASES_FILE = 'data/purchases.csw'
-SALES_FILE = 'data/sales.csw'
-WINES_FILE = 'data/wines.csw'
-SUPPLIERS_FILE = 'data/suppliers.csw'
-SUPPLIER_WINES_FILE = 'data/supplierWines.csw'
-USERS_FILE = 'data/users.csw'
+BONUS_CARDS_FILE = 'data/bonusCards.csv'
+CUSTOMERS_FILE = 'data/customers.csv'
+PURCHASES_FILE = 'data/purchases.csv'
+SALES_FILE = 'data/sales.csv'
+WINES_FILE = 'data/wines.csv'
+SUPPLIERS_FILE = 'data/suppliers.csv'
+SUPPLIER_WINES_FILE = 'data/supplierWines.csv'
+USERS_FILE = 'data/users.csv'
 
 # Бонусные карты
 MIN_BONUSES = 0

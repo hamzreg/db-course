@@ -44,7 +44,7 @@ def generate_customers():
         name = faker.first_name()
         surname = faker.last_name()
 
-        record = '{0}|{1}|{2}\n'.format(bonus_card, name, surname)
+        record = '{0}|{1}|{2}\n'.format(name, surname, bonus_card)
         file.write(record)
     
     file.close()
