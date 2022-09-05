@@ -27,12 +27,13 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IWineRepository, WineRepository>();
 
-    services.AddDbContext<DataBaseContext>(
+    // Bad way
+/*    services.AddDbContext<DataBaseContext>(
         opts =>
         {
             opts.UseNpgsql(@"Server=localhost;Port=5432;Database=wine_sales;
                 User ID=postgres;Password=postgres");
-        });
+        });*/
 }
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,8 +44,24 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 ConfigureServices(builder.Services);
+builder.Configuration.AddJsonFile("dbsettings.json");
+builder.Services.AddDbContext<DataBaseContext>(options => options.UseNpgsql(
+      builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
+
 
 var app = builder.Build();
+
+// Test db
+/*using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+
+    var myRepository = services.GetRequiredService<IBonusCardRepository>();
+
+    var card = myRepository.GetByID(1);
+    Console.WriteLine(card.Phone);
+}    */
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
