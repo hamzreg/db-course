@@ -1,0 +1,25 @@
+﻿@using WineSales.Domain.Models
+
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="img/wine.png" class="img-fluid rounded-start" alt="wine">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">@OneWine.Kind @OneWine.Color</h5>
+        <p class="card-text"><small class="text-muted">@OneWine.Volume л</small></p>
+        <p class="card-text"><small class="text-muted">Сахар: @OneWine.Sugar</small></p>
+        <p class="card-text"><small class="text-muted">Алкоголь: @OneWine.Alcohol %</small></p>
+        <p class="card-text"><small class="text-muted">Выдержка: @OneWine.Aging</small></p>
+        <p class="card-text">@Price ₽</p>
+        <a href="#" class="btn btn-primary">Купить</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code {
+    [Parameter] public Wine OneWine { get; set; }
+    [Parameter] public double Price { get; set; }
+}
