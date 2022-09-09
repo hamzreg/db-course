@@ -7,6 +7,10 @@ using WineSales.Domain.Models;
 using WineSales.Domain.Interactors;
 using WineSales.Domain.RepositoryInterfaces;
 
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+
 void ConfigureServices(IServiceCollection services)
 {
     services.AddScoped<IBonusCardInteractor, BonusCardInteractor>();
@@ -15,7 +19,7 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<ISaleInteractor, SaleInteractor>();
     services.AddScoped<ISupplierInteractor, SupplierInteractor>();
     services.AddScoped<ISupplierWineInteractor, SupplierWineInteractor>();
-    services.AddScoped<IUserInteractor, UserInteractor>();
+    services.AddSingleton<IUserInteractor, UserInteractor>();
     services.AddScoped<IWineInteractor, WineInteractor>();
 
     services.AddScoped<IBonusCardRepository, BonusCardRepository>();
@@ -24,7 +28,7 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<ISaleRepository, SaleRepository>();
     services.AddScoped<ISupplierRepository, SupplierRepository>();
     services.AddScoped<ISupplierWineRepository, SupplierWineRepository>();
-    services.AddScoped<IUserRepository, UserRepository>();
+    services.AddSingleton<IUserRepository, UserRepository>();
     services.AddScoped<IWineRepository, WineRepository>();
 
     // Bad way
@@ -42,6 +46,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddBootstrapProviders()
+    .AddFontAwesomeIcons();
 
 ConfigureServices(builder.Services);
 builder.Configuration.AddJsonFile("dbsettings.json");

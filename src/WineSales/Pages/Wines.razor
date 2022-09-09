@@ -1,20 +1,24 @@
 ﻿@page "/wines"
 
-<PageTitle>Вина</PageTitle>
+<PageTitle>Каталог вин</PageTitle>
 
 @using WineSales.Domain.Models
+@using WineSales.Domain.Interactors
 @using WineSales.PageComponents
-@inject WineSales.Domain.Interactors.ISupplierWineInteractor SupplierWineInteractor
+@inject ISupplierWineInteractor SupplierWineInteractor
 
-<div class="row">
-    <div class="col text-center">
-        <h1>Каталог вин</h1>
-    </div>
-</div>
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronTitle Size="JumbotronTitleSize.Is4">Каталог вин</JumbotronTitle>
+    <Divider></Divider>
+</Jumbotron>
 
 @if (wines == null || prices == null)
 {
-    <p><em>Загрузка...</em></p>
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronSubtitle>
+            Загрузка...
+        </JumbotronSubtitle>
+    </Jumbotron>
 }
 else
 {
