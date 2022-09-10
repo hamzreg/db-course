@@ -7,8 +7,8 @@ namespace WineSales.Domain.RepositoryInterfaces
         List<SupplierWine> GetByWineID(int wineID);
         List<SupplierWine> GetByPrice(double price);
         List<SupplierWine> GetByPercent(int percent);
-        (List<Wine>, List<double>) GetBySupplierID(int supplierID);
-        (List<Wine>, List<double>) GetAllWine();
+        (List<Wine>, List<double>, List<int>) GetBySupplierID(int supplierID);
+        (List<int>, List<Wine>, List<double>) GetAllWine();
         (List<Wine>, List<string>, List<double>) GetByAdmin();
         (List<Wine>, List<double>) GetRating();
     }

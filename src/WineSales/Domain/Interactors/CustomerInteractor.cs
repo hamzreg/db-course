@@ -8,6 +8,7 @@ namespace WineSales.Domain.Interactors
     public interface ICustomerInteractor
     {
         void CreateCustomer(Customer customer);
+        Customer GetByID(int id);
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(Customer customer);
     }
@@ -19,6 +20,11 @@ namespace WineSales.Domain.Interactors
         public CustomerInteractor(ICustomerRepository customerRepository)
         {
             this.customerRepository = customerRepository;
+        }
+
+        public Customer GetByID(int id)
+        {
+            return customerRepository.GetByID(id);
         }
 
         public void CreateCustomer(Customer customer)

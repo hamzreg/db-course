@@ -9,6 +9,7 @@ namespace WineSales.Domain.Interactors
     {
         void CreateBonusCard(string phone);
         int GetBonuses(string phone);
+        BonusCard GetByID(int id);
         void AddBonuses(string phone, int bonuses);
         void WriteOffBonuses(string phone, int bonuses);
         void DeleteBonusCard(string phone);
@@ -21,6 +22,11 @@ namespace WineSales.Domain.Interactors
         public BonusCardInteractor(IBonusCardRepository bonusCardRepository)
         {
             this.bonusCardRepository = bonusCardRepository;
+        }
+
+        public BonusCard GetByID(int id)
+        {
+            return bonusCardRepository.GetByID(id);
         }
 
         public void CreateBonusCard(string phone)

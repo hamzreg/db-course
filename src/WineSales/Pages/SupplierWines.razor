@@ -1,0 +1,75 @@
+﻿@page "/supplierWines"
+
+@using WineSales.Domain.Interactors
+@inject IUserInteractor UserInteractor
+@inject ISupplierWineInteractor SupplierWineInteractor
+
+@if (nowUser.Role != "supplier")
+{
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronSubtitle>
+        Для просмотра этой страницы необходимо войти в аккаунт поставщика.
+    </JumbotronSubtitle>
+</Jumbotron>
+}
+else
+{
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronTitle Size="JumbotronTitleSize.Is4">Мои вина</JumbotronTitle>
+        <Divider></Divider>
+    </Jumbotron>
+
+    <Bar Breakpoint="Breakpoint.Desktop"
+         Background="Background.Light"
+         ThemeContrast="ThemeContrast.Light">
+        <BarToggler />
+        <BarMenu>
+            <BarStart>
+                <BarItem>
+                    <Button Color="Color.Primary">Добавить вино</Button>
+                    <Button Color="Color.Primary">Редактировать вино</Button>
+                </BarItem>
+            </BarStart>
+            <BarEnd>
+                <Button Color="Color.Danger">Удалить вино</Button>
+            </BarEnd>
+        </BarMenu>
+    </Bar>
+
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Сорт</TableHeaderCell>
+                <TableHeaderCell>Цвет</TableHeaderCell>
+                <TableHeaderCell>Объем (л)</TableHeaderCell>
+                <TableHeaderCell>Сахар</TableHeaderCell>
+                <TableHeaderCell>Алкоголь (%)</TableHeaderCell>
+                <TableHeaderCell>Выдержка (лет)</TableHeaderCell>
+                <TableHeaderCell>Процент</TableHeaderCell>
+                <TableHeaderCell>Цена (₽)</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            @for (int i = 0; i < wines.Count; i++)
+            {
+                <TableRowWine OneWine="wines[i]" incPrice=true Price="prices[i]" incPercent=true Percent="percentes[i]" incPoint=false></TableRowWine>
+            }
+        </TableBody>
+    </Table>
+}
+
+@code {
+    private List<Wine> wines = new List<Wine>();
+    private List<Double> prices = new List<Double>();
+    private List<int> percentes = new List<int>();
+
+    User nowUser;
+
+    protected override void OnInitialized()
+    {
+        nowUser = UserInteractor.GetNowUser();
+        int supplierID = nowUser.RoleID;
+        (wines, prices, percentes) = SupplierWineInteractor.GetBySupplierID(supplierID);
+        base.OnInitialized();
+    }
+}

@@ -14,39 +14,47 @@
                 <BarLink To="/">Главная</BarLink>
             </BarItem>
             <BarItem>
-                <BarLink To="wines">Каталог вин</BarLink>
+                <BarLink To="catalog">Каталог вин</BarLink>
             </BarItem>
             @if (nowUser.Role == "customer")
             {
                 <BarItem>
-                    <BarLink To="">Мои покупки</BarLink>
+                    <BarLink To="rating">Рейтинг вин</BarLink>
                 </BarItem>
                 <BarItem>
-                    <BarLink To="">Бонусная карта</BarLink>
+                    <BarLink To="purchases">Мои покупки</BarLink>
+                </BarItem>
+                <BarItem>
+                    <BarLink To="bonusCard">Бонусная карта</BarLink>
                 </BarItem>
             }
             else if (nowUser.Role == "supplier")
             {
                 <BarItem>
-                    <BarLink To="">Мои вина</BarLink>
+                    <BarLink To="supplierWines">Мои вина</BarLink>
                 </BarItem>
                 <BarItem>
-                    <BarLink To="">Мои продажи</BarLink>
+                    <BarLink To="supplierSales">Мои продажи</BarLink>
                 </BarItem>    
             }
         </BarStart>
         <BarEnd>
-            <BarItem>
-                @if (nowUser.Role == "guest")
-                {
+            @if (nowUser.Role == "guest")
+            {
+                <BarItem>
                     <Button Color="Color.Primary" Clicked="@ShowLogin">Вход в аккаунт</Button>
                     <Button Color="Color.Primary" Clicked="@ShowRegistration">Регистрация</Button>
-                }
-                else
-                {
+                </BarItem>
+            }
+            else
+            {
+                <BarItem>
+                    <BarLink To="">Настройки аккаунта</BarLink>
+                </BarItem>
+                <BarItem>
                     <Button Color="Color.Primary" Clicked="@SignOut">Выход из аккаунта</Button>
-                }
-            </BarItem>
+                 </BarItem>
+            }
         </BarEnd>
     </BarMenu>
 </Bar>

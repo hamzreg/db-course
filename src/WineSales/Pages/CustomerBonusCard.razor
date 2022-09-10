@@ -1,0 +1,60 @@
+﻿@page "/bonusCard"
+
+@using WineSales.Domain.Interactors
+@inject IUserInteractor UserInteractor
+@inject ICustomerInteractor CustomerInteractor
+@inject IBonusCardInteractor BonusCardInteractor
+
+@if (nowUser.Role != "customer")
+{
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronSubtitle>
+        Для просмотра этой страницы необходимо войти в аккаунт покупателя.
+    </JumbotronSubtitle>
+</Jumbotron>
+}
+else
+{
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronTitle Size="JumbotronTitleSize.Is4">Бонусная карта</JumbotronTitle>
+        
+        @if (bonusCardID is null)
+        {
+            <Button Color="Color.Primary">Получить бонусную карту</Button>
+        }
+        else
+        {
+            <JumbotronSubtitle>
+                Число бонусов: @bonuses
+            </JumbotronSubtitle>            
+        }
+        <Divider></Divider>
+    </Jumbotron>
+}
+
+@code {
+    private int bonuses;
+
+    User nowUser;
+    int? bonusCardID;
+
+    protected override void OnInitialized()
+    {
+        nowUser = UserInteractor.GetNowUser();
+
+        if (nowUser.Role == "customer")
+        {
+            int customerID = nowUser.RoleID;
+            Customer customer = CustomerInteractor.GetByID(customerID);
+            bonusCardID = customer.BonusCardID;
+
+            if (bonusCardID is not null)
+            {
+                BonusCard bonusCard = BonusCardInteractor.GetByID((int)bonusCardID);
+                bonuses = BonusCardInteractor.GetBonuses(bonusCard.Phone);
+            }
+        }
+
+        base.OnInitialized();
+    }
+}

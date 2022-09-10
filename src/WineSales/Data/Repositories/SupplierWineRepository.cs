@@ -54,7 +54,7 @@ namespace WineSales.Data.Repositories
                 .ToList();
         }
 
-        public (List<Wine>, List<double>) GetBySupplierID(int supplierID)
+        public (List<Wine>, List<double>, List<int>) GetBySupplierID(int supplierID)
         {
             var supplierWines = _context.SupplierWines
                 .Where(supplierWine => supplierWine.SupplierID == supplierID)
@@ -62,30 +62,34 @@ namespace WineSales.Data.Repositories
 
             var wines = new List<Wine>();
             var prices = new List<double>();
+            var percentes = new List<int>();
 
             foreach (SupplierWine supplierWine in supplierWines)
             {
                 wines.Add(_context.Wines.Find(supplierWine.WineID));
                 prices.Add(supplierWine.Price);
+                percentes.Add(supplierWine.Percent);
             }
 
-            return (wines, prices);
+            return (wines, prices, percentes);
         }
 
-        public (List<Wine>, List<double>) GetAllWine()
+        public (List<int>, List<Wine>, List<double>) GetAllWine()
         {
             var supplierWines = GetAll();
 
+            var ids = new List<int>();
             var wines = new List<Wine>();
             var prices = new List<double>();
 
             foreach (SupplierWine supplierWine in supplierWines)
             {
+                ids.Add(supplierWine.ID);
                 wines.Add(_context.Wines.Find(supplierWine.WineID));
                 prices.Add(supplierWine.Price * (1 + supplierWine.Percent / 100.0));
             }
 
-            return (wines, prices);
+            return (ids, wines, prices);
         }
 
         public (List<Wine>, List<string>, List<double>) GetByAdmin()

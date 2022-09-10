@@ -13,6 +13,7 @@ namespace WineSales.Domain.Interactors
         void Register(LoginDetails info, string role);
         void SignIn(LoginDetails info);
         int GetNowUserID();
+        int GetNowUserRoleID();
         User GetNowUser();
         void SetNowUser(User user);
     }
@@ -33,6 +34,11 @@ namespace WineSales.Domain.Interactors
         public int GetNowUserID()
         {
             return nowUser.ID;
+        }
+
+        public int GetNowUserRoleID()
+        {
+            return nowUser.RoleID;
         }
 
         public User GetNowUser()

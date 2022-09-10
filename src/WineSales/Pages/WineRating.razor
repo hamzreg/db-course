@@ -1,0 +1,58 @@
+﻿@page "/rating"
+
+<PageTitle>Рейтинг вин</PageTitle>
+
+@using WineSales.Domain.Interactors
+@inject IUserInteractor UserInteractor
+@inject ISupplierWineInteractor SupplierWineInteractor
+
+@if (nowUser.Role != "customer")
+{
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronSubtitle>
+        Для просмотра этой страницы необходимо войти в аккаунт покупателя.
+    </JumbotronSubtitle>
+</Jumbotron>
+}
+else
+{
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronTitle Size="JumbotronTitleSize.Is4">Рейтинг вин</JumbotronTitle>
+        <Divider></Divider>
+    </Jumbotron>
+
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Сорт</TableHeaderCell>
+                <TableHeaderCell>Цвет</TableHeaderCell>
+                <TableHeaderCell>Объем (л)</TableHeaderCell>
+                <TableHeaderCell>Сахар</TableHeaderCell>
+                <TableHeaderCell>Алкоголь (%)</TableHeaderCell>
+                <TableHeaderCell>Выдержка (лет)</TableHeaderCell>
+                <TableHeaderCell>Рейтинг</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            @for (int i = 0; i < wines.Count; i++)
+            {
+                <TableRowWine OneWine="wines[i]" Point="points[i]" incPrice=false incPercent=false incPoint=true></TableRowWine>
+            }
+        </TableBody>
+    </Table>
+}
+
+@code {
+    private List<Wine>? wines = new List<Wine>();
+    private List<double> points = new List<Double>();
+
+    User nowUser;
+
+    protected override void OnInitialized()
+    {
+        nowUser = UserInteractor.GetNowUser();
+        (wines, points) = SupplierWineInteractor.GetRating();
+
+        base.OnInitialized();
+    }
+}

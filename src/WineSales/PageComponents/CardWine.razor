@@ -1,0 +1,65 @@
+﻿<Modal @ref="supplierInfoModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Информация о поставщике @OneSupplier.Name</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <ListGroup Flush>
+                <ListGroupItem Disabled>Страна: @OneSupplier.Country</ListGroupItem>
+                <ListGroupItem Disabled>Опыт: @OneSupplier.Experience (лет)</ListGroupItem>
+
+                @if (@OneSupplier.License)
+                {
+                    <ListGroupItem Disabled>Лицензия: есть</ListGroupItem>
+                }
+                else
+                {
+                    <ListGroupItem Disabled>Лицензия: нет</ListGroupItem>
+                }
+            </ListGroup>
+        </ModalBody>
+        <ModalFooter>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Card>
+    <CardBody>
+        <CardTitle Size="5">@OneWine.Kind @OneWine.Color</CardTitle>
+        <CardText>
+            <ListGroup Flush>
+                <ListGroupItem Disabled>Объем: @OneWine.Volume л</ListGroupItem>
+                <ListGroupItem Disabled>Сахар: @OneWine.Sugar</ListGroupItem>
+                <ListGroupItem Disabled>Алкоголь: @OneWine.Alcohol %</ListGroupItem>
+                <ListGroupItem Disabled>Выдержка: @OneWine.Aging лет</ListGroupItem>
+                <ListGroupItem>@Price</ListGroupItem>
+            </ListGroup>
+        </CardText>
+
+        @if (@Full)
+        {
+            <Button Color="Color.Primary" Clicked="@GetSupplierInfo">О поставщике</Button>
+            <Button Color="Color.Primary" Clicked="@BuyWine">Купить</Button>
+        }
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter] public Wine OneWine { get; set; }
+    [Parameter] public double Price { get; set; }
+    [Parameter] public Supplier OneSupplier { get; set; }
+    [Parameter] public bool Full { get; set; }
+
+    private Modal? supplierInfoModal;
+
+    private void GetSupplierInfo()
+    {
+        supplierInfoModal.Show();
+    }
+
+    private Task BuyWine()
+    {
+        return Task.CompletedTask;
+    }
+}
