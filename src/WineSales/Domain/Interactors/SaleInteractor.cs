@@ -8,6 +8,7 @@ namespace WineSales.Domain.Interactors
     public interface ISaleInteractor
     {
         void CreateSale(Sale sale, int percent);
+        Sale GetByPurchaseID(int purchaseID);
         (List<Wine>, List<double>) GetBySupplierID(int supplierID);
         (List<Wine>, List<string>, List<Sale>) GetByAdmin();
         void DeleteSale(Sale sale);
@@ -39,6 +40,11 @@ namespace WineSales.Domain.Interactors
             sale.Profit = (sale.Margin - sale.Costs) * sale.WineNumber;
 
             saleRepository.Create(sale);
+        }
+
+        public Sale GetByPurchaseID(int purchaseID)
+        {
+            return saleRepository.GetByPurchaseID(purchaseID);
         }
 
         public (List<Wine>, List<double>) GetBySupplierID(int supplierID)

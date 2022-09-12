@@ -34,14 +34,14 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <TableRowWine OneWine="wines[i]" incPrice=true Price="prices[i]" incPercent=false incPoint=false></TableRowWine>
-                <Button Color="Color.Primary" Clicked="@CancelPurchase">Отменить</Button>
+                <OnePurchase OneWine="wines[i]" OnePrice="prices[i]" PurchaseID="ids[i]"></OnePurchase>
             }
         </TableBody>
     </Table>
 }
 
 @code {
+    private List<int> ids = new List<int>();
     private List<Wine> wines = new List<Wine>();
     private List<Double> prices = new List<Double>();
 
@@ -51,12 +51,7 @@ else
     {
         nowUser = UserInteractor.GetNowUser();
         int customerID = nowUser.RoleID;
-        (wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
+        (ids, wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
         base.OnInitialized();
-    }
-
-    private Task CancelPurchase()
-    {
-        return Task.CompletedTask;
     }
 }

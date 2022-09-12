@@ -57,11 +57,14 @@ namespace WineSales.Data.Repositories
                 .ToList();
         }
 
-        public (List<Wine>, List<double>) GetByCustomerID(int customerID)
+        public (List<int>, List<Wine>, List<double>) GetByCustomerID(int customerID)
         {
-            var purchases = _context.Purchases.Where(purchase => purchase.CustomerID == customerID)
-                .ToList();
+            var purchases = _context.Purchases.Where(purchase => 
+                                                     purchase.CustomerID == customerID &&
+                                                     purchase.Status == (int)PurchaseConfig.Statuses.Active)
+                                              .ToList();
 
+            var ids = new List<int>();
             var wines = new List<Wine>();
             var prices = new List<double>();
 
@@ -72,6 +75,7 @@ namespace WineSales.Data.Repositories
 
                 foreach (Sale sale in sales)
                 {
+                    ids.Add(purchase.ID);
                     var supplierWine = _context.SupplierWines.Find(sale.SupplierWineID);
                     wines.Add(_context.Wines.Find(supplierWine.WineID));
 
@@ -79,7 +83,7 @@ namespace WineSales.Data.Repositories
                 }
             }
 
-            return (wines, prices);
+            return (ids, wines, prices);
         }
 
         public void Update(Purchase purchase)

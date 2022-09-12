@@ -8,7 +8,7 @@ namespace WineSales.Domain.Interactors
     public interface IPurchaseInteractor
     {
         void CreatePurchase(Purchase purchase);
-        (List<Wine>, List<double>) GetByCustomer(int customerID);
+        (List<int>, List<Wine>, List<double>) GetByCustomer(int customerID);
         Purchase GetActive(int customerID, double price);
         void ChangeStatus(Purchase purchase);
         void DeletePurchase(Purchase purchase);
@@ -33,7 +33,7 @@ namespace WineSales.Domain.Interactors
             purchaseRepository.Create(purchase);
         }
 
-        public (List<Wine>, List<double>) GetByCustomer(int customerID)
+        public (List<int>, List<Wine>, List<double>) GetByCustomer(int customerID)
         {
             return purchaseRepository.GetByCustomerID(customerID);
         }
@@ -47,7 +47,7 @@ namespace WineSales.Domain.Interactors
         {
             if (!CheckStatus(purchase.Status))
                 throw new PurchaseException("Invalid input of status.");
-            if (!Exist(purchase))
+            if (NotExist(purchase.ID))
                 throw new PurchaseException("This purchase doesn't exist.");
 
             purchaseRepository.Update(purchase);
@@ -67,6 +67,11 @@ namespace WineSales.Domain.Interactors
                                                    obj.Price == purchase.Price &&
                                                    obj.Status == purchase.Status &&
                                                    obj.CustomerID == purchase.CustomerID);
+        }
+
+        private bool NotExist(int id)
+        {
+            return purchaseRepository.GetByID(id) == null;
         }
 
         private bool CheckStatus(int status)
