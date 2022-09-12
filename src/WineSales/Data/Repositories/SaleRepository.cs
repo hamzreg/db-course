@@ -78,6 +78,11 @@ namespace WineSales.Data.Repositories
                 .ToList();
         }
 
+        public Sale GetByPurchaseID(int purchaseID)
+        {
+            return _context.Sales.FirstOrDefault(sale => sale.PurchaseID == purchaseID);
+        }
+
         public (List<Wine>, List<double>) GetBySupplierID(int supplierID)
         {
             var supplierWines = _context.SupplierWines.Where(wine => wine.SupplierID == supplierID)

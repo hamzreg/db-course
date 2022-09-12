@@ -29,7 +29,7 @@ namespace WineSales.Domain.Interactors
 
         public void CreateCustomer(Customer customer)
         {
-            if (Exist(customer.ID))
+            if (Exist(customer))
                 throw new CustomerException("This customer already exists.");
 
             customerRepository.Create(customer);
@@ -37,7 +37,7 @@ namespace WineSales.Domain.Interactors
 
         public void UpdateCustomer(Customer customer)
         {
-            if (!Exist(customer.ID))
+            if (!Exist(customer))
                 throw new CustomerException("This customer doesn't exist.");
 
             customerRepository.Update(customer);
@@ -45,15 +45,17 @@ namespace WineSales.Domain.Interactors
 
         public void DeleteCustomer(Customer customer)
         {
-            if (!Exist(customer.ID))
+            if (!Exist(customer))
                 throw new CustomerException("This customer doesn't exist.");
 
             customerRepository.Delete(customer);
         }
 
-        private bool Exist(int id)
+        private bool Exist(Customer customer)
         {
-            return customerRepository.GetByID(id) != null;
+            return customerRepository.GetAll().Any(obj => 
+                                                   obj.Name == customer.Name &&
+                                                   obj.Surname == customer.Surname);
         }
     }
 }

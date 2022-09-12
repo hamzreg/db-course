@@ -1,6 +1,7 @@
 ﻿using WineSales.Domain.Models;
 using WineSales.Domain.RepositoryInterfaces;
 using WineSales.Domain.Exceptions;
+using WineSales.Config;
 
 namespace WineSales.Data.Repositories
 {
@@ -34,6 +35,14 @@ namespace WineSales.Data.Repositories
         public Purchase GetByID(int id)
         {
             return _context.Purchases.Find(id);
+        }
+        
+        public Purchase GetActive(int customerID, double price)
+        {
+            return _context.Purchases.FirstOrDefault(purchase =>
+                                                     purchase.CustomerID == customerID &&
+                                                     purchase.Price == price &&
+                                                     purchase.Status == (int)PurchaseConfig.Statuses.Active);
         }
 
         public List<Purchase> GetByPrice(double price)

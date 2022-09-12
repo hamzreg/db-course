@@ -31,7 +31,7 @@ namespace WineSales.Domain.Interactors
                 throw new SaleException("Invalid input of costs.");
             else if (sale.WineNumber < SaleConfig.MinWineNumer)
                 throw new SaleException("Invalid input of wine number.");
-            else if (Exist(sale.ID))
+            else if (Exist(sale))
                 throw new SaleException("This sale already exists.");
 
             sale.SellingPrice = sale.PurchasePrice * (1 + percent / 100.0);
@@ -53,15 +53,15 @@ namespace WineSales.Domain.Interactors
 
         public void DeleteSale(Sale sale)
         {
-            if (!Exist(sale.ID))
+            if (!Exist(sale))
                 throw new SaleException("This sale doesn't exist.");
 
             saleRepository.Delete(sale);
         }
 
-        private bool Exist(int id)
+        private bool Exist(Sale sale)
         {
-            return saleRepository.GetByID(id) != null;
+            return saleRepository.GetByPurchaseID(sale.PurchaseID) != null;
         }
     }
 }

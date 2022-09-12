@@ -1,4 +1,12 @@
-﻿<Modal @ref="supplierInfoModal">
+﻿@using WineSales.Config
+@using WineSales.Domain.Interactors
+@inject IUserInteractor UserInteractor
+@inject IPurchaseInteractor PurchaseInteractor
+@inject ISaleInteractor SaleInteractor
+@inject ISupplierWineInteractor SupplierWineInteractor
+@inject ISupplierInteractor SupplierInteractor
+
+<Modal @ref="supplierInfoModal">
     <ModalContent Centered>
         <ModalHeader>
             <ModalTitle>Информация о поставщике @OneSupplier.Name</ModalTitle>
@@ -33,7 +41,7 @@
                 <ListGroupItem Disabled>Сахар: @OneWine.Sugar</ListGroupItem>
                 <ListGroupItem Disabled>Алкоголь: @OneWine.Alcohol %</ListGroupItem>
                 <ListGroupItem Disabled>Выдержка: @OneWine.Aging лет</ListGroupItem>
-                <ListGroupItem>@Price</ListGroupItem>
+                <ListGroupItem>@OnePrice</ListGroupItem>
             </ListGroup>
         </CardText>
 
@@ -46,12 +54,14 @@
 </Card>
 
 @code {
+    [Parameter] public int SupplierWineID { get; set; }
     [Parameter] public Wine OneWine { get; set; }
-    [Parameter] public double Price { get; set; }
+    [Parameter] public double OnePrice { get; set; }
     [Parameter] public Supplier OneSupplier { get; set; }
     [Parameter] public bool Full { get; set; }
 
     private Modal? supplierInfoModal;
+    User nowUser;
 
     private void GetSupplierInfo()
     {
@@ -60,6 +70,32 @@
 
     private Task BuyWine()
     {
+        nowUser = UserInteractor.GetNowUser();
+
+        Purchase purchase = new Purchase
+        {
+            Price = OnePrice,
+            Status = (int)PurchaseConfig.Statuses.Active,
+            CustomerID = nowUser.RoleID
+        };
+
+        PurchaseInteractor.CreatePurchase(purchase);
+        Purchase createdPurchase = PurchaseInteractor.GetActive(nowUser.RoleID, OnePrice);
+
+        SupplierWine supplierWine = SupplierWineInteractor.GetByID(SupplierWineID);
+
+        Sale sale = new Sale
+        {
+            PurchasePrice = OnePrice,
+            Costs = SaleConfig.MinCosts,
+            WineNumber = WineConfig.MinNumber,
+            Date = new DateOnly(),
+            PurchaseID = createdPurchase.ID,
+            SupplierWineID = SupplierWineID
+        };
+
+        SaleInteractor.CreateSale(sale, supplierWine.Percent);
+
         return Task.CompletedTask;
     }
 }

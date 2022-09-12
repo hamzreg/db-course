@@ -8,6 +8,7 @@ namespace WineSales.Domain.Interactors
     public interface ISupplierWineInteractor
     {
         void CreateSupplierWine(SupplierWine supplierWine);
+        SupplierWine GetByID(int id);
         (List<Wine>, List<double>, List<int>) GetBySupplierID(int supplierID);
         (List<int>, List<Wine>, List<double>) GetAllWine();
         (List<Wine>, List<string>, List<double>) GetByAdmin();
@@ -33,6 +34,11 @@ namespace WineSales.Domain.Interactors
 
             supplierWine.Rating = WineConfig.MinRating;
             supplierWineRepository.Create(supplierWine);
+        }
+
+        public SupplierWine GetByID(int id)
+        {
+            return supplierWineRepository.GetByID(id);
         }
 
         public (List<Wine>, List<double>, List<int>) GetBySupplierID(int supplierID)

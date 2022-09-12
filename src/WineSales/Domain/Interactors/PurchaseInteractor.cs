@@ -9,6 +9,7 @@ namespace WineSales.Domain.Interactors
     {
         void CreatePurchase(Purchase purchase);
         (List<Wine>, List<double>) GetByCustomer(int customerID);
+        Purchase GetActive(int customerID, double price);
         void ChangeStatus(Purchase purchase);
         void DeletePurchase(Purchase purchase);
     }
@@ -26,7 +27,7 @@ namespace WineSales.Domain.Interactors
         {
             if (!CheckStatus(purchase.Status))
                 throw new PurchaseException("Invalid input of status.");
-            else if (Exist(purchase.ID))
+            else if (Exist(purchase))
                 throw new PurchaseException("This purchase already exists.");
 
             purchaseRepository.Create(purchase);
@@ -37,11 +38,16 @@ namespace WineSales.Domain.Interactors
             return purchaseRepository.GetByCustomerID(customerID);
         }
 
+        public Purchase GetActive(int customerID, double price)
+        {
+            return purchaseRepository.GetActive(customerID, price);
+        }
+
         public void ChangeStatus(Purchase purchase)
         {
             if (!CheckStatus(purchase.Status))
                 throw new PurchaseException("Invalid input of status.");
-            if (!Exist(purchase.ID))
+            if (!Exist(purchase))
                 throw new PurchaseException("This purchase doesn't exist.");
 
             purchaseRepository.Update(purchase);
@@ -49,15 +55,18 @@ namespace WineSales.Domain.Interactors
 
         public void DeletePurchase(Purchase purchase)
         {
-            if (!Exist(purchase.ID))
+            if (!Exist(purchase))
                 throw new PurchaseException("This purchase doesn't exist.");
 
             purchaseRepository.Delete(purchase);
         }
 
-        private bool Exist(int id)
+        private bool Exist(Purchase purchase)
         {
-            return purchaseRepository.GetByID(id) != null;
+            return purchaseRepository.GetAll().Any(obj =>
+                                                   obj.Price == purchase.Price &&
+                                                   obj.Status == purchase.Status &&
+                                                   obj.CustomerID == purchase.CustomerID);
         }
 
         private bool CheckStatus(int status)

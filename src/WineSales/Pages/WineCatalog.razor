@@ -14,7 +14,7 @@
 
 @for (int i = 0; i < wines.Count; i++)
 {
-    <CardWine OneWine="wines[i]" Price="prices[i]" OneSupplier="suppliers[i]" Full=withButton></CardWine>
+    <CardWine SupplierWineID="ids[i]" OneWine="wines[i]" OnePrice="prices[i]" OneSupplier="suppliers[i]" Full=withButton></CardWine>
 }
 
 @code {
