@@ -13,23 +13,23 @@ using Blazorise.Icons.FontAwesome;
 
 void ConfigureServices(IServiceCollection services)
 {
-    services.AddScoped<IBonusCardInteractor, BonusCardInteractor>();
-    services.AddScoped<ICustomerInteractor, CustomerInteractor>();
-    services.AddScoped<IPurchaseInteractor, PurchaseInteractor>();
-    services.AddScoped<ISaleInteractor, SaleInteractor>();
-    services.AddScoped<ISupplierInteractor, SupplierInteractor>();
-    services.AddScoped<ISupplierWineInteractor, SupplierWineInteractor>();
+    services.AddTransient<IBonusCardInteractor, BonusCardInteractor>();
+    services.AddTransient<ICustomerInteractor, CustomerInteractor>();
+    services.AddTransient<IPurchaseInteractor, PurchaseInteractor>();
+    services.AddTransient<ISaleInteractor, SaleInteractor>();
+    services.AddTransient<ISupplierInteractor, SupplierInteractor>();
+    services.AddTransient<ISupplierWineInteractor, SupplierWineInteractor>();
     services.AddSingleton<IUserInteractor, UserInteractor>();
-    services.AddScoped<IWineInteractor, WineInteractor>();
+    services.AddTransient<IWineInteractor, WineInteractor>();
 
-    services.AddScoped<IBonusCardRepository, BonusCardRepository>();
-    services.AddScoped<ICustomerRepository, CustomerRepository>();
-    services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-    services.AddScoped<ISaleRepository, SaleRepository>();
-    services.AddScoped<ISupplierRepository, SupplierRepository>();
-    services.AddScoped<ISupplierWineRepository, SupplierWineRepository>();
+    services.AddTransient<IBonusCardRepository, BonusCardRepository>();
+    services.AddTransient<ICustomerRepository, CustomerRepository>();
+    services.AddTransient<IPurchaseRepository, PurchaseRepository>();
+    services.AddTransient<ISaleRepository, SaleRepository>();
+    services.AddTransient<ISupplierRepository, SupplierRepository>();
+    services.AddTransient<ISupplierWineRepository, SupplierWineRepository>();
     services.AddSingleton<IUserRepository, UserRepository>();
-    services.AddScoped<IWineRepository, WineRepository>();
+    services.AddTransient<IWineRepository, WineRepository>();
 
     // Bad way
 /*    services.AddDbContext<DataBaseContext>(

@@ -9,6 +9,7 @@ namespace WineSales.Domain.Interactors
     {
         void CreateCustomer(Customer customer);
         Customer GetByID(int id);
+        Customer GetByNameSurname(string name, string surname);
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(Customer customer);
     }
@@ -25,6 +26,11 @@ namespace WineSales.Domain.Interactors
         public Customer GetByID(int id)
         {
             return customerRepository.GetByID(id);
+        }
+
+        public Customer GetByNameSurname(string name, string surname)
+        {
+            return customerRepository.GetByNameSurname(name, surname);
         }
 
         public void CreateCustomer(Customer customer)

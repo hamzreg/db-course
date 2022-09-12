@@ -238,7 +238,7 @@ namespace DataTests
                 });
         }
 
-        [Fact]
+/*        [Fact]
         public void GetBySupplierIDTest()
         {
             using var context = CreateContext();
@@ -266,9 +266,9 @@ namespace DataTests
             Assert.Collection(
                 prices,
                 price => Assert.Equal(700, price));
-        }
+        }*/
 
-        [Fact]
+ /*       [Fact]
         public void GetAllWineTest()
         {
             using var context = CreateContext();
@@ -308,7 +308,7 @@ namespace DataTests
                 prices,
                 price => Assert.Equal(1050, price),
                 price => Assert.Equal(750, price));
-        }
+        }*/
 
         [Fact]
         public void GetByAdminTest()

@@ -36,6 +36,13 @@ namespace WineSales.Data.Repositories
             return _context.Customers.Find(id);
         }
 
+        public Customer GetByNameSurname(string name, string surname)
+        {
+            return _context.Customers.FirstOrDefault(customer =>
+                                                     customer.Name == name &&
+                                                     customer.Surname == surname);
+        }
+
         public List<Customer> GetByName(string name)
         {
             return _context.Customers.Where(customer => customer.Name == name)

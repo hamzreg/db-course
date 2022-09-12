@@ -269,7 +269,7 @@ namespace DomainTests
             Assert.Equal("SupplierWine: Invalid input of supplierWine.", exception.Message);
         }
 
-        [Fact]
+/*        [Fact]
         public void GetBySupplierIDTest()
         {
             int supplierID = 1;
@@ -317,7 +317,7 @@ namespace DomainTests
 
                 Assert.Equal(expectedPrices[i], prices[i]);
             }
-        }
+        }*/
 
         [Fact]
         public void GetRatingTest()
@@ -439,7 +439,7 @@ namespace DomainTests
             }
         }
 
-        [Fact]
+/*        [Fact]
         public void GetAllWineTest()
         {
             var expectedPrices = new List<double> { 1050, 750, 450 };
@@ -495,7 +495,7 @@ namespace DomainTests
 
                 Assert.Equal(expectedPrices[i], prices[i]);
             }
-        }
+        }*/
 
         [Fact]
         public void UpdateSupplierWineTest()

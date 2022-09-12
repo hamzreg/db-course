@@ -10,7 +10,7 @@ namespace WineSales.Domain.Interactors
         void CreateUser(User user);
         void UpdateUser(User user);
         void DeleteUser(User user);
-        void Register(LoginDetails info, string role);
+        void Register(LoginDetails info, string role, int roleID);
         void SignIn(LoginDetails info);
         int GetNowUserID();
         int GetNowUserRoleID();
@@ -84,7 +84,7 @@ namespace WineSales.Domain.Interactors
             userRepository.Delete(user);
         }
 
-        public void Register(LoginDetails info, string role)
+        public void Register(LoginDetails info, string role, int roleID)
         {
             if (Exist(info.Login))
                 throw new UserException("This user already exists.");
@@ -93,6 +93,7 @@ namespace WineSales.Domain.Interactors
                 throw new UserException("Invalid input of password.");
 
             var newUser = new User(info.Login, info.Password, role);
+            newUser.RoleID = roleID;
             userRepository.Register(newUser);
         }
 

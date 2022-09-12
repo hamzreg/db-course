@@ -35,6 +35,7 @@ else
             @for (int i = 0; i < wines.Count; i++)
             {
                 <TableRowWine OneWine="wines[i]" incPrice=true Price="prices[i]" incPercent=false incPoint=false></TableRowWine>
+                <Button Color="Color.Primary" Clicked="@CancelPurchase">Отменить</Button>
             }
         </TableBody>
     </Table>
@@ -52,5 +53,10 @@ else
         int customerID = nowUser.RoleID;
         (wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
         base.OnInitialized();
+    }
+
+    private Task CancelPurchase()
+    {
+        return Task.CompletedTask;
     }
 }

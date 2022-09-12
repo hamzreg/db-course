@@ -43,7 +43,8 @@
             {
                 <BarItem>
                     <Button Color="Color.Primary" Clicked="@ShowLogin">Вход в аккаунт</Button>
-                    <Button Color="Color.Primary" Clicked="@ShowRegistration">Регистрация</Button>
+                    <Button Color="Color.Primary" Clicked="@ShowCustomerRegistration">Регистрация покупателя</Button>
+                    <Button Color="Color.Primary" Clicked="@ShowSupplierRegistration">Регистрация поставщика</Button>
                 </BarItem>
             }
             else
@@ -60,9 +61,11 @@
 </Bar>
 
 <Login @ref=@loginModal/>
+<CustomerRegistration @ref=@customerRegistrationModal/>
 
 @code{
     private Login? loginModal;
+    private CustomerRegistration? customerRegistrationModal;
 
     User nowUser;
 
@@ -78,7 +81,13 @@
         return Task.CompletedTask;
     }
 
-    Task ShowRegistration()
+    Task ShowCustomerRegistration()
+    {
+        customerRegistrationModal?.ShowModal();
+        return Task.CompletedTask;
+    }
+
+    Task ShowSupplierRegistration()
     {
         return Task.CompletedTask;
     }
