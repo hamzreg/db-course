@@ -35,8 +35,7 @@ else
             <BarMenu>
                 <BarStart>
                     <BarItem>
-                        <Button Color="Color.Primary">Добавить вино</Button>
-                        <Button Color="Color.Primary">Редактировать вино</Button>
+                        <Button Color="Color.Primary" Clicked="@ShowModalAddWine">Добавить вино</Button>
                     </BarItem>
                 </BarStart>
             </BarMenu>
@@ -58,16 +57,19 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <OneSupplierWine OneWine="wines[i]" OnePrice="prices[i]" OnePercent="percentes[i]"></OneSupplierWine>
+                <OneSupplierWine OneWine="wines[i]" SupplierWineItem="supplierWines[i]"></OneSupplierWine>
             }
         </TableBody>
     </Table>
 }
 
+<ModalAddWine @ref=@addWineModal/>
+
 @code {
+    private ModalAddWine? addWineModal;
+
     private List<Wine> wines = new List<Wine>();
-    private List<Double> prices = new List<Double>();
-    private List<int> percentes = new List<int>();
+    private List<SupplierWine> supplierWines = new List<SupplierWine>(); 
 
     User nowUser;
     Supplier supplier;
@@ -77,7 +79,13 @@ else
         nowUser = UserInteractor.GetNowUser();
         int supplierID = nowUser.RoleID;
         supplier = SupplierInteractor.GetByID(supplierID);
-        (wines, prices, percentes) = SupplierWineInteractor.GetBySupplierID(supplierID);
+        (wines, supplierWines) = SupplierWineInteractor.GetBySupplierID(supplierID);
         base.OnInitialized();
+    }
+
+    Task ShowModalAddWine()
+    {
+        addWineModal?.ShowModal();
+        return Task.CompletedTask;
     }
 }

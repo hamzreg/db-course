@@ -1,8 +1,10 @@
-﻿@inject NavigationManager NavigationManager
-@using WineSales.Config
+﻿@using WineSales.Config
 @using WineSales.Domain.Interactors
+@inject NavigationManager NavigationManager
+@inject IUserInteractor UserInteractor
 @inject IWineInteractor WineInteractor
 @inject ISupplierWineInteractor SupplierWineInteractor
+@inject ISupplierInteractor SupplierInteractor
 
 <Modal @ref="updateWineModal">
     <ModalContent Centered>
@@ -39,30 +41,15 @@
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Отменить</Button>
-            <Button Color="Color.Primary" Clicked="@UpdateWine">Изменить</Button>
+            <Button Color="Color.Primary" Clicked="@AddWine">Изменить</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
 
-<TableRow>
-    <TableRowCell>@OneWine.Kind</TableRowCell>
-    <TableRowCell>@OneWine.Color</TableRowCell>
-    <TableRowCell>@OneWine.Volume</TableRowCell>
-    <TableRowCell>@OneWine.Sugar</TableRowCell>
-    <TableRowCell>@OneWine.Alcohol</TableRowCell>
-    <TableRowCell>@OneWine.Aging</TableRowCell>
-    <TableRowCell>@SupplierWineItem.Percent</TableRowCell>
-    <TableRowCell>@SupplierWineItem.Price</TableRowCell>
-</TableRow>
-<Button Color="Color.Danger" Clicked="DeleteWine">Удалить вино</Button>
-<Button Color="Color.Primary" Clicked="ShowModal">Редактировать вино</Button>
-
 @code {
-    [Parameter] public Wine OneWine { get; set; }
-    [Parameter] public SupplierWine SupplierWineItem { get; set; }
-
     private Modal? updateWineModal;
 
+    User nowUser;
     SupplierWine supplierWine = new SupplierWine();
 
     Validations? wineValidations;
@@ -73,13 +60,12 @@
     Validation? percentValidation;
     string percentErrorMsg = "";
 
-    public Task ShowModal()
+    public void ShowModal()
     {
         updateWineModal.Show();
-        return Task.CompletedTask;
     }
 
-    async Task UpdateWine()
+    async Task AddWine()
     {
         if (await wineValidations.ValidateAll())
         {
@@ -87,10 +73,10 @@
 
             try
             {
-                supplierWine.ID = SupplierWineItem.ID;
-                supplierWine.WineID = SupplierWineItem.WineID;
-                supplierWine.Rating = SupplierWineItem.Rating;
-                SupplierWineInteractor.UpdateSupplierWine(supplierWine);
+                nowUser = UserInteractor.GetNowUser();
+                int supplierID = nowUser.RoleID;
+
+                SupplierWineInteractor.CreateSupplierWine(supplierWine);
 
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await wineValidations.ClearAll();
@@ -158,13 +144,5 @@
     private Task HideModal()
     {
         return updateWineModal.Hide();
-    }
-
-    private Task DeleteWine()
-    {
-        WineInteractor.DeleteWine(OneWine);
-        SupplierWineInteractor.DeleteSupplierWine(SupplierWineItem);
-        NavigationManager.NavigateTo(NavigationManager.Uri, true);
-        return Task.CompletedTask;
     }
 }

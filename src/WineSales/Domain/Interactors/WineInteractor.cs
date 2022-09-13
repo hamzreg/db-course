@@ -7,6 +7,7 @@ namespace WineSales.Domain.Interactors
 {
     public interface IWineInteractor
     {
+        Wine GetByInfo(Wine wine);
         void CreateWine(Wine wine);
         void DeleteWine(Wine wine);
     }
@@ -33,6 +34,11 @@ namespace WineSales.Domain.Interactors
 
             wine.Number = WineConfig.MinNumber;
             wineRepository.Create(wine);
+        }
+
+        public Wine GetByInfo(Wine wine)
+        {
+            return wineRepository.GetByInfo(wine);
         }
 
         public void DeleteWine(Wine wine)
@@ -70,18 +76,33 @@ namespace WineSales.Domain.Interactors
         private bool CheckWine(Wine wine)
         {
             if (!WineConfig.Colors.Contains(wine.Color))
+            {
+                Console.WriteLine("Color: ", wine.Color);
                 return false;
+            }
             else if (!WineConfig.Sugar.Contains(wine.Sugar))
+            {
+                Console.WriteLine("Sugar: ", wine.Sugar);
                 return false;
+            }
             else if (wine.Volume < WineConfig.MinVolume ||
                      wine.Volume > WineConfig.MaxVolume)
+            {
+                Console.WriteLine("Volume: ", wine.Volume);
                 return false;
+            }
             else if (wine.Alcohol < WineConfig.MinAlcohol ||
                      wine.Alcohol > WineConfig.MaxAlcohol)
+            {
+                Console.WriteLine("Alcohol: ", wine.Alcohol);
                 return false;
+            }
             else if (wine.Aging < WineConfig.MinAging ||
                      wine.Aging > WineConfig.MaxAging)
+            {
+                Console.WriteLine("Aging: ", wine.Aging);
                 return false;
+            }
             return true;
         }
     }

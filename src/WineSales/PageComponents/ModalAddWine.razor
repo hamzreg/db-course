@@ -1,0 +1,327 @@
+﻿@using WineSales.Config
+@using WineSales.Domain.Interactors
+@inject NavigationManager NavigationManager
+@inject IUserInteractor UserInteractor
+@inject IWineInteractor WineInteractor
+@inject ISupplierWineInteractor SupplierWineInteractor
+@inject ISupplierInteractor SupplierInteractor
+
+<Modal @ref="addWineModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Добавление вина</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+        <Validations @ref="@wineValidations" ValidateOnLoad=false>
+            <Validation @ref="@kindValidation" Validator="@ValidateKind">
+                <Field>
+                    <FieldLabel>Сорт</FieldLabel>
+                    <TextEdit @bind-Text="@wine.Kind" Placeholder="Введите сорт...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@kindErrorMsg</ValidationError> 
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@volumeValidation" Validator="@ValidateVolume">
+                <Field>
+                    <FieldLabel>Объем (л)</FieldLabel>
+                    <NumericEdit @bind-Value="@wine.Volume" Placeholder="Введите объем...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@volumeErrorMsg</ValidationError> 
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@alcoholValidation" Validator="@ValidateAlcohol">
+                <Field>
+                    <FieldLabel>Содержание алкоголя (%)</FieldLabel>
+                    <NumericEdit @bind-Value="@wine.Alcohol" Placeholder="Введите содержание алкоголя...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@alcoholErrorMsg</ValidationError> 
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@agingValidation" Validator="@ValidateAging">
+                <Field>
+                    <FieldLabel>Выдержка (года)</FieldLabel>
+                    <NumericEdit @bind-Value="@wine.Aging" Placeholder="Введите выдержку...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@agingErrorMsg</ValidationError> 
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@priceValidation" Validator="@ValidatePrice">
+                <Field>
+                    <FieldLabel>Цена (₽)</FieldLabel>
+                    <NumericEdit @bind-Value="@supplierWine.Price" Placeholder="Введите цену...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@priceErrorMsg</ValidationError> 
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@percentValidation" Validator="@ValidatePercent">
+                <Field>
+                    <FieldLabel>Процент</FieldLabel>
+                    <NumericEdit @bind-Value="@supplierWine.Percent" Placeholder="Введите процент...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@percentErrorMsg</ValidationError> 
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </Validation>
+        </Validations>
+
+        <Field>
+            <FieldLabel>Цвет</FieldLabel>
+            <RadioGroup TValue="string" Name="colors" @bind-CheckedValue="@color">
+                <Radio Value="@("red")">red</Radio>
+                <Radio Value="@("white")">white</Radio>
+                <Radio Value="@("rose")">rose</Radio>
+            </RadioGroup>
+        </Field>
+
+        <Field>
+            <FieldLabel>Сахар</FieldLabel>
+            <RadioGroup TValue="string" Name="sugares" @bind-CheckedValue="@sugar">
+                <Radio Value="@("dry")">dry</Radio>
+                <Radio Value="@("semi-dry")">semi-dry</Radio>
+                <Radio Value="@("semi-sweet")">semi-sweet</Radio>
+                <Radio Value="@("sweet")">sweet</Radio>
+            </RadioGroup>
+        </Field>
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Отменить</Button>
+            <Button Color="Color.Primary" Clicked="@AddWine">Добавить</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    private Modal? addWineModal;
+    string color;
+    string sugar;
+
+    User nowUser;
+
+    Wine wine = new Wine();
+    SupplierWine supplierWine = new SupplierWine();
+
+    Validations? wineValidations;
+
+    Validation? kindValidation;
+    string kindErrorMsg = "";
+
+    Validation? volumeValidation;
+    string volumeErrorMsg = "";
+
+    Validation? alcoholValidation;
+    string alcoholErrorMsg = "";
+
+    Validation? agingValidation;
+    string agingErrorMsg = "";
+
+    Validation? priceValidation;
+    string priceErrorMsg = "";
+
+    Validation? percentValidation;
+    string percentErrorMsg = "";
+
+    public void ShowModal()
+    {
+        addWineModal.Show();
+    }
+
+    async Task AddWine()
+    {
+        if (await wineValidations.ValidateAll())
+        {
+            Console.WriteLine("AddWine");
+
+            try
+            {
+                wine.Color = color;
+                wine.Sugar = sugar;
+                WineInteractor.CreateWine(wine);
+
+                Wine createdWine = WineInteractor.GetByInfo(wine);
+                nowUser = UserInteractor.GetNowUser();
+                int supplierID = nowUser.RoleID;
+
+                supplierWine.WineID = createdWine.ID;
+                supplierWine.SupplierID = supplierID;
+                SupplierWineInteractor.CreateSupplierWine(supplierWine);
+
+                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+                await wineValidations.ClearAll();
+            }
+            catch(WineException ex)
+            {
+                var errorMsg = ex.Message;
+                Console.WriteLine("AddWine: error");
+                Console.WriteLine(errorMsg);
+                await wineValidations.ValidateAll();
+            }
+            catch(SupplierWineException ex)
+            {
+                var errorMsg = ex.Message;
+                Console.WriteLine("AddWine: error");
+                Console.WriteLine(errorMsg);
+
+                if (errorMsg == "SupplierWine: This supplier already has this wine.")
+                {
+                    Console.WriteLine("AddWine: already exists");
+                    Wine createdWine = WineInteractor.GetByInfo(wine);
+                    WineInteractor.DeleteWine(createdWine);
+                }
+                await wineValidations.ValidateAll();
+            }
+        }
+    }
+
+    void ValidateKind(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateKind");
+
+        var kind = Convert.ToString(fact.Value);
+
+        if (string.IsNullOrEmpty(kind))
+        {
+            kindErrorMsg = "Необходимо ввести название сорта вина.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    void ValidateVolume(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateVolume");
+
+        var volume = Convert.ToDouble(fact.Value);
+
+        if (volume == 0)
+        {
+            volumeErrorMsg = "Необходимо ввести объем вина.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else if (volume < WineConfig.MinVolume || volume > WineConfig.MaxVolume)
+        {
+            volumeErrorMsg = "Объем вина должен быть от 0.1875 до 30 литров.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    void ValidateAlcohol(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateAlcohol");
+
+        var alcohol = Convert.ToDouble(fact.Value);
+
+        if (alcohol == 0)
+        {
+            alcoholErrorMsg = "Необходимо ввести содержание алкоголя.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else if (alcohol < WineConfig.MinAlcohol || alcohol > WineConfig.MaxAlcohol)
+        {
+            alcoholErrorMsg = "Содержание алкоголя должно быть от 7.5 до 22 %.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    void ValidateAging(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateAging");
+
+        var strAging = Convert.ToString(fact.Value);
+        var aging = Convert.ToInt32(strAging);
+
+        if (aging == 0)
+        {
+            agingErrorMsg = "Необходимо ввести выдержку вина.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else if (aging < WineConfig.MinAging || aging > WineConfig.MaxAging)
+        {
+            agingErrorMsg = "Выдержка вина должна быть от 2 до 10 лет.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    void ValidatePercent(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidatePercent");
+
+        var strPercent = Convert.ToString(fact.Value);
+        var percent = Convert.ToInt32(strPercent);
+
+        if (percent == 0)
+        {
+            percentErrorMsg = "Необходимо ввести процент.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else if (percent < SaleConfig.MinPercent)
+        {
+            percentErrorMsg = "Процент должен быть не менее 43 %.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    void ValidatePrice(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidatePrice");
+
+        var price = Convert.ToDouble(fact.Value);
+
+        if (price == 0)
+        {
+            priceErrorMsg = "Необходимо ввести цену вина.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else if (price < SaleConfig.MinPurchasePrice)
+        {
+            priceErrorMsg = "Цена вина должна быть не менее 118 ₽.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    private Task HideModal()
+    {
+        return addWineModal.Hide();
+    }
+}

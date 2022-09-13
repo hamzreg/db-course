@@ -54,24 +54,19 @@ namespace WineSales.Data.Repositories
                 .ToList();
         }
 
-        public (List<Wine>, List<double>, List<int>) GetBySupplierID(int supplierID)
+        public (List<Wine>, List<SupplierWine>) GetBySupplierID(int supplierID)
         {
             var supplierWines = _context.SupplierWines
                 .Where(supplierWine => supplierWine.SupplierID == supplierID)
                 .ToList();
 
             var wines = new List<Wine>();
-            var prices = new List<double>();
-            var percentes = new List<int>();
-
             foreach (SupplierWine supplierWine in supplierWines)
             {
                 wines.Add(_context.Wines.Find(supplierWine.WineID));
-                prices.Add(supplierWine.Price);
-                percentes.Add(supplierWine.Percent);
             }
 
-            return (wines, prices, percentes);
+            return (wines, supplierWines);
         }
 
         public (List<int>, List<Wine>, List<double>) GetAllWine()

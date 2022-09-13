@@ -36,6 +36,17 @@ namespace WineSales.Data.Repositories
             return _context.Wines.Find(id);
         }
 
+        public Wine GetByInfo(Wine wine)
+        {
+            return _context.Wines.FirstOrDefault(obj =>
+                                                 obj.Kind == wine.Kind &&
+                                                 obj.Color == wine.Color &&
+                                                 obj.Sugar == wine.Sugar &&
+                                                 obj.Volume == wine.Volume &&
+                                                 obj.Alcohol == wine.Alcohol &&
+                                                 obj.Aging == wine.Aging);
+        }
+
         public List<Wine> GetByKind(string kind)
         {
             return _context.Wines.Where(wine => wine.Kind == kind)
