@@ -20,7 +20,7 @@ else
         
         @if (bonusCardID is null)
         {
-            <Button Color="Color.Primary">Получить бонусную карту</Button>
+            <Button Color="Color.Primary" Clicked="@ShowBonusCardModal">Получить бонусную карту</Button>
         }
         else
         {
@@ -32,7 +32,10 @@ else
     </Jumbotron>
 }
 
+<ModalBonusCard @ref=@bonusCardModal/>
+
 @code {
+    private ModalBonusCard? bonusCardModal;
     private int bonuses;
 
     User nowUser;
@@ -56,5 +59,11 @@ else
         }
 
         base.OnInitialized();
+    }
+
+    Task ShowBonusCardModal()
+    {
+        bonusCardModal?.ShowModal();
+        return Task.CompletedTask;
     }
 }

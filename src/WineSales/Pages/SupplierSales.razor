@@ -3,6 +3,7 @@
 @using WineSales.Domain.Interactors
 @inject IUserInteractor UserInteractor
 @inject ISaleInteractor SaleInteractor
+@inject ISupplierInteractor SupplierInteractor
 
 @if (nowUser.Role != "supplier")
 {
@@ -11,6 +12,14 @@
         Для просмотра этой страницы необходимо войти в аккаунт поставщика.
     </JumbotronSubtitle>
 </Jumbotron>
+}
+else if (!supplier.License)
+{
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronSubtitle>
+            Для поставки вин необходима лицензия. Администратор еще не выдал Вам лицензию.
+        </JumbotronSubtitle>
+    </Jumbotron>
 }
 else
 {
@@ -33,7 +42,7 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <TableRowWine OneWine="wines[i]" incPrice=true Price="prices[i]" incPercent=false incPoint=false></TableRowWine>
+                <OneSupplierSale OneWine="wines[i]" OnePrice="prices[i]"></OneSupplierSale>
             }
         </TableBody>
     </Table>
@@ -44,11 +53,13 @@ else
     private List<Double> prices = new List<Double>();
 
     User nowUser;
+    Supplier supplier;
 
     protected override void OnInitialized()
     {
         nowUser = UserInteractor.GetNowUser();
         int supplierID = nowUser.RoleID;
+        supplier = SupplierInteractor.GetByID(supplierID);
         (wines, prices) = SaleInteractor.GetBySupplierID(supplierID);
         base.OnInitialized();
     }

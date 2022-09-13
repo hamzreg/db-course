@@ -49,12 +49,19 @@
             }
             else
             {
-                <BarItem>
-                    <BarLink To="">Настройки аккаунта</BarLink>
-                </BarItem>
-                <BarItem>
-                    <Button Color="Color.Primary" Clicked="@SignOut">Выход из аккаунта</Button>
-                 </BarItem>
+                @if (nowUser.Role == "customer")
+                {
+                    <BarItem> 
+                        <Button Color="Color.Danger" Clicked="@DeleteAccount">Удалить аккаунт</Button>
+                        <Button Color="Color.Primary" Clicked="@SignOut">Выход из аккаунта</Button>
+                    </BarItem>
+                }
+                else
+                {
+                    <BarItem>                 
+                        <Button Color="Color.Primary" Clicked="@SignOut">Выход из аккаунта</Button>
+                    </BarItem>                    
+                }
             }
         </BarEnd>
     </BarMenu>
@@ -62,10 +69,12 @@
 
 <Login @ref=@loginModal/>
 <CustomerRegistration @ref=@customerRegistrationModal/>
+<SupplierRegistration @ref=@supplierRegistrationModal/>
 
 @code{
     private Login? loginModal;
     private CustomerRegistration? customerRegistrationModal;
+    private SupplierRegistration? supplierRegistrationModal;
 
     User nowUser;
 
@@ -89,11 +98,22 @@
 
     Task ShowSupplierRegistration()
     {
+        supplierRegistrationModal?.ShowModal();
         return Task.CompletedTask;
     }
 
     public void SignOut()
     {
+        User guestUser = new User("guest", "guest", "guest");
+        UserInteractor.SetNowUser(guestUser);
+        nowUser = UserInteractor.GetNowUser();
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+
+    public void DeleteAccount()
+    {
+        nowUser = UserInteractor.GetNowUser();
+        UserInteractor.DeleteUser(nowUser);
         User guestUser = new User("guest", "guest", "guest");
         UserInteractor.SetNowUser(guestUser);
         nowUser = UserInteractor.GetNowUser();

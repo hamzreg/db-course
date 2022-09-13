@@ -7,6 +7,8 @@ namespace WineSales.Domain.Interactors
     public interface ISupplierInteractor
     {
         void CreateSupplier(Supplier supplier);
+        Supplier GetByID(int id);
+        Supplier GetByName(string name);
         Supplier GetBySupplierWineID(int supplierWineID);
         void UpdateSupplier(Supplier supplier);
         void DeleteSupplier(Supplier supplier);
@@ -26,7 +28,20 @@ namespace WineSales.Domain.Interactors
             if (Exist(supplier.Name))
                 throw new SupplierException("This supplier already exists.");
 
+            supplier.Experience = 0;
+            supplier.License = false;
+
             supplierRepository.Create(supplier);
+        }
+
+        public Supplier GetByID(int id)
+        {
+            return supplierRepository.GetByID(id);
+        }
+
+        public Supplier GetByName(string name)
+        {
+            return supplierRepository.GetByName(name);
         }
 
         public Supplier GetBySupplierWineID(int supplierWineID)

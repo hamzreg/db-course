@@ -11,6 +11,7 @@ namespace WineSales.Domain.Interactors
         Customer GetByID(int id);
         Customer GetByNameSurname(string name, string surname);
         void UpdateCustomer(Customer customer);
+        void UpdateBonusCard(int customerID, int bonusCardID);
         void DeleteCustomer(Customer customer);
     }
 
@@ -47,6 +48,11 @@ namespace WineSales.Domain.Interactors
                 throw new CustomerException("This customer doesn't exist.");
 
             customerRepository.Update(customer);
+        }
+
+        public void UpdateBonusCard(int customerID, int bonusCardID)
+        {
+            customerRepository.UpdateBonusCard(customerID, bonusCardID);
         }
 
         public void DeleteCustomer(Customer customer)

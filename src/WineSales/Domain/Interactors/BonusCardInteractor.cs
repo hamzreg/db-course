@@ -10,6 +10,7 @@ namespace WineSales.Domain.Interactors
         void CreateBonusCard(string phone);
         int GetBonuses(string phone);
         BonusCard GetByID(int id);
+        BonusCard GetByPhone(string phone);
         void AddBonuses(string phone, int bonuses);
         void WriteOffBonuses(string phone, int bonuses);
         void DeleteBonusCard(string phone);
@@ -27,6 +28,11 @@ namespace WineSales.Domain.Interactors
         public BonusCard GetByID(int id)
         {
             return bonusCardRepository.GetByID(id);
+        }
+
+        public BonusCard GetByPhone(string phone)
+        {
+            return bonusCardRepository.GetByPhone(phone);
         }
 
         public void CreateBonusCard(string phone)

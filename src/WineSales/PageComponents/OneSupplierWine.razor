@@ -1,0 +1,20 @@
+﻿@using WineSales.Config
+@using WineSales.Domain.Interactors
+
+<TableRow>
+    <TableRowCell>@OneWine.Kind</TableRowCell>
+    <TableRowCell>@OneWine.Color</TableRowCell>
+    <TableRowCell>@OneWine.Volume</TableRowCell>
+    <TableRowCell>@OneWine.Sugar</TableRowCell>
+    <TableRowCell>@OneWine.Alcohol</TableRowCell>
+    <TableRowCell>@OneWine.Aging</TableRowCell>
+    <TableRowCell>@OnePercent</TableRowCell>
+    <TableRowCell>@OnePrice</TableRowCell>
+</TableRow>
+<Button Color="Color.Danger">Удалить вино</Button>
+
+@code {
+    [Parameter] public Wine OneWine { get; set; }
+    [Parameter] public int OnePercent { get; set; }
+    [Parameter] public double OnePrice { get; set; }
+}

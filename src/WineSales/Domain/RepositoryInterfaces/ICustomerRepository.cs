@@ -7,5 +7,6 @@ namespace WineSales.Domain.RepositoryInterfaces
         Customer GetByNameSurname(string name, string surname);
         List<Customer> GetByName(string name);
         List<Customer> GetBySurname(string surname);
+        void UpdateBonusCard(int customerID, int bonusCardID);
     }
 }

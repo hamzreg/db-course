@@ -1,0 +1,126 @@
+﻿@using WineSales.Config;
+@inject NavigationManager NavigationManager
+@inject WineSales.Domain.Interactors.IUserInteractor UserInteractor
+@inject WineSales.Domain.Interactors.ICustomerInteractor CustomerInteractor
+@inject WineSales.Domain.Interactors.IBonusCardInteractor BonusCardInteractor
+
+<Modal @ref="bonusCardModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Получение бонусной карты</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+        <Validations @ref="@bonusCardValidations" ValidateOnLoad=false>
+            <Validation @ref="@phoneValidation" Validator="@ValidatePhone">
+                <Field>
+                    <FieldLabel>Номер телефона</FieldLabel>
+                    <TextEdit @bind-Text="@phone" Placeholder="Введите номер телефона...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@phoneErrorMsg</ValidationError> 
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+        </Validations>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Отменить</Button>
+            <Button Color="Color.Primary" Clicked="@GetBonusCard">Получить</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    private Modal? bonusCardModal;
+    string phone;
+
+    Validations? bonusCardValidations;
+
+    Validation? phoneValidation;
+    string phoneErrorMsg = "";
+    bool alreadyExist = false;
+    bool invalidPhone = false;
+
+    public void ShowModal()
+    {
+        bonusCardModal.Show();
+    }
+
+    async Task GetBonusCard()
+    {
+        if (await bonusCardValidations.ValidateAll())
+        {
+            Console.WriteLine("GetBonusCard");
+
+            try
+            {
+                BonusCardInteractor.CreateBonusCard(phone);
+                BonusCard createdBonusCard = BonusCardInteractor.GetByPhone(phone);
+                int customerID = UserInteractor.GetNowUserID();
+                CustomerInteractor.UpdateBonusCard(customerID, createdBonusCard.ID);
+                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+                await bonusCardValidations.ClearAll();
+            }
+            catch(BonusCardException ex)
+            {
+                var errorMsg = ex.Message;
+                Console.WriteLine("GetBonusCard: error");
+                Console.WriteLine(errorMsg);
+
+                if (errorMsg == "BonusCard: Invalid input of phone.")
+                {
+                    Console.WriteLine("GetBonusCard: error with phone");
+                    invalidPhone = true;
+                    await bonusCardValidations.ValidateAll();
+                }
+                else if (errorMsg == "BonusCard: The bonus card is already linked to this phone.")
+                {
+                    Console.WriteLine("GetBonusCard: already exist");
+                    alreadyExist = true;
+                    await bonusCardValidations.ValidateAll();
+                }
+            }
+        }
+    }
+
+    void ValidatePhone(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidatePhone");
+
+        if (alreadyExist)
+        {
+            Console.WriteLine("ValidatePhone: alreadyExist");
+            phoneErrorMsg = "К этому номеру телефона уже привязана бонусная карта.";
+            fact.Status = ValidationStatus.Error;
+            alreadyExist = false;
+        }
+        else if (invalidPhone)
+        {
+            Console.WriteLine("ValidatePhone: invalidPhone");
+            phoneErrorMsg = "Номер телефона должен состоять из 11 цифр.";
+            fact.Status = ValidationStatus.Error;
+            alreadyExist = false;
+        }
+        else
+        {
+            var phoneNumber = Convert.ToString(fact.Value);
+
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                phoneErrorMsg = "Неверный номер телефона.";
+                fact.Status = ValidationStatus.Error;
+            }
+            else
+            {
+                fact.Status = ValidationStatus.Success;
+            }
+        }
+    }
+
+    private Task HideModal()
+    {
+        return bonusCardModal.Hide();
+    }
+}

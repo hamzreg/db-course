@@ -3,14 +3,23 @@
 @using WineSales.Domain.Interactors
 @inject IUserInteractor UserInteractor
 @inject ISupplierWineInteractor SupplierWineInteractor
+@inject ISupplierInteractor SupplierInteractor
 
 @if (nowUser.Role != "supplier")
 {
-<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
-    <JumbotronSubtitle>
-        Для просмотра этой страницы необходимо войти в аккаунт поставщика.
-    </JumbotronSubtitle>
-</Jumbotron>
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronSubtitle>
+            Для просмотра этой страницы необходимо войти в аккаунт поставщика.
+        </JumbotronSubtitle>
+    </Jumbotron>
+}
+else if (!supplier.License)
+{
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronSubtitle>
+            Для поставки вин необходима лицензия. Администратор еще не выдал Вам лицензию.
+        </JumbotronSubtitle>
+    </Jumbotron>
 }
 else
 {
@@ -18,22 +27,19 @@ else
         <JumbotronTitle Size="JumbotronTitleSize.Is4">Мои вина</JumbotronTitle>
         <Divider></Divider>
     </Jumbotron>
-
+    
     <Bar Breakpoint="Breakpoint.Desktop"
          Background="Background.Light"
          ThemeContrast="ThemeContrast.Light">
-        <BarToggler />
-        <BarMenu>
-            <BarStart>
-                <BarItem>
-                    <Button Color="Color.Primary">Добавить вино</Button>
-                    <Button Color="Color.Primary">Редактировать вино</Button>
-                </BarItem>
-            </BarStart>
-            <BarEnd>
-                <Button Color="Color.Danger">Удалить вино</Button>
-            </BarEnd>
-        </BarMenu>
+         <BarToggler />
+            <BarMenu>
+                <BarStart>
+                    <BarItem>
+                        <Button Color="Color.Primary">Добавить вино</Button>
+                        <Button Color="Color.Primary">Редактировать вино</Button>
+                    </BarItem>
+                </BarStart>
+            </BarMenu>
     </Bar>
 
     <Table>
@@ -52,7 +58,7 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <TableRowWine OneWine="wines[i]" incPrice=true Price="prices[i]" incPercent=true Percent="percentes[i]" incPoint=false></TableRowWine>
+                <OneSupplierWine OneWine="wines[i]" OnePrice="prices[i]" OnePercent="percentes[i]"></OneSupplierWine>
             }
         </TableBody>
     </Table>
@@ -64,11 +70,13 @@ else
     private List<int> percentes = new List<int>();
 
     User nowUser;
+    Supplier supplier;
 
     protected override void OnInitialized()
     {
         nowUser = UserInteractor.GetNowUser();
         int supplierID = nowUser.RoleID;
+        supplier = SupplierInteractor.GetByID(supplierID);
         (wines, prices, percentes) = SupplierWineInteractor.GetBySupplierID(supplierID);
         base.OnInitialized();
     }

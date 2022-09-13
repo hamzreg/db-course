@@ -1,6 +1,7 @@
 ﻿using WineSales.Domain.Models;
 using WineSales.Domain.RepositoryInterfaces;
 using WineSales.Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace WineSales.Data.Repositories
 {
@@ -65,6 +66,25 @@ namespace WineSales.Data.Repositories
             catch
             {
                 throw new CustomerException("Failed to update customer.");
+            }
+        }
+
+        public void UpdateBonusCard(int customerID, int bonusCardID)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlRaw("call change_customer_bonus_card({0}, {1});",
+                                                      customerID, bonusCardID);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(ex.Message);
+                    throw new CustomerException("Failed to update bonus card.");
+                }
             }
         }
 

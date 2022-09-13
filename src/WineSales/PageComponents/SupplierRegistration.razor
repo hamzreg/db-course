@@ -1,5 +1,253 @@
-﻿<h3>SupplierRegistration</h3>
+﻿@inject NavigationManager NavigationManager
+@inject WineSales.Domain.Interactors.IUserInteractor UserInteractor
+@inject WineSales.Domain.Interactors.ISupplierInteractor SupplierInteractor
+
+<Modal @ref="supplierRegistrationModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Регистрация</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+        <Validations @ref="@registrationValidations" ValidateOnLoad=false>
+            <Validation @ref="@loginValidation" Validator="@ValidateLogin">
+                <Field>
+                    <FieldLabel>Логин</FieldLabel>
+                    <TextEdit @bind-Text="@loginDetails.Login" Placeholder="Введите логин...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@loginErrorMsg</ValidationError> 
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@passwordValidation" Validator="@ValidatePassword">
+                <Field>
+                    <FieldLabel>Пароль</FieldLabel>
+                    <TextEdit @bind-Text="@loginDetails.Password" Placeholder="Введите пароль...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@passwordErrorMsg</ValidationError> 
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@nameValidation" Validator="@ValidateName">
+                <Field>
+                    <FieldLabel>Имя</FieldLabel>
+                    <TextEdit @bind-Text="@supplier.Name" Placeholder="Введите название предприятия...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@nameErrorMsg</ValidationError> 
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation @ref="@countryValidation" Validator="@ValidateCountry">
+                <Field>
+                    <FieldLabel>Страна</FieldLabel>
+                    <TextEdit @bind-Text="@supplier.Country" Placeholder="Введите название страны...">
+                        <Feedback>
+                            <ValidationSuccess>Отлично!</ValidationSuccess> 
+                            <ValidationError>@countryErrorMsg</ValidationError> 
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+        </Validations>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Отменить</Button>
+            <Button Color="Color.Primary" Clicked="@Register">Зарегистрироваться</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
 
 @code {
+    private Modal? supplierRegistrationModal;
 
+    LoginDetails loginDetails = new LoginDetails();
+    Supplier supplier = new Supplier();
+
+    Validations? registrationValidations;
+
+    Validation? loginValidation;
+    string loginErrorMsg = "";
+    bool invalidLogin = false;
+
+    Validation? passwordValidation;
+    string passwordErrorMsg = "";
+    bool invalidPassword = false;
+
+    Validation? nameValidation;
+    string nameErrorMsg = "";
+    bool invalidName = false;
+
+    Validation? countryValidation;
+    string countryErrorMsg = "";
+
+    public void ShowModal()
+    {
+        supplierRegistrationModal.Show();
+    }
+
+    async Task Register()
+    {
+        if (await registrationValidations.ValidateAll())
+        {
+            Console.WriteLine("Register");
+
+            try
+            {
+                SupplierInteractor.CreateSupplier(supplier);
+                Supplier createdSupplier = SupplierInteractor.GetByName(supplier.Name);
+                UserInteractor.Register(loginDetails, "supplier", createdSupplier.ID);
+                UserInteractor.SignIn(loginDetails);
+                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+                await registrationValidations.ClearAll();
+            }
+            catch(UserException ex)
+            {
+                Supplier createdSupplier = SupplierInteractor.GetByName(supplier.Name);
+
+                if (createdSupplier is not null)
+                {
+                    SupplierInteractor.DeleteSupplier(createdSupplier);
+                }
+
+                var errorMsg = ex.Message;
+                Console.WriteLine("Register: error");
+                Console.WriteLine(errorMsg);
+
+                if (errorMsg == "User: This user already exists.")
+                {
+                    Console.WriteLine("Register: error with login");
+                    invalidLogin = true;
+                    await registrationValidations.ValidateAll();
+                }
+                else if (errorMsg == "User: Invalid input of password.")
+                {
+                    Console.WriteLine("Register: error with password");
+                    invalidPassword = true;
+                    await registrationValidations.ValidateAll();
+                }
+            }
+            catch(SupplierException ex)
+            {
+                var errorMsg = ex.Message;
+                Console.WriteLine("Register: error");
+                Console.WriteLine(errorMsg);
+
+                if (errorMsg == "Supplier: This supplier already exists.")
+                {
+                    Console.WriteLine("Register: error with name");
+                    invalidName = true;
+                    await registrationValidations.ValidateAll();
+                }
+            }
+        }
+    }
+
+    void ValidateLogin(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateLogin");
+
+        if (invalidLogin)
+        {
+            Console.WriteLine("ValidateLogin: invalid login");
+            loginErrorMsg = "Введенный логин уже занят.";
+            fact.Status = ValidationStatus.Error;
+            invalidLogin = false;
+        }
+        else
+        {
+            var login = Convert.ToString(fact.Value);
+
+            if (string.IsNullOrEmpty(login))
+            {
+                loginErrorMsg = "Неверный логин.";
+                fact.Status = ValidationStatus.Error;
+            }
+            else
+            {
+                fact.Status = ValidationStatus.Success;
+            }
+        }
+    }
+
+    void ValidatePassword(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidatePassword");
+
+        if (invalidPassword)
+        {
+            Console.WriteLine("ValidatePassword: invalid password");
+            passwordErrorMsg = "Пароль должен содержать минимум 8 символов.";
+            fact.Status = ValidationStatus.Error;
+            invalidPassword = false;
+        }
+        else
+        {
+            var password = Convert.ToString(fact.Value);
+
+            if (string.IsNullOrEmpty(password))
+            {
+                passwordErrorMsg = "Неверный пароль.";
+                fact.Status = ValidationStatus.Error;
+            }
+            else
+            {
+                fact.Status = ValidationStatus.Success;
+            }
+        }
+    }
+
+    void ValidateName(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateName");
+
+        if (invalidName)
+        {
+            Console.WriteLine("ValidateName: invalid name");
+            nameErrorMsg = "Такой пользователь уже существует.";
+            fact.Status = ValidationStatus.Error;
+            invalidName = false;
+        }
+        else
+        {
+            var name = Convert.ToString(fact.Value);
+
+            if (string.IsNullOrEmpty(name))
+            {
+                nameErrorMsg = "Неверное имя.";
+                fact.Status = ValidationStatus.Error;
+            }
+            else
+            {
+                fact.Status = ValidationStatus.Success;
+            }
+        }
+    }
+
+    void ValidateCountry(ValidatorEventArgs fact)
+    {
+        Console.WriteLine("ValidateCountry");
+
+        var country = Convert.ToString(fact.Value);
+
+        if (string.IsNullOrEmpty(country))
+        {
+            countryErrorMsg = "Необходимо ввести название страны.";
+            fact.Status = ValidationStatus.Error;
+        }
+        else
+        {
+            fact.Status = ValidationStatus.Success;
+        }
+    }
+
+    private Task HideModal()
+    {
+        return supplierRegistrationModal.Hide();
+    }
 }
