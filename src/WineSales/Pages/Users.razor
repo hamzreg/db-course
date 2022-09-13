@@ -1,0 +1,50 @@
+﻿@page "/users"
+
+@using WineSales.Domain.Interactors
+@inject IUserInteractor UserInteractor
+
+@if (nowUser.Role != "admin")
+{
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronSubtitle>
+        Для просмотра этой страницы необходимо войти в аккаунт администратора.
+    </JumbotronSubtitle>
+</Jumbotron>
+}
+else
+{
+    <Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+        <JumbotronTitle Size="JumbotronTitleSize.Is4">Пользователи</JumbotronTitle>
+        <Divider></Divider>
+    </Jumbotron>
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Имя</TableHeaderCell>
+                <TableHeaderCell>Роль</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            @foreach (User user in users)
+            {
+                if (user.Role != "admin")
+                {
+                    <OneUser UserItem="user"></OneUser>
+                }
+            }
+        </TableBody>
+    </Table>
+}
+
+@code {
+    private List<User> users = new List<User>();
+
+    User nowUser;
+
+    protected override void OnInitialized()
+    {
+        nowUser = UserInteractor.GetNowUser();
+        users = UserInteractor.GetAll();
+        base.OnInitialized();
+    }
+}

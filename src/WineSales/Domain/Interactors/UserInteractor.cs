@@ -12,6 +12,7 @@ namespace WineSales.Domain.Interactors
         void DeleteUser(User user);
         void Register(LoginDetails info, string role, int roleID);
         void SignIn(LoginDetails info);
+        List<User> GetAll();
         int GetNowUserID();
         int GetNowUserRoleID();
         User GetNowUser();
@@ -29,6 +30,11 @@ namespace WineSales.Domain.Interactors
             nowUser = new User(UserConfig.Default,
                                UserConfig.Default,
                                UserConfig.Roles[3]);
+        }
+
+        public List<User> GetAll()
+        {
+            return userRepository.GetAll();
         }
 
         public int GetNowUserID()
