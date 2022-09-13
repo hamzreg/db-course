@@ -15,7 +15,7 @@
             <Validation @ref="@priceValidation" Validator="@ValidatePrice">
                 <Field>
                     <FieldLabel>Цена (₽)</FieldLabel>
-                    <NumericEdit @bind-Value="@supplierWine.Price" Placeholder="Введите цену...">
+                    <NumericEdit @bind-Value="@SupplierWineItem.Price" Placeholder="Введите цену...">
                         <Feedback>
                             <ValidationSuccess>Отлично!</ValidationSuccess> 
                             <ValidationError>@priceErrorMsg</ValidationError> 
@@ -26,7 +26,7 @@
             <Validation @ref="@percentValidation" Validator="@ValidatePercent">
                 <Field>
                     <FieldLabel>Процент</FieldLabel>
-                    <NumericEdit @bind-Value="@supplierWine.Percent" Placeholder="Введите процент...">
+                    <NumericEdit @bind-Value="@SupplierWineItem.Percent" Placeholder="Введите процент...">
                         <Feedback>
                             <ValidationSuccess>Отлично!</ValidationSuccess> 
                             <ValidationError>@percentErrorMsg</ValidationError> 
@@ -63,8 +63,6 @@
 
     private Modal? updateWineModal;
 
-    SupplierWine supplierWine = new SupplierWine();
-
     Validations? wineValidations;
 
     Validation? priceValidation;
@@ -87,10 +85,7 @@
 
             try
             {
-                supplierWine.ID = SupplierWineItem.ID;
-                supplierWine.WineID = SupplierWineItem.WineID;
-                supplierWine.Rating = SupplierWineItem.Rating;
-                SupplierWineInteractor.UpdateSupplierWine(supplierWine);
+                SupplierWineInteractor.UpdateSupplierWine(SupplierWineItem);
 
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await wineValidations.ClearAll();
