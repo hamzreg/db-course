@@ -35,7 +35,22 @@
                 </BarItem>
                 <BarItem>
                     <BarLink To="supplierSales">Мои продажи</BarLink>
-                </BarItem>    
+                </BarItem>
+            }
+            else if (nowUser.Role == "admin")
+            {
+                <BarItem>
+                    <BarLink To="suppliers">Поставщики</BarLink>
+                </BarItem>
+                <BarItem>
+                    <BarLink To="">Вина</BarLink>
+                </BarItem>
+                <BarItem>
+                    <BarLink To="">Продажи</BarLink>
+                </BarItem>
+                <BarItem>
+                    <BarLink To="">Аккаунты</BarLink>
+                </BarItem>
             }
         </BarStart>
         <BarEnd>

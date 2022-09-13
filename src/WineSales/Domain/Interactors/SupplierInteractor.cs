@@ -7,6 +7,7 @@ namespace WineSales.Domain.Interactors
     public interface ISupplierInteractor
     {
         void CreateSupplier(Supplier supplier);
+        List<Supplier> GetAll();
         Supplier GetByID(int id);
         Supplier GetByName(string name);
         Supplier GetBySupplierWineID(int supplierWineID);
@@ -32,6 +33,11 @@ namespace WineSales.Domain.Interactors
             supplier.License = false;
 
             supplierRepository.Create(supplier);
+        }
+
+        public List<Supplier> GetAll()
+        {
+            return supplierRepository.GetAll();
         }
 
         public Supplier GetByID(int id)

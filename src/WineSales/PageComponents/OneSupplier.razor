@@ -1,0 +1,44 @@
+﻿@using WineSales.Domain.Interactors
+@inject ISupplierInteractor SupplierInteractor
+
+<TableRow>
+    <TableRowCell>@SupplierItem.Name</TableRowCell>
+    <TableRowCell>@SupplierItem.Country</TableRowCell>
+    <TableRowCell>@SupplierItem.Experience</TableRowCell>
+@if (@SupplierItem.License)
+{
+    <TableRowCell>Есть</TableRowCell>
+}
+else
+{
+    <TableRowCell>Нет</TableRowCell>
+}
+</TableRow>
+@if (@SupplierItem.License)
+{
+    <Button Color="Color.Primary" Clicked="@TakeLicense">Отобрать лицензию</Button>
+}
+else
+{
+    <Button Color="Color.Primary" Clicked="@GiveLicense">Выдать лицензию</Button>
+}
+
+@code {
+    [Parameter] public Supplier SupplierItem { get; set; }
+
+    private Task GiveLicense()
+    {
+        SupplierItem.License = true;
+        SupplierInteractor.UpdateSupplier(SupplierItem);
+
+        return Task.CompletedTask;
+    }
+
+    private Task TakeLicense()
+    {
+        SupplierItem.License = false;
+        SupplierInteractor.UpdateSupplier(SupplierItem);
+
+        return Task.CompletedTask;
+    }
+}
