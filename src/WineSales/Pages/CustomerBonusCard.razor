@@ -1,6 +1,7 @@
 ﻿@page "/bonusCard"
 
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 @inject ICustomerInteractor CustomerInteractor
 @inject IBonusCardInteractor BonusCardInteractor
@@ -36,10 +37,10 @@ else
 
 @code {
     private ModalBonusCard? bonusCardModal;
-    private int bonuses;
 
-    User nowUser;
-    int? bonusCardID;
+    private int bonuses;
+    private User nowUser;
+    private int? bonusCardID;
 
     protected override void OnInitialized()
     {

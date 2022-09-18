@@ -35,6 +35,16 @@ namespace WineSales.Domain.Interactors
             return bonusCardRepository.GetByPhone(phone);
         }
 
+        public void Create(BonusCard bonusCard)
+        {
+            if (!CheckPhone(bonusCard.Phone))
+                throw new BonusCardException("Invalid input of phone.");
+            else if (Exist(bonusCard.Phone))
+                throw new BonusCardException("The bonus card is already linked to this phone.");
+
+            bonusCardRepository.Create(bonusCard);
+        }
+
         public void CreateBonusCard(string phone)
         {
             if (!CheckPhone(phone))

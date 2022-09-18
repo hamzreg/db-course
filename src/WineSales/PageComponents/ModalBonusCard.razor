@@ -1,4 +1,5 @@
 ﻿@using WineSales.Config;
+
 @inject NavigationManager NavigationManager
 @inject WineSales.Domain.Interactors.IUserInteractor UserInteractor
 @inject WineSales.Domain.Interactors.ICustomerInteractor CustomerInteractor
@@ -34,14 +35,13 @@
 
 @code {
     private Modal? bonusCardModal;
-    string phone;
+    private Validations? bonusCardValidations;
 
-    Validations? bonusCardValidations;
-
-    Validation? phoneValidation;
-    string phoneErrorMsg = "";
-    bool alreadyExist = false;
-    bool invalidPhone = false;
+    private string phone;
+    private Validation? phoneValidation;
+    private string phoneErrorMsg = "";
+    private bool alreadyExist = false;
+    private bool invalidPhone = false;
 
     public void ShowModal()
     {
@@ -52,32 +52,31 @@
     {
         if (await bonusCardValidations.ValidateAll())
         {
-            Console.WriteLine("GetBonusCard");
-
             try
             {
                 BonusCardInteractor.CreateBonusCard(phone);
                 BonusCard createdBonusCard = BonusCardInteractor.GetByPhone(phone);
-                int customerID = UserInteractor.GetNowUserID();
-                CustomerInteractor.UpdateBonusCard(customerID, createdBonusCard.ID);
+                
+                User nowUser = UserInteractor.GetNowUser();
+                int customerID = nowUser.RoleID;
+                Customer customer = CustomerInteractor.GetByID(customerID);
+                customer.BonusCardID = createdBonusCard.ID;
+                CustomerInteractor.UpdateCustomer(customer);
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await bonusCardValidations.ClearAll();
             }
             catch(BonusCardException ex)
             {
                 var errorMsg = ex.Message;
-                Console.WriteLine("GetBonusCard: error");
-                Console.WriteLine(errorMsg);
 
                 if (errorMsg == "BonusCard: Invalid input of phone.")
                 {
-                    Console.WriteLine("GetBonusCard: error with phone");
                     invalidPhone = true;
                     await bonusCardValidations.ValidateAll();
                 }
                 else if (errorMsg == "BonusCard: The bonus card is already linked to this phone.")
                 {
-                    Console.WriteLine("GetBonusCard: already exist");
                     alreadyExist = true;
                     await bonusCardValidations.ValidateAll();
                 }
@@ -87,21 +86,17 @@
 
     void ValidatePhone(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidatePhone");
-
         if (alreadyExist)
         {
-            Console.WriteLine("ValidatePhone: alreadyExist");
             phoneErrorMsg = "К этому номеру телефона уже привязана бонусная карта.";
             fact.Status = ValidationStatus.Error;
             alreadyExist = false;
         }
         else if (invalidPhone)
         {
-            Console.WriteLine("ValidatePhone: invalidPhone");
             phoneErrorMsg = "Номер телефона должен состоять из 11 цифр.";
             fact.Status = ValidationStatus.Error;
-            alreadyExist = false;
+            invalidPhone = false;
         }
         else
         {

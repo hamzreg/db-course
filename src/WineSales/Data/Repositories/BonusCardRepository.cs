@@ -30,7 +30,6 @@ namespace WineSales.Data.Repositories
         {
             var bonusCard = new BonusCard();
 
-            bonusCard.ID = _context.BonusCards.Count() + 1;
             bonusCard.Bonuses = 0;
             bonusCard.Phone = phone;
 
