@@ -232,7 +232,7 @@ namespace DomainTests
                 Password = "password"
             };
 
-            _interactor.Register(info, "customer");
+            _interactor.Register(info, "customer", 5);
             Assert.Equal(expectedCount, mockUsers.Count);
 
             var usersList = mockUsers;
@@ -248,7 +248,7 @@ namespace DomainTests
                 Password = "password"
             };
 
-            void action() => _interactor.Register(info, "customer");
+            void action() => _interactor.Register(info, "customer", 5);
             Assert.Throws<UserException>(action);
 
             var exception = Assert.Throws<UserException>(action);
@@ -265,7 +265,7 @@ namespace DomainTests
                 Password = "pass"
             };
 
-            void action() => _interactor.Register(info, "customer");
+            void action() => _interactor.Register(info, "customer", 5);
             Assert.Throws<UserException>(action);
 
             var exception = Assert.Throws<UserException>(action);

@@ -269,12 +269,11 @@ namespace DomainTests
             Assert.Equal("SupplierWine: Invalid input of supplierWine.", exception.Message);
         }
 
-/*        [Fact]
+        [Fact]
         public void GetBySupplierIDTest()
         {
             int supplierID = 1;
 
-            var expectedPrices = new List<double> { 700, 300 };
             var expectedWines = new List<Wine>
             {
                 new Wine
@@ -299,11 +298,11 @@ namespace DomainTests
                 }
             };
 
-            var (wines, prices) = _interactor.GetBySupplierID(supplierID);
+            var (wines, supplierWines) = _interactor.GetBySupplierID(supplierID);
 
-            var expectedCount = expectedPrices.Count;
+            var expectedCount = expectedWines.Count;
             Assert.Equal(expectedCount, wines.Count);
-            Assert.Equal(expectedCount, prices.Count);
+            Assert.Equal(expectedCount, supplierWines.Count);
 
             for (int i = 0; i < expectedCount; i++)
             {
@@ -314,10 +313,8 @@ namespace DomainTests
                 Assert.Equal(expectedWines[i].Volume, wines[i].Volume);
                 Assert.Equal(expectedWines[i].Alcohol, wines[i].Alcohol);
                 Assert.Equal(expectedWines[i].Aging, wines[i].Aging);
-
-                Assert.Equal(expectedPrices[i], prices[i]);
             }
-        }*/
+        }
 
         [Fact]
         public void GetRatingTest()
@@ -439,7 +436,7 @@ namespace DomainTests
             }
         }
 
-/*        [Fact]
+        [Fact]
         public void GetAllWineTest()
         {
             var expectedPrices = new List<double> { 1050, 750, 450 };
@@ -477,7 +474,7 @@ namespace DomainTests
                 }
             };
 
-            var (wines, prices) = _interactor.GetAllWine();
+            var (ids, wines, prices) = _interactor.GetAllWine();
 
             var expectedCount = expectedPrices.Count;
             Assert.Equal(expectedCount, wines.Count);
@@ -495,7 +492,7 @@ namespace DomainTests
 
                 Assert.Equal(expectedPrices[i], prices[i]);
             }
-        }*/
+        }
 
         [Fact]
         public void UpdateSupplierWineTest()

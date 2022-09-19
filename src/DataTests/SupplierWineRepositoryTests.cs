@@ -238,16 +238,16 @@ namespace DataTests
                 });
         }
 
-/*        [Fact]
+        [Fact]
         public void GetBySupplierIDTest()
         {
             using var context = CreateContext();
             var repository = new SupplierWineRepository(context);
 
-            var (wines, prices) = repository.GetBySupplierID(1);
+            var (wines, supplierWines) = repository.GetBySupplierID(1);
 
             Assert.Equal(1, wines.Count);
-            Assert.Equal(1, prices.Count);
+            Assert.Equal(1, supplierWines.Count);
 
             Assert.Collection(
                 wines,
@@ -262,19 +262,15 @@ namespace DataTests
                     Assert.Equal(2, wine.Aging);
                     Assert.Equal(2, wine.Number);
                 });
+        }
 
-            Assert.Collection(
-                prices,
-                price => Assert.Equal(700, price));
-        }*/
-
- /*       [Fact]
+        [Fact]
         public void GetAllWineTest()
         {
             using var context = CreateContext();
             var repository = new SupplierWineRepository(context);
 
-            var (wines, prices) = repository.GetAllWine();
+            var (ids, wines, prices) = repository.GetAllWine();
 
             Assert.Equal(2, wines.Count);
             Assert.Equal(2, prices.Count);
@@ -308,7 +304,7 @@ namespace DataTests
                 prices,
                 price => Assert.Equal(1050, price),
                 price => Assert.Equal(750, price));
-        }*/
+        }
 
         [Fact]
         public void GetByAdminTest()

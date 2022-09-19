@@ -69,25 +69,6 @@ namespace WineSales.Data.Repositories
             }
         }
 
-        public void UpdateBonusCard(int customerID, int bonusCardID)
-        {
-            using (var transaction = _context.Database.BeginTransaction())
-            {
-                try
-                {
-                    _context.Database.ExecuteSqlRaw("call change_customer_bonus_card({0}, {1});",
-                                                      customerID, bonusCardID);
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    Console.WriteLine(ex.Message);
-                    throw new CustomerException("Failed to update bonus card.");
-                }
-            }
-        }
-
         public void Delete(Customer customer)
         {
             var foundCustomer = GetByID(customer.ID);
