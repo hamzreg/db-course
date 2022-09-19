@@ -40,13 +40,13 @@
             else if (nowUser.Role == "admin")
             {
                 <BarItem>
+                    <BarLink To="adminSupplierWines">Вина</BarLink>
+                </BarItem>
+                <BarItem>
+                    <BarLink To="adminSales">Продажи</BarLink>
+                </BarItem>
+                <BarItem>
                     <BarLink To="suppliers">Поставщики</BarLink>
-                </BarItem>
-                <BarItem>
-                    <BarLink To="">Вина</BarLink>
-                </BarItem>
-                <BarItem>
-                    <BarLink To="">Продажи</BarLink>
                 </BarItem>
                 <BarItem>
                     <BarLink To="users">Аккаунты</BarLink>
@@ -91,7 +91,7 @@
     private CustomerRegistration? customerRegistrationModal;
     private SupplierRegistration? supplierRegistrationModal;
 
-    User nowUser;
+    private User nowUser;
 
     protected override void OnInitialized()
     {

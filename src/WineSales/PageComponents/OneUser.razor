@@ -1,11 +1,22 @@
 ﻿@using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 
 <TableRow>
     <TableRowCell>@UserItem.Login</TableRowCell>
     <TableRowCell>@UserItem.Role</TableRowCell>
 </TableRow>
-<Button Color="Color.Primary" Clicked="@DeleteUser">Удалить аккаунт пользователя</Button>
+<Bar Breakpoint="Breakpoint.Desktop"
+     ThemeContrast="ThemeContrast.Light">
+    <BarToggler />
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <Button Color="Color.Danger" Clicked="@DeleteUser">Удалить аккаунт пользователя</Button>
+            </BarItem>
+        </BarStart>
+    </BarMenu>
+</Bar>
 
 @code {
     [Parameter] public User UserItem { get; set; }

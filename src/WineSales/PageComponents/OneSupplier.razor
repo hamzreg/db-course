@@ -1,10 +1,12 @@
 ﻿@using WineSales.Domain.Interactors
+
 @inject ISupplierInteractor SupplierInteractor
 
 <TableRow>
     <TableRowCell>@SupplierItem.Name</TableRowCell>
     <TableRowCell>@SupplierItem.Country</TableRowCell>
     <TableRowCell>@SupplierItem.Experience</TableRowCell>
+
 @if (@SupplierItem.License)
 {
     <TableRowCell>Есть</TableRowCell>
@@ -14,9 +16,10 @@ else
     <TableRowCell>Нет</TableRowCell>
 }
 </TableRow>
+
 @if (@SupplierItem.License)
 {
-    <Button Color="Color.Primary" Clicked="@TakeLicense">Отобрать лицензию</Button>
+    <Button Color="Color.Danger" Clicked="@TakeLicense">Отобрать лицензию</Button>
 }
 else
 {
