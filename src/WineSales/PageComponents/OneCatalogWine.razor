@@ -1,10 +1,10 @@
 ﻿@using WineSales.Config
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 @inject IPurchaseInteractor PurchaseInteractor
 @inject ISaleInteractor SaleInteractor
 @inject ISupplierWineInteractor SupplierWineInteractor
-@inject ISupplierInteractor SupplierInteractor
 
 <Modal @ref="supplierInfoModal">
     <ModalContent Centered>
@@ -32,36 +32,40 @@
     </ModalContent>
 </Modal>
 
-<Card>
-    <CardBody>
-        <CardTitle Size="5">@OneWine.Kind @OneWine.Color</CardTitle>
-        <CardText>
-            <ListGroup Flush>
-                <ListGroupItem Disabled>Объем: @OneWine.Volume л</ListGroupItem>
-                <ListGroupItem Disabled>Сахар: @OneWine.Sugar</ListGroupItem>
-                <ListGroupItem Disabled>Алкоголь: @OneWine.Alcohol %</ListGroupItem>
-                <ListGroupItem Disabled>Выдержка: @OneWine.Aging лет</ListGroupItem>
-                <ListGroupItem>@OnePrice</ListGroupItem>
-            </ListGroup>
-        </CardText>
+<TableRow>
+    <TableRowCell>@OneWine.Kind</TableRowCell>
+    <TableRowCell>@OneWine.Color</TableRowCell>
+    <TableRowCell>@OneWine.Volume</TableRowCell>
+    <TableRowCell>@OneWine.Sugar</TableRowCell>
+    <TableRowCell>@OneWine.Alcohol</TableRowCell>
+    <TableRowCell>@OneWine.Aging</TableRowCell>
+    <TableRowCell>@OnePrice</TableRowCell>
+</TableRow>
 
-        @if (@Full)
-        {
-            <Button Color="Color.Primary" Clicked="@GetSupplierInfo">О поставщике</Button>
-            <Button Color="Color.Primary" Clicked="@BuyWine">Купить</Button>
-        }
-    </CardBody>
-</Card>
+@if (@Full)
+{
+    <Bar Breakpoint="Breakpoint.Desktop"
+         ThemeContrast="ThemeContrast.Light">
+        <BarToggler />
+        <BarMenu>
+            <BarStart>
+                <BarItem>
+                    <Button Color="Color.Primary" Clicked="@GetSupplierInfo">О поставщике</Button>
+                    <Button Color="Color.Primary" Clicked="@BuyWine">Купить</Button>
+                </BarItem>
+            </BarStart>
+        </BarMenu>
+    </Bar>
+}
 
 @code {
-    [Parameter] public int SupplierWineID { get; set; }
     [Parameter] public Wine OneWine { get; set; }
     [Parameter] public double OnePrice { get; set; }
+    [Parameter] public int SupplierWineID { get; set; }
     [Parameter] public Supplier OneSupplier { get; set; }
     [Parameter] public bool Full { get; set; }
 
     private Modal? supplierInfoModal;
-    User nowUser;
 
     private void GetSupplierInfo()
     {
@@ -70,7 +74,7 @@
 
     private Task BuyWine()
     {
-        nowUser = UserInteractor.GetNowUser();
+        User nowUser = UserInteractor.GetNowUser();
 
         Purchase purchase = new Purchase
         {
@@ -78,7 +82,6 @@
             Status = (int)PurchaseConfig.Statuses.Active,
             CustomerID = nowUser.RoleID
         };
-
         PurchaseInteractor.CreatePurchase(purchase);
         Purchase createdPurchase = PurchaseInteractor.GetActive(nowUser.RoleID, OnePrice);
 

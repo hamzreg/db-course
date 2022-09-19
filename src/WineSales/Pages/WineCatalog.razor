@@ -3,6 +3,7 @@
 <PageTitle>Каталог вин</PageTitle>
 
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 @inject ISupplierWineInteractor SupplierWineInteractor
 @inject ISupplierInteractor SupplierInteractor
@@ -12,10 +13,25 @@
     <Divider></Divider>
 </Jumbotron>
 
-@for (int i = 0; i < wines.Count; i++)
-{
-    <CardWine SupplierWineID="ids[i]" OneWine="wines[i]" OnePrice="prices[i]" OneSupplier="suppliers[i]" Full=withButton></CardWine>
-}
+<Table>
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell>Сорт</TableHeaderCell>
+            <TableHeaderCell>Цвет</TableHeaderCell>
+            <TableHeaderCell>Объем (л)</TableHeaderCell>
+            <TableHeaderCell>Сахар</TableHeaderCell>
+            <TableHeaderCell>Алкоголь (%)</TableHeaderCell>
+            <TableHeaderCell>Выдержка (лет)</TableHeaderCell>
+            <TableHeaderCell>Цена (₽)</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @for (int i = 0; i < wines.Count; i++)
+        {
+            <OneCatalogWine OneWine="wines[i]" OnePrice="prices[i]" SupplierWineID="ids[i]" OneSupplier="suppliers[i]" Full=withButton></OneCatalogWine>
+        }
+    </TableBody>
+</Table>
 
 @code {
     private List<int> ids = new List<int>();
@@ -24,12 +40,11 @@
     private List<Supplier> suppliers = new List<Supplier>();
     private List<double> points = new List<Double>();
 
-    User nowUser;
-    bool withButton = false;
+    private bool withButton = false;
 
     protected override void OnInitialized()
     {
-        nowUser = UserInteractor.GetNowUser();
+        User nowUser = UserInteractor.GetNowUser();
 
         if (nowUser.Role == "customer")
         {

@@ -1,0 +1,14 @@
+﻿<TableRow>
+    <TableRowCell>@OneWine.Kind</TableRowCell>
+    <TableRowCell>@OneWine.Color</TableRowCell>
+    <TableRowCell>@OneWine.Volume</TableRowCell>
+    <TableRowCell>@OneWine.Sugar</TableRowCell>
+    <TableRowCell>@OneWine.Alcohol</TableRowCell>
+    <TableRowCell>@OneWine.Aging</TableRowCell>
+    <TableRowCell>@Point</TableRowCell>
+</TableRow>
+
+@code {
+    [Parameter] public Wine OneWine { get; set; }
+    [Parameter] public double Point { get; set; }
+}

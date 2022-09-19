@@ -36,7 +36,7 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <TableRowWine OneWine="wines[i]" Point="points[i]" incPrice=false incPercent=false incPoint=true></TableRowWine>
+                <OneRatingWine OneWine="wines[i]" Point="points[i]"></OneRatingWine>
             }
         </TableBody>
     </Table>
@@ -46,7 +46,7 @@ else
     private List<Wine>? wines = new List<Wine>();
     private List<double> points = new List<Double>();
 
-    User nowUser;
+    private User nowUser;
 
     protected override void OnInitialized()
     {
