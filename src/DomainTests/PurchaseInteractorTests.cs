@@ -277,7 +277,7 @@ namespace DomainTests
                 }
             };
 
-            var (wines, prices) = _interactor.GetByCustomer(customer.ID);
+            var (ids, dates, wines, prices) = _interactor.GetByCustomer(customer.ID);
 
             Assert.Equal(expectedWines.Count, wines.Count);
             Assert.Equal(expectedPrices.Count, prices.Count);

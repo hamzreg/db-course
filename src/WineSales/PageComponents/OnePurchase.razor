@@ -1,6 +1,6 @@
-﻿@using WineSales.Config
-@using WineSales.Domain.Interactors
-@inject IPurchaseInteractor PurchaseInteractor
+﻿@using WineSales.Domain.Interactors
+
+@inject NavigationManager NavigationManager
 @inject ISaleInteractor SaleInteractor
 
 <TableRow>
@@ -11,12 +11,14 @@
     <TableRowCell>@OneWine.Alcohol</TableRowCell>
     <TableRowCell>@OneWine.Aging</TableRowCell>
     <TableRowCell>@OnePrice</TableRowCell>
+    <TableRowCell>@OneDate</TableRowCell>
 </TableRow>
-<Button Color="Color.Primary" Clicked="@CancelPurchase">Отменить</Button>
+<Button Color="Color.Danger" Clicked="@CancelPurchase">Отменить</Button>
 
 @code {
     [Parameter] public Wine OneWine { get; set; }
     [Parameter] public double OnePrice { get; set; }
+    [Parameter] public DateOnly OneDate { get; set; }
     [Parameter] public int PurchaseID { get; set; }
 
     private Task CancelPurchase()
@@ -24,6 +26,7 @@
         Sale sale = SaleInteractor.GetByPurchaseID(PurchaseID);
         SaleInteractor.DeleteSale(sale);
 
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
         return Task.CompletedTask;
     }
 }

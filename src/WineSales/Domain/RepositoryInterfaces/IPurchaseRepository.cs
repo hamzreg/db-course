@@ -6,7 +6,7 @@ namespace WineSales.Domain.RepositoryInterfaces
     {
         List<Purchase> GetByPrice(double price);
         List<Purchase> GetByStatus(int status);
-        (List<int>, List<Wine>, List<double>) GetByCustomerID(int customerID);
+        (List<int>, List<DateOnly>, List<Wine>, List<double>) GetByCustomerID(int customerID);
         Purchase GetActive(int customerID, double price);
     }
 }

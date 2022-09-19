@@ -57,7 +57,7 @@ namespace WineSales.Data.Repositories
                 .ToList();
         }
 
-        public (List<int>, List<Wine>, List<double>) GetByCustomerID(int customerID)
+        public (List<int>, List<DateOnly>, List<Wine>, List<double>) GetByCustomerID(int customerID)
         {
             var purchases = _context.Purchases.Where(purchase => 
                                                      purchase.CustomerID == customerID &&
@@ -65,25 +65,22 @@ namespace WineSales.Data.Repositories
                                               .ToList();
 
             var ids = new List<int>();
+            var dates = new List<DateOnly>();
             var wines = new List<Wine>();
             var prices = new List<double>();
 
             foreach (Purchase purchase in purchases)
             {
-                var sales = _context.Sales.Where(sl => sl.PurchaseID == purchase.ID)
-                    .ToList();
+                var sale = _context.Sales.FirstOrDefault(sl => sl.PurchaseID == purchase.ID);
+                var supplierWine = _context.SupplierWines.Find(sale.SupplierWineID);
 
-                foreach (Sale sale in sales)
-                {
-                    ids.Add(purchase.ID);
-                    var supplierWine = _context.SupplierWines.Find(sale.SupplierWineID);
-                    wines.Add(_context.Wines.Find(supplierWine.WineID));
-
-                    prices.Add(purchase.Price);
-                }
+                ids.Add(purchase.ID);
+                dates.Add(sale.Date);
+                wines.Add(_context.Wines.Find(supplierWine.WineID));
+                prices.Add(purchase.Price);
             }
 
-            return (ids, wines, prices);
+            return (ids, dates, wines, prices);
         }
 
         public void Update(Purchase purchase)

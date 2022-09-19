@@ -41,12 +41,14 @@ namespace DataTests
                 new Sale
                 {
                     PurchaseID = 2,
-                    SupplierWineID = 1
+                    SupplierWineID = 1,
+                    Date = new DateOnly(2022,9,9)
                 },
                 new Sale
                 {
                     PurchaseID = 1,
-                    SupplierWineID = 2
+                    SupplierWineID = 2,
+                    Date = new DateOnly(2022,8,15)
                 });
 
             context.SupplierWines.AddRange(new SupplierWine { WineID = 1 },
@@ -186,7 +188,7 @@ namespace DataTests
             using var context = CreateContext();
             var repository = new PurchaseRepository(context);
 
-            var (wines, prices) = repository.GetByCustomerID(2);
+            var (ids, dates, wines, prices) = repository.GetByCustomerID(2);
 
             Assert.Collection(
                 wines,

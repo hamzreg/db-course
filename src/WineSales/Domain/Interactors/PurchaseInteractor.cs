@@ -8,7 +8,7 @@ namespace WineSales.Domain.Interactors
     public interface IPurchaseInteractor
     {
         void CreatePurchase(Purchase purchase);
-        (List<int>, List<Wine>, List<double>) GetByCustomer(int customerID);
+        (List<int>, List<DateOnly>, List<Wine>, List<double>) GetByCustomer(int customerID);
         Purchase GetActive(int customerID, double price);
         void ChangeStatus(Purchase purchase);
         void DeletePurchase(Purchase purchase);
@@ -33,7 +33,7 @@ namespace WineSales.Domain.Interactors
             purchaseRepository.Create(purchase);
         }
 
-        public (List<int>, List<Wine>, List<double>) GetByCustomer(int customerID)
+        public (List<int>, List<DateOnly>, List<Wine>, List<double>) GetByCustomer(int customerID)
         {
             return purchaseRepository.GetByCustomerID(customerID);
         }

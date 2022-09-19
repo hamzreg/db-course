@@ -1,6 +1,7 @@
 ﻿@page "/purchases"
 
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 @inject IPurchaseInteractor PurchaseInteractor
 
@@ -29,12 +30,13 @@ else
                 <TableHeaderCell>Алкоголь (%)</TableHeaderCell>
                 <TableHeaderCell>Выдержка (лет)</TableHeaderCell>
                 <TableHeaderCell>Цена (₽)</TableHeaderCell>
+                <TableHeaderCell>Дата</TableHeaderCell>
             </TableRow>
         </TableHeader>
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <OnePurchase OneWine="wines[i]" OnePrice="prices[i]" PurchaseID="ids[i]"></OnePurchase>
+                <OnePurchase OneWine="wines[i]" OnePrice="prices[i]" OneDate="dates[i]" PurchaseID="ids[i]"></OnePurchase>
             }
         </TableBody>
     </Table>
@@ -42,16 +44,18 @@ else
 
 @code {
     private List<int> ids = new List<int>();
+    private List<DateOnly> dates = new List<DateOnly>();
     private List<Wine> wines = new List<Wine>();
     private List<Double> prices = new List<Double>();
 
-    User nowUser;
+    private User nowUser;
 
     protected override void OnInitialized()
     {
         nowUser = UserInteractor.GetNowUser();
         int customerID = nowUser.RoleID;
-        (ids, wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
+        (ids, dates, wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
+
         base.OnInitialized();
     }
 }

@@ -84,12 +84,17 @@
 
         SupplierWine supplierWine = SupplierWineInteractor.GetByID(SupplierWineID);
 
+        var nowDate = Convert.ToString(DateTime.Now.ToShortDateString());
+        string[] strNowDate = nowDate.Split('.');
+
         Sale sale = new Sale
         {
             PurchasePrice = OnePrice,
             Costs = SaleConfig.MinCosts,
             WineNumber = WineConfig.MinNumber,
-            Date = new DateOnly(),
+            Date = new DateOnly(Convert.ToInt32(strNowDate[2]), 
+                                Convert.ToInt32(strNowDate[1]),
+                                Convert.ToInt32(strNowDate[0])),
             PurchaseID = createdPurchase.ID,
             SupplierWineID = SupplierWineID
         };
