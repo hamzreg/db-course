@@ -1,6 +1,7 @@
 ﻿@page "/users"
 
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 
 @if (nowUser.Role != "admin")
@@ -45,6 +46,7 @@ else
     {
         nowUser = UserInteractor.GetNowUser();
         users = UserInteractor.GetAll();
+
         base.OnInitialized();
     }
 }

@@ -122,6 +122,7 @@
         User guestUser = new User("guest", "guest", "guest");
         UserInteractor.SetNowUser(guestUser);
         nowUser = UserInteractor.GetNowUser();
+
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 
@@ -129,9 +130,11 @@
     {
         nowUser = UserInteractor.GetNowUser();
         UserInteractor.DeleteUser(nowUser);
+
         User guestUser = new User("guest", "guest", "guest");
         UserInteractor.SetNowUser(guestUser);
         nowUser = UserInteractor.GetNowUser();
+
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 }

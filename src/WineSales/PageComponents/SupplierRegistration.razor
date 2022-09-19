@@ -95,14 +95,14 @@
     {
         if (await registrationValidations.ValidateAll())
         {
-            Console.WriteLine("Register");
-
             try
             {
                 SupplierInteractor.CreateSupplier(supplier);
                 Supplier createdSupplier = SupplierInteractor.GetByName(supplier.Name);
+
                 UserInteractor.Register(loginDetails, "supplier", createdSupplier.ID);
                 UserInteractor.SignIn(loginDetails);
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await registrationValidations.ClearAll();
             }
@@ -116,18 +116,14 @@
                 }
 
                 var errorMsg = ex.Message;
-                Console.WriteLine("Register: error");
-                Console.WriteLine(errorMsg);
 
                 if (errorMsg == "User: This user already exists.")
                 {
-                    Console.WriteLine("Register: error with login");
                     invalidLogin = true;
                     await registrationValidations.ValidateAll();
                 }
                 else if (errorMsg == "User: Invalid input of password.")
                 {
-                    Console.WriteLine("Register: error with password");
                     invalidPassword = true;
                     await registrationValidations.ValidateAll();
                 }
@@ -135,12 +131,9 @@
             catch(SupplierException ex)
             {
                 var errorMsg = ex.Message;
-                Console.WriteLine("Register: error");
-                Console.WriteLine(errorMsg);
 
                 if (errorMsg == "Supplier: This supplier already exists.")
                 {
-                    Console.WriteLine("Register: error with name");
                     invalidName = true;
                     await registrationValidations.ValidateAll();
                 }
@@ -150,11 +143,8 @@
 
     void ValidateLogin(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidateLogin");
-
         if (invalidLogin)
         {
-            Console.WriteLine("ValidateLogin: invalid login");
             loginErrorMsg = "Введенный логин уже занят.";
             fact.Status = ValidationStatus.Error;
             invalidLogin = false;
@@ -177,11 +167,8 @@
 
     void ValidatePassword(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidatePassword");
-
         if (invalidPassword)
         {
-            Console.WriteLine("ValidatePassword: invalid password");
             passwordErrorMsg = "Пароль должен содержать минимум 8 символов.";
             fact.Status = ValidationStatus.Error;
             invalidPassword = false;
@@ -204,11 +191,8 @@
 
     void ValidateName(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidateName");
-
         if (invalidName)
         {
-            Console.WriteLine("ValidateName: invalid name");
             nameErrorMsg = "Такой пользователь уже существует.";
             fact.Status = ValidationStatus.Error;
             invalidName = false;
@@ -231,8 +215,6 @@
 
     void ValidateCountry(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidateCountry");
-
         var country = Convert.ToString(fact.Value);
 
         if (string.IsNullOrEmpty(country))

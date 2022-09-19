@@ -59,6 +59,7 @@
                 
                 User nowUser = UserInteractor.GetNowUser();
                 int customerID = nowUser.RoleID;
+
                 Customer customer = CustomerInteractor.GetByID(customerID);
                 customer.BonusCardID = createdBonusCard.ID;
                 CustomerInteractor.UpdateCustomer(customer);

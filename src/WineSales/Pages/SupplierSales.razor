@@ -1,6 +1,7 @@
 ﻿@page "/supplierSales"
 
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 @inject ISaleInteractor SaleInteractor
 @inject ISupplierInteractor SupplierInteractor
@@ -52,15 +53,17 @@ else
     private List<Wine> wines = new List<Wine>();
     private List<Double> prices = new List<Double>();
 
-    User nowUser;
-    Supplier supplier;
+    private User nowUser;
+    private Supplier supplier;
 
     protected override void OnInitialized()
     {
         nowUser = UserInteractor.GetNowUser();
         int supplierID = nowUser.RoleID;
         supplier = SupplierInteractor.GetByID(supplierID);
+
         (wines, prices) = SaleInteractor.GetBySupplierID(supplierID);
+
         base.OnInitialized();
     }
 }

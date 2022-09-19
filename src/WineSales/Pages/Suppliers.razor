@@ -1,6 +1,7 @@
 ﻿@page "/suppliers"
 
 @using WineSales.Domain.Interactors
+
 @inject IUserInteractor UserInteractor
 @inject ISupplierInteractor SupplierInteractor
 
@@ -39,12 +40,13 @@ else
 @code {
     private List<Supplier> suppliers = new List<Supplier>();
 
-    User nowUser;
+    private User nowUser;
 
     protected override void OnInitialized()
     {
         nowUser = UserInteractor.GetNowUser();
         suppliers = SupplierInteractor.GetAll();
+
         base.OnInitialized();
     }
 }

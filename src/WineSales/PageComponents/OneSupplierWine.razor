@@ -1,6 +1,7 @@
-﻿@inject NavigationManager NavigationManager
-@using WineSales.Config
+﻿@using WineSales.Config
 @using WineSales.Domain.Interactors
+
+@inject NavigationManager NavigationManager
 @inject IWineInteractor WineInteractor
 @inject ISupplierWineInteractor SupplierWineInteractor
 
@@ -54,8 +55,18 @@
     <TableRowCell>@SupplierWineItem.Percent</TableRowCell>
     <TableRowCell>@SupplierWineItem.Price</TableRowCell>
 </TableRow>
-<Button Color="Color.Danger" Clicked="DeleteWine">Удалить вино</Button>
-<Button Color="Color.Primary" Clicked="ShowModal">Редактировать вино</Button>
+<Bar Breakpoint="Breakpoint.Desktop"
+    ThemeContrast="ThemeContrast.Light">
+    <BarToggler />
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <Button Color="Color.Danger" Clicked="DeleteWine">Удалить вино</Button>
+                <Button Color="Color.Primary" Clicked="ShowModal">Редактировать вино</Button>
+            </BarItem>
+        </BarStart>
+    </BarMenu>
+</Bar>
 
 @code {
     [Parameter] public Wine OneWine { get; set; }
@@ -81,8 +92,6 @@
     {
         if (await wineValidations.ValidateAll())
         {
-            Console.WriteLine("UpdateWine");
-
             try
             {
                 SupplierWineInteractor.UpdateSupplierWine(SupplierWineItem);
@@ -93,12 +102,9 @@
             catch(SupplierWineException ex)
             {
                 var errorMsg = ex.Message;
-                Console.WriteLine("UpdateWine: error");
-                Console.WriteLine(errorMsg);
 
                 if (errorMsg == "SupplierWine: This supplier doesn't have this wine.")
                 {
-                    Console.WriteLine("UpdateWine: not this wine");
                     wineValidations.ValidateAll();
                 }
             }
@@ -107,8 +113,6 @@
 
     void ValidatePercent(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidatePercent");
-
         var strPercent = Convert.ToString(fact.Value);
         var percent = Convert.ToInt32(strPercent);
 
@@ -130,8 +134,6 @@
 
     void ValidatePrice(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidatePrice");
-
         var price = Convert.ToDouble(fact.Value);
 
         if (price == 0)
@@ -159,6 +161,7 @@
     {
         WineInteractor.DeleteWine(OneWine);
         SupplierWineInteractor.DeleteSupplierWine(SupplierWineItem);
+
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
         return Task.CompletedTask;
     }

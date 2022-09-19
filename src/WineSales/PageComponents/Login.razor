@@ -64,29 +64,24 @@
     {
         if (await loginValidations.ValidateAll())
         {
-            Console.WriteLine("SignIn");
-
             try
             {
                 UserInteractor.SignIn(loginDetails);
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await loginValidations.ClearAll();
             }
             catch(UserException ex)
             {
                 var errorMsg = ex.Message;
-                Console.WriteLine("SignIn: error");
-                Console.WriteLine(errorMsg);
 
                 if (errorMsg == "User: This user doesn't exist.")
                 {
-                    Console.WriteLine("SignIn: error with login");
                     invalidLogin = true;
                     await loginValidations.ValidateAll();
                 }
                 else if (errorMsg == "User: Invalid input of password." || errorMsg == "User: Invalid password.")
                 {
-                    Console.WriteLine("SignIn: error with password");
                     invalidPassword = true;
                     await loginValidations.ValidateAll();
                 }
@@ -96,11 +91,8 @@
 
     void ValidateLogin(ValidatorEventArgs fact)
     {
-        Console.WriteLine("ValidateLogin");
-
         if (invalidLogin)
         {
-            Console.WriteLine("ValidateLogin: invalid login");
             loginErrorMsg = "Неверный логин.";
             fact.Status = ValidationStatus.Error;
             invalidLogin = false;
@@ -123,11 +115,8 @@
 
     void ValidatePassword(ValidatorEventArgs fact)
     {
-        Console.WriteLine( "ValidatePassword");
-
         if (invalidPassword)
         {
-            Console.WriteLine("ValidatePassword: invalid password");
             passwordErrorMsg = "Неверный пароль.";
             fact.Status = ValidationStatus.Error;
             invalidPassword = false;
