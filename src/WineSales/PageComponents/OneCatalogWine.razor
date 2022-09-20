@@ -5,6 +5,7 @@
 @inject IPurchaseInteractor PurchaseInteractor
 @inject ISaleInteractor SaleInteractor
 @inject ISupplierWineInteractor SupplierWineInteractor
+@inject ICheckInteractor CheckInteractor
 
 <Modal @ref="supplierInfoModal">
     <ModalContent Centered>
@@ -106,6 +107,14 @@
         };
 
         SaleInteractor.CreateSale(sale, supplierWine.Percent);
+        Sale createdSale = SaleInteractor.GetByPurchaseID(createdPurchase.ID);
+
+        Check check = new Check
+        {
+            PaymentMethod = "card",
+            SaleID = createdSale.ID
+        };
+        CheckInteractor.CreateCheck(check);
 
         return Task.CompletedTask;
     }
