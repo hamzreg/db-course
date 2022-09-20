@@ -2,6 +2,7 @@
 
 @inject NavigationManager NavigationManager
 @inject ISaleInteractor SaleInteractor
+@inject ICheckInteractor CheckInteractor
 
 <Modal @ref="checkModal">
     <ModalContent Centered>
@@ -59,6 +60,9 @@
 
         Sale sale = SaleInteractor.GetByPurchaseID(PurchaseID);
         SaleInteractor.DeleteSale(sale);
+
+        Check check = CheckInteractor.GetByPurchase(PurchaseID);
+        CheckInteractor.DeleteCheck(check);
 
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
         return Task.CompletedTask;
