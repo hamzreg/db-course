@@ -4,6 +4,7 @@
 
 @inject IUserInteractor UserInteractor
 @inject IPurchaseInteractor PurchaseInteractor
+@inject ICheckInteractor CheckInteractor
 
 @if (nowUser.Role != "customer")
 {
@@ -36,7 +37,7 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <OnePurchase OneWine="wines[i]" OnePrice="prices[i]" OneDate="dates[i]" PurchaseID="ids[i]"></OnePurchase>
+                <OnePurchase OneWine="wines[i]" OnePrice="prices[i]" OneDate="dates[i]" OneCheck="checks[i]" PurchaseID="ids[i]"></OnePurchase>
             }
         </TableBody>
     </Table>
@@ -47,6 +48,7 @@ else
     private List<DateOnly> dates = new List<DateOnly>();
     private List<Wine> wines = new List<Wine>();
     private List<Double> prices = new List<Double>();
+    private List<Check> checks = new List<Check>();
 
     private User nowUser;
 
@@ -55,6 +57,11 @@ else
         nowUser = UserInteractor.GetNowUser();
         int customerID = nowUser.RoleID;
         (ids, dates, wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
+
+        foreach (int id in ids)
+        {
+            checks.Add(CheckInteractor.GetByPurchase(id));
+        }
 
         Log.Information("Purchases initialized.");
         base.OnInitialized();

@@ -44,7 +44,6 @@
 
     protected override void OnInitialized()
     {
-        Log.Debug("GetNowUser() called.");
         User nowUser = UserInteractor.GetNowUser();
 
         if (nowUser.Role == "customer")
@@ -52,7 +51,6 @@
             withButton = true;
         }
 
-        Log.Debug("GetAllWine() called.");
         (ids, wines, prices) = SupplierWineInteractor.GetAllWine();
 
         foreach (var id in ids)

@@ -96,3 +96,47 @@
 2022-09-20 22:39:40.598 +03:00 [INF] User logged out.
 2022-09-20 22:39:40.624 +03:00 [INF] Menu initialized.
 2022-09-20 22:39:40.823 +03:00 [INF] Menu initialized.
+2022-09-20 22:54:24.153 +03:00 [INF] Menu initialized.
+2022-09-20 22:54:25.650 +03:00 [INF] Menu initialized.
+2022-09-20 22:54:26.246 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 22:54:26.247 +03:00 [INF] Login showed.
+2022-09-20 22:54:33.424 +03:00 [INF] User logged in.
+2022-09-20 22:54:33.496 +03:00 [INF] Menu initialized.
+2022-09-20 22:54:34.208 +03:00 [INF] Menu initialized.
+2022-09-20 22:55:47.552 +03:00 [INF] Menu initialized.
+2022-09-20 22:55:48.964 +03:00 [INF] Menu initialized.
+2022-09-20 22:55:52.491 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 22:55:52.491 +03:00 [INF] Login showed.
+2022-09-20 22:56:02.879 +03:00 [INF] User logged in.
+2022-09-20 22:56:02.924 +03:00 [INF] Menu initialized.
+2022-09-20 22:56:03.211 +03:00 [INF] Menu initialized.
+2022-09-20 22:56:04.297 +03:00 [INF] Purchases initialized.
+2022-09-20 22:56:07.188 +03:00 [INF] Button <GetCheck> clicked.
+2022-09-20 22:56:13.309 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 22:56:13.309 +03:00 [INF] User logged out.
+2022-09-20 22:56:13.338 +03:00 [INF] Menu initialized.
+2022-09-20 22:56:13.539 +03:00 [INF] Menu initialized.
+2022-09-20 23:01:08.510 +03:00 [INF] Menu initialized.
+2022-09-20 23:01:10.481 +03:00 [INF] Menu initialized.
+2022-09-20 23:01:10.742 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 23:01:10.742 +03:00 [INF] Login showed.
+2022-09-20 23:01:25.586 +03:00 [INF] User logged in.
+2022-09-20 23:01:25.658 +03:00 [INF] Menu initialized.
+2022-09-20 23:01:25.985 +03:00 [INF] Menu initialized.
+2022-09-20 23:01:39.459 +03:00 [INF] AdminSales initialized.
+2022-09-20 23:04:34.067 +03:00 [INF] Menu initialized.
+2022-09-20 23:04:35.317 +03:00 [INF] Menu initialized.
+2022-09-20 23:04:36.643 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 23:04:36.643 +03:00 [INF] Login showed.
+2022-09-20 23:04:43.811 +03:00 [INF] User logged in.
+2022-09-20 23:04:43.847 +03:00 [INF] Menu initialized.
+2022-09-20 23:04:44.150 +03:00 [INF] Menu initialized.
+2022-09-20 23:04:56.358 +03:00 [INF] AdminSales initialized.
+2022-09-20 23:05:18.797 +03:00 [INF] Button <GetCheck> clicked.
+2022-09-20 23:05:32.095 +03:00 [INF] Users initialized.
+2022-09-20 23:05:35.913 +03:00 [INF] Menu initialized.
+2022-09-20 23:05:42.530 +03:00 [INF] Menu initialized.
+2022-09-20 23:05:44.046 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 23:05:44.047 +03:00 [INF] User logged out.
+2022-09-20 23:05:44.098 +03:00 [INF] Menu initialized.
+2022-09-20 23:05:44.582 +03:00 [INF] Menu initialized.

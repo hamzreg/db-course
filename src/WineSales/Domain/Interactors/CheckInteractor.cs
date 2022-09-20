@@ -9,7 +9,7 @@ namespace WineSales.Domain.Interactors
     {
         void CreateCheck(Check check);
         Check GetBySale(int saleID);
-        (Check, Sale) GetByPurchase(int purchaseID);
+        Check GetByPurchase(int purchaseID);
         void DeleteCheck(Check check);
     }
 
@@ -38,7 +38,7 @@ namespace WineSales.Domain.Interactors
             return checkRepository.GetBySaleID(saleID);
         }
 
-        public (Check, Sale) GetByPurchase(int purchaseID)
+        public Check GetByPurchase(int purchaseID)
         {
             return checkRepository.GetByPurchase(purchaseID);
         }

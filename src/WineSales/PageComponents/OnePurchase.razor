@@ -3,6 +3,23 @@
 @inject NavigationManager NavigationManager
 @inject ISaleInteractor SaleInteractor
 
+<Modal @ref="checkModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Чек</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <ListGroup Flush>
+                <ListGroupItem Disabled>Смена: @OneCheck.ShiftNumber</ListGroupItem>
+                <ListGroupItem Disabled>Способ оплаты: @OneCheck.PaymentMethod</ListGroupItem>
+            </ListGroup>
+        </ModalBody>
+        <ModalFooter>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
 <TableRow>
     <TableRowCell>@OneWine.Kind</TableRowCell>
     <TableRowCell>@OneWine.Color</TableRowCell>
@@ -13,13 +30,28 @@
     <TableRowCell>@OnePrice</TableRowCell>
     <TableRowCell>@OneDate</TableRowCell>
 </TableRow>
-<Button Color="Color.Danger" Clicked="@CancelPurchase">Отменить</Button>
+
+<Bar Breakpoint="Breakpoint.Desktop"
+    ThemeContrast="ThemeContrast.Light">
+    <BarToggler />
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <Button Color="Color.Danger" Clicked="@CancelPurchase">Отменить</Button>
+                <Button Color="Color.Primary" Clicked="@GetCheck">Получить чек</Button>
+            </BarItem>
+        </BarStart>
+    </BarMenu>
+</Bar>
 
 @code {
     [Parameter] public Wine OneWine { get; set; }
     [Parameter] public double OnePrice { get; set; }
     [Parameter] public DateOnly OneDate { get; set; }
+    [Parameter] public Check OneCheck { get; set; }
     [Parameter] public int PurchaseID { get; set; }
+
+    private Modal? checkModal;
 
     private Task CancelPurchase()
     {
@@ -30,5 +62,11 @@
 
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
         return Task.CompletedTask;
+    }
+
+    private void GetCheck()
+    {
+        Log.Information("Button <GetCheck> clicked.");
+        checkModal.Show();
     }
 }

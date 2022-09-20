@@ -24,6 +24,7 @@ void ConfigureServices(IServiceCollection services)
     services.AddTransient<ISupplierWineInteractor, SupplierWineInteractor>();
     services.AddSingleton<IUserInteractor, UserInteractor>();
     services.AddTransient<IWineInteractor, WineInteractor>();
+    services.AddTransient<ICheckInteractor, CheckInteractor>();
 
     services.AddTransient<IBonusCardRepository, BonusCardRepository>();
     services.AddTransient<ICustomerRepository, CustomerRepository>();
@@ -33,6 +34,7 @@ void ConfigureServices(IServiceCollection services)
     services.AddTransient<ISupplierWineRepository, SupplierWineRepository>();
     services.AddSingleton<IUserRepository, UserRepository>();
     services.AddTransient<IWineRepository, WineRepository>();
+    services.AddTransient<ICheckRepository, CheckRepository>();
 }
 
 Log.Logger = new LoggerConfiguration().

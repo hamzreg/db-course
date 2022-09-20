@@ -7,6 +7,6 @@ namespace WineSales.Domain.RepositoryInterfaces
         List<Check> GetByPaymentMethod(string paymentMethod);
         List<Check> GetByShiftNumber(int shiftNumber);
         Check GetBySaleID(int saleID);
-        (Check, Sale) GetByPurchase(int purchaseID);
+        Check GetByPurchase(int purchaseID);
     }
 }

@@ -53,25 +53,12 @@ namespace WineSales.Data.Repositories
             return _context.Checks.FirstOrDefault(check => check.SaleID == saleID);
         }
 
-/*        public (List<Check>, List<Sale>) GetByAdmin()
-        {
-            var checks = GetAll();
-            var sales = new List<Sale>();
-
-            foreach (Check check in checks)
-            {
-                sales.Add(_context.Sales.Find(check.SaleID));
-            }
-
-            return (checks, sales);
-        }*/
-
-        public (Check, Sale) GetByPurchase(int purchaseID)
+        public Check GetByPurchase(int purchaseID)
         {
             var sale = _context.Sales.FirstOrDefault(sale => sale.PurchaseID == purchaseID);
             var check = GetBySaleID(sale.ID);
 
-            return (check, sale);
+            return check;
         }
 
         public void Update(Check check)

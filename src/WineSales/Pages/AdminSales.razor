@@ -4,6 +4,7 @@
 
 @inject IUserInteractor UserInteractor
 @inject ISaleInteractor SaleInteractor
+@inject ICheckInteractor CheckInteractor
 
 @if (nowUser.Role != "admin")
 {
@@ -41,7 +42,7 @@ else
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <OneAdminSale OneWine="wines[i]" SupplierName=@suppliers[i] OneSale="sales[i]"></OneAdminSale>
+                <OneAdminSale OneWine="wines[i]" SupplierName=@suppliers[i] OneSale="sales[i]" OneCheck="checks[i]"></OneAdminSale>
             }
         </TableBody>
     </Table>
@@ -51,6 +52,7 @@ else
     private List<Wine> wines = new List<Wine>();
     private List<string> suppliers = new List<string>();
     private List<Sale> sales = new List<Sale>();
+    private List<Check> checks = new List<Check>();
 
     private User nowUser;
 
@@ -58,6 +60,11 @@ else
     {
         nowUser = UserInteractor.GetNowUser();
         (wines, suppliers, sales) = SaleInteractor.GetByAdmin();
+
+        foreach(Sale sale in sales)
+        {
+            checks.Add(CheckInteractor.GetBySale(sale.ID));
+        }
 
         Log.Information("AdminSales initialized.");
         base.OnInitialized();

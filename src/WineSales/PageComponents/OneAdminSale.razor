@@ -1,4 +1,21 @@
-﻿<TableRow>
+﻿<Modal @ref="checkModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Чек</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <ListGroup Flush>
+                <ListGroupItem Disabled>Смена: @OneCheck.ShiftNumber</ListGroupItem>
+                <ListGroupItem Disabled>Способ оплаты: @OneCheck.PaymentMethod</ListGroupItem>
+            </ListGroup>
+        </ModalBody>
+        <ModalFooter>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<TableRow>
     <TableRowCell>@OneWine.Kind</TableRowCell>
     <TableRowCell>@OneWine.Color</TableRowCell>
     <TableRowCell>@OneWine.Volume</TableRowCell>
@@ -14,8 +31,29 @@
     <TableRowCell>@OneSale.Profit</TableRowCell>
 </TableRow>
 
+<Bar Breakpoint="Breakpoint.Desktop"
+    ThemeContrast="ThemeContrast.Light">
+    <BarToggler />
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <Button Color="Color.Primary" Clicked="@GetCheck">Получить чек</Button>
+            </BarItem>
+        </BarStart>
+    </BarMenu>
+</Bar>
+
 @code {
     [Parameter] public Wine OneWine { get; set; }
     [Parameter] public string SupplierName { get; set; }
     [Parameter] public Sale OneSale { get; set; }
+    [Parameter] public Check OneCheck { get; set; }
+
+    private Modal? checkModal;
+
+    private void GetCheck()
+    {
+        Log.Information("Button <GetCheck> clicked.");
+        checkModal.Show();
+    }
 }
