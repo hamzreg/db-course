@@ -14,7 +14,7 @@ namespace WineSales.Data
         public DbSet<SupplierWine> SupplierWines { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Wine> Wines { get; set; }
-
+        public DbSet<Check> Checks { get; set; }
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options)
             : base(options) { }

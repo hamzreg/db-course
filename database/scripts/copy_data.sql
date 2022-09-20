@@ -2,7 +2,9 @@
 from 'C:\Users\regin\bmstu\db-course\database\data\bonusCards.csv'
 delimiter '|' csv;
 
-\copy "Customers"("Name", "Surname", "BonusCardID") from 'C:\Users\regin\bmstu\db-course\database\data\customers.csv' delimiter '|' csv;
+\copy "Customers"("Name", "Surname", "BonusCardID") 
+from 'C:\Users\regin\bmstu\db-course\database\data\customers.csv' 
+delimiter '|' csv;
 
 \copy "Purchases"("Price", "Status", "CustomerID")
 from 'C:\Users\regin\bmstu\db-course\database\data\purchases.csv'
@@ -20,8 +22,14 @@ delimiter '|' csv;
 from 'C:\Users\regin\bmstu\db-course\database\data\suppliers.csv' 
 delimiter '|' csv;
 
-\copy "Users"("RoleID", "Login", "Password", "Role") from 'C:\Users\regin\bmstu\db-course\database\data\users.csv' delimiter '|' csv;
+\copy "Users"("RoleID", "Login", "Password", "Role") 
+from 'C:\Users\regin\bmstu\db-course\database\data\users.csv' 
+delimiter '|' csv;
 
 \copy "Wines"("Kind", "Color", "Sugar", "Volume", "Alcohol", "Aging", "Number") 
 from 'C:\Users\regin\bmstu\db-course\database\data\wines.csv' 
+delimiter '|' csv;
+
+\copy "Checks"("PaymentMethod", "ShiftNumber", "SaleID") 
+from 'C:\Users\regin\bmstu\db-course\database\data\checks.csv' 
 delimiter '|' csv;

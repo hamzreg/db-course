@@ -9,6 +9,7 @@ WINES_FILE = 'data/wines.csv'
 SUPPLIERS_FILE = 'data/suppliers.csv'
 SUPPLIER_WINES_FILE = 'data/supplierWines.csv'
 USERS_FILE = 'data/users.csv'
+CHECKS_FILE = 'data/checks.csv'
 
 # Бонусные карты
 MIN_BONUSES = 0
@@ -90,3 +91,9 @@ MAX_WINE_NUMBER = 5
 # Пользователи
 MIN_PASSWORD_LEN = 8
 MAX_PASSWORD_LEN = 16
+
+# Чеки
+MIN_SHIFT_NUMBER = 1
+MAX_SHIFT_NUMBER = 10
+
+PAYMENT_METHODS = ['card', 'cash']

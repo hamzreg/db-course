@@ -242,12 +242,31 @@ def generate_users():
     file.close()
 
 
+def generate_checks():
+    """
+        Генерация таблицы
+        чеков.
+    """
+
+    file = open(CHECKS_FILE, 'w')
+
+    for sale_id in range(1, NUM_RECORDS + 1):
+        payment_method = choice(PAYMENT_METHODS)
+        shift_number = randint(MIN_SHIFT_NUMBER, MAX_SHIFT_NUMBER)
+
+        record = '{0}|{1}|{2}\n'.format(payment_method, shift_number, sale_id)
+        file.write(record)
+
+    file.close()
+
+
 if __name__ == "__main__":
-    generate_bonus_cards()
-    generate_customers()
-    generate_suppliers()
-    generate_users()
-    wines = generate_wines()
-    supplier_wines = generate_supplier_wines(wines)
-    prices = generate_sales(supplier_wines)
-    generate_purchases(prices)
+    # generate_bonus_cards()
+    # generate_customers()
+    # generate_suppliers()
+    # generate_users()
+    # wines = generate_wines()
+    # supplier_wines = generate_supplier_wines(wines)
+    # prices = generate_sales(supplier_wines)
+    # generate_purchases(prices)
+    generate_checks()

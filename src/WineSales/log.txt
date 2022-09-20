@@ -55,3 +55,44 @@
 2022-09-20 14:44:07.643 +03:00 [INF] User logged out.
 2022-09-20 14:44:07.684 +03:00 [INF] Menu initialized.
 2022-09-20 14:44:07.957 +03:00 [INF] Menu initialized.
+2022-09-20 22:36:34.060 +03:00 [INF] Menu initialized.
+2022-09-20 22:36:35.461 +03:00 [INF] Menu initialized.
+2022-09-20 22:36:53.581 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 22:36:53.581 +03:00 [INF] Login showed.
+2022-09-20 22:37:02.596 +03:00 [INF] User logged in.
+2022-09-20 22:37:02.640 +03:00 [INF] Menu initialized.
+2022-09-20 22:37:03.158 +03:00 [INF] Menu initialized.
+2022-09-20 22:37:05.148 +03:00 [INF] CustomerBonusCard initialized.
+2022-09-20 22:37:06.729 +03:00 [INF] Purchases initialized.
+2022-09-20 22:37:16.836 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 22:37:16.836 +03:00 [INF] User logged out.
+2022-09-20 22:37:16.874 +03:00 [INF] Menu initialized.
+2022-09-20 22:37:17.083 +03:00 [INF] Menu initialized.
+2022-09-20 22:37:17.680 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 22:37:17.680 +03:00 [INF] Login showed.
+2022-09-20 22:37:23.627 +03:00 [INF] User logged in.
+2022-09-20 22:37:23.659 +03:00 [INF] Menu initialized.
+2022-09-20 22:37:23.891 +03:00 [INF] Menu initialized.
+2022-09-20 22:37:25.072 +03:00 [INF] Users initialized.
+2022-09-20 22:37:33.824 +03:00 [INF] Suppliers initialized.
+2022-09-20 22:38:02.515 +03:00 [INF] AdminSales initialized.
+2022-09-20 22:38:18.031 +03:00 [INF] AdminSupplierWines initialized.
+2022-09-20 22:39:20.463 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 22:39:20.464 +03:00 [INF] User logged out.
+2022-09-20 22:39:20.521 +03:00 [INF] Menu initialized.
+2022-09-20 22:39:20.533 +03:00 [INF] AdminSupplierWines initialized.
+2022-09-20 22:39:21.220 +03:00 [INF] Menu initialized.
+2022-09-20 22:39:21.269 +03:00 [INF] AdminSupplierWines initialized.
+2022-09-20 22:39:23.270 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 22:39:23.270 +03:00 [INF] Login showed.
+2022-09-20 22:39:34.387 +03:00 [INF] User logged in.
+2022-09-20 22:39:34.433 +03:00 [INF] Menu initialized.
+2022-09-20 22:39:34.448 +03:00 [INF] AdminSupplierWines initialized.
+2022-09-20 22:39:34.633 +03:00 [INF] Menu initialized.
+2022-09-20 22:39:34.660 +03:00 [INF] AdminSupplierWines initialized.
+2022-09-20 22:39:36.127 +03:00 [INF] SupplierSales initialized.
+2022-09-20 22:39:36.941 +03:00 [INF] SupplierWines initialized.
+2022-09-20 22:39:40.598 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 22:39:40.598 +03:00 [INF] User logged out.
+2022-09-20 22:39:40.624 +03:00 [INF] Menu initialized.
+2022-09-20 22:39:40.823 +03:00 [INF] Menu initialized.
