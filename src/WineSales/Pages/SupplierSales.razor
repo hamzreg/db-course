@@ -37,13 +37,14 @@ else
                 <TableHeaderCell>Сахар</TableHeaderCell>
                 <TableHeaderCell>Алкоголь (%)</TableHeaderCell>
                 <TableHeaderCell>Выдержка (лет)</TableHeaderCell>
+                <TableHeaderCell>Дата</TableHeaderCell>
                 <TableHeaderCell>Цена (₽)</TableHeaderCell>
             </TableRow>
         </TableHeader>
         <TableBody>
             @for (int i = 0; i < wines.Count; i++)
             {
-                <OneSupplierSale OneWine="wines[i]" OnePrice="prices[i]"></OneSupplierSale>
+                <OneSupplierSale OneWine="wines[i]" OneDate="dates[i]" OnePrice="prices[i]"></OneSupplierSale>
             }
         </TableBody>
     </Table>
@@ -51,6 +52,7 @@ else
 
 @code {
     private List<Wine> wines = new List<Wine>();
+    private List<DateOnly> dates = new List<DateOnly>();
     private List<Double> prices = new List<Double>();
 
     private User nowUser;
@@ -62,7 +64,7 @@ else
         int supplierID = nowUser.RoleID;
         supplier = SupplierInteractor.GetByID(supplierID);
 
-        (wines, prices) = SaleInteractor.GetBySupplierID(supplierID);
+        (wines, dates, prices) = SaleInteractor.GetBySupplierID(supplierID);
 
         base.OnInitialized();
     }

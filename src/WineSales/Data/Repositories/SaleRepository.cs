@@ -89,12 +89,13 @@ namespace WineSales.Data.Repositories
             return _context.Sales.FirstOrDefault(sale => sale.PurchaseID == purchaseID);
         }
 
-        public (List<Wine>, List<double>) GetBySupplierID(int supplierID)
+        public (List<Wine>, List<DateOnly>, List<double>) GetBySupplierID(int supplierID)
         {
             var supplierWines = _context.SupplierWines.Where(wine => wine.SupplierID == supplierID)
                 .ToList();
 
             var wines = new List<Wine>();
+            var dates = new List<DateOnly>();
             var prices = new List<double>();
 
             foreach (SupplierWine supplierWine in supplierWines)
@@ -104,11 +105,12 @@ namespace WineSales.Data.Repositories
                 foreach (Sale sale in sales)
                 {
                     wines.Add(_context.Wines.Find(supplierWine.WineID));
+                    dates.Add(sale.Date);
                     prices.Add(supplierWine.Price);
                 }
             }
 
-            return (wines, prices);
+            return (wines, dates, prices);
         }
 
         public (List<Wine>, List<string>, List<Sale>) GetByAdmin()

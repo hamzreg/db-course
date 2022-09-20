@@ -5,10 +5,12 @@
     <TableRowCell>@OneWine.Sugar</TableRowCell>
     <TableRowCell>@OneWine.Alcohol</TableRowCell>
     <TableRowCell>@OneWine.Aging</TableRowCell>
+    <TableRowCell>@OneDate</TableRowCell>
     <TableRowCell>@OnePrice</TableRowCell>
 </TableRow>
 
 @code {
     [Parameter] public Wine OneWine { get; set; }
+    [Parameter] public DateOnly OneDate { get; set; }
     [Parameter] public double OnePrice { get; set; }
 }

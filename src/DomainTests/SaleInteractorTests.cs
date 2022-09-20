@@ -335,7 +335,7 @@ namespace DomainTests
 
             var expectedCount = expectedPrices.Count();
 
-            var (wines, prices) = _interactor.GetBySupplierID(supplierID);
+            var (wines, dates, prices) = _interactor.GetBySupplierID(supplierID);
 
             Assert.Equal(expectedCount, wines.Count);
             Assert.Equal(expectedCount, prices.Count);

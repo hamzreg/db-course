@@ -411,7 +411,7 @@ namespace DataTests
             using var context = CreateContext();
             var repository = new SaleRepository(context);
 
-            var (wines, prices) = repository.GetBySupplierID(1);
+            var (wines, dates, prices) = repository.GetBySupplierID(1);
 
             Assert.Equal(2, wines.Count);
             Assert.Equal(2, prices.Count);
