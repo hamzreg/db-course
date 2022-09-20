@@ -23,6 +23,8 @@
 
     private Task DeleteUser()
     {
+        Log.Information("Button <DeleteUser> clicked.");
+
         UserInteractor.DeleteUser(UserItem);
         return Task.CompletedTask;
     }

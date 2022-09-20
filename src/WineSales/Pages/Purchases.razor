@@ -56,6 +56,7 @@ else
         int customerID = nowUser.RoleID;
         (ids, dates, wines, prices) = PurchaseInteractor.GetByCustomer(customerID);
 
+        Log.Information("Purchases initialized.");
         base.OnInitialized();
     }
 }

@@ -47,6 +47,7 @@ else
         nowUser = UserInteractor.GetNowUser();
         suppliers = SupplierInteractor.GetAll();
 
+        Log.Information("Suppliers initialized.");
         base.OnInitialized();
     }
 }

@@ -96,38 +96,51 @@
     protected override void OnInitialized()
     {
         nowUser = UserInteractor.GetNowUser();
-        Console.WriteLine(nowUser.Role);
+
+        Log.Information("Menu initialized.");
+        base.OnInitialized();
     }
 
     Task ShowLogin()
     {
+        Log.Information("Button <ShowLogin> clicked.");
         loginModal?.ShowModal();
+
         return Task.CompletedTask;
     }
 
     Task ShowCustomerRegistration()
     {
+        Log.Information("Button <ShowCustomerRegistration> clicked.");
         customerRegistrationModal?.ShowModal();
+
         return Task.CompletedTask;
     }
 
     Task ShowSupplierRegistration()
     {
+        Log.Information("Button <ShowSupplierRegistration> clicked.");
         supplierRegistrationModal?.ShowModal();
+
         return Task.CompletedTask;
     }
 
     public void SignOut()
     {
+        Log.Information("Button <SignOut> clicked.");
+
         User guestUser = new User("guest", "guest", "guest");
         UserInteractor.SetNowUser(guestUser);
         nowUser = UserInteractor.GetNowUser();
 
+        Log.Information("User logged out.");
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 
     public void DeleteAccount()
     {
+        Log.Information("Button <DeleteAccount> clicked.");
+
         nowUser = UserInteractor.GetNowUser();
         UserInteractor.DeleteUser(nowUser);
 
@@ -135,6 +148,7 @@
         UserInteractor.SetNowUser(guestUser);
         nowUser = UserInteractor.GetNowUser();
 
+        Log.Information("User deleted account.");
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 }

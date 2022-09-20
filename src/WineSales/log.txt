@@ -1,0 +1,57 @@
+2022-09-20 13:38:43.883 +03:00 [INF] Menu initialized.
+2022-09-20 13:38:46.123 +03:00 [INF] Menu initialized.
+2022-09-20 13:38:57.325 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 13:39:08.138 +03:00 [INF] Menu initialized.
+2022-09-20 13:39:08.862 +03:00 [INF] Menu initialized.
+2022-09-20 13:39:13.551 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 13:39:13.552 +03:00 [INF] User logged out.
+2022-09-20 13:39:13.652 +03:00 [INF] Menu initialized.
+2022-09-20 13:39:13.973 +03:00 [INF] Menu initialized.
+2022-09-20 13:40:38.150 +03:00 [INF] Menu initialized.
+2022-09-20 13:40:39.931 +03:00 [INF] Menu initialized.
+2022-09-20 13:40:40.807 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 13:40:49.852 +03:00 [INF] Menu initialized.
+2022-09-20 13:40:50.173 +03:00 [INF] Menu initialized.
+2022-09-20 13:40:51.705 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 13:40:51.705 +03:00 [INF] User logged out.
+2022-09-20 13:40:51.755 +03:00 [INF] Menu initialized.
+2022-09-20 13:40:51.979 +03:00 [INF] Menu initialized.
+2022-09-20 14:41:14.568 +03:00 [INF] Menu initialized.
+2022-09-20 14:41:18.290 +03:00 [INF] Menu initialized.
+2022-09-20 14:41:23.920 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 14:41:23.920 +03:00 [INF] Login showed.
+2022-09-20 14:41:36.716 +03:00 [INF] User logged in.
+2022-09-20 14:41:37.215 +03:00 [INF] Menu initialized.
+2022-09-20 14:41:39.396 +03:00 [INF] Menu initialized.
+2022-09-20 14:41:44.960 +03:00 [INF] Users initialized.
+2022-09-20 14:41:58.251 +03:00 [INF] Suppliers initialized.
+2022-09-20 14:42:35.039 +03:00 [INF] AdminSales initialized.
+2022-09-20 14:42:54.671 +03:00 [INF] AdminSupplierWines initialized.
+2022-09-20 14:43:09.701 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 14:43:09.701 +03:00 [INF] User logged out.
+2022-09-20 14:43:09.762 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:10.326 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:10.892 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 14:43:10.892 +03:00 [INF] Login showed.
+2022-09-20 14:43:22.614 +03:00 [INF] User logged in.
+2022-09-20 14:43:22.683 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:22.967 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:24.539 +03:00 [INF] CustomerBonusCard initialized.
+2022-09-20 14:43:26.324 +03:00 [INF] Purchases initialized.
+2022-09-20 14:43:28.180 +03:00 [INF] WineRating initialized.
+2022-09-20 14:43:40.362 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 14:43:40.362 +03:00 [INF] User logged out.
+2022-09-20 14:43:40.405 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:40.682 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:41.724 +03:00 [INF] Button <ShowLogin> clicked.
+2022-09-20 14:43:41.724 +03:00 [INF] Login showed.
+2022-09-20 14:43:56.899 +03:00 [INF] User logged in.
+2022-09-20 14:43:56.934 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:57.243 +03:00 [INF] Menu initialized.
+2022-09-20 14:43:58.748 +03:00 [INF] SupplierSales initialized.
+2022-09-20 14:44:00.242 +03:00 [INF] SupplierWines initialized.
+2022-09-20 14:44:05.354 +03:00 [INF] SupplierSales initialized.
+2022-09-20 14:44:07.643 +03:00 [INF] Button <SignOut> clicked.
+2022-09-20 14:44:07.643 +03:00 [INF] User logged out.
+2022-09-20 14:44:07.684 +03:00 [INF] Menu initialized.
+2022-09-20 14:44:07.957 +03:00 [INF] Menu initialized.

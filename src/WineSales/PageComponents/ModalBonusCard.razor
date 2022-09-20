@@ -45,18 +45,21 @@
 
     public void ShowModal()
     {
+        Log.Information("ModalBonusCard showed.");
         bonusCardModal.Show();
     }
 
     async Task GetBonusCard()
     {
+        Log.Information("Button <GetBonusCard> clicked.");
+
         if (await bonusCardValidations.ValidateAll())
         {
             try
             {
                 BonusCardInteractor.CreateBonusCard(phone);
                 BonusCard createdBonusCard = BonusCardInteractor.GetByPhone(phone);
-                
+
                 User nowUser = UserInteractor.GetNowUser();
                 int customerID = nowUser.RoleID;
 
@@ -64,11 +67,15 @@
                 customer.BonusCardID = createdBonusCard.ID;
                 CustomerInteractor.UpdateCustomer(customer);
 
+                Log.Information("Bonus card received.");
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await bonusCardValidations.ClearAll();
             }
             catch(BonusCardException ex)
             {
+                Log.Error("BonusCardException received.");
+
                 var errorMsg = ex.Message;
 
                 if (errorMsg == "BonusCard: Invalid input of phone.")
@@ -117,6 +124,7 @@
 
     private Task HideModal()
     {
+        Log.Information("Button <HideModal> clicked.");
         return bonusCardModal.Hide();
     }
 }

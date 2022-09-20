@@ -59,11 +59,14 @@ else
             }
         }
 
+        Log.Information("CustomerBonusCard initialized.");
         base.OnInitialized();
     }
 
     Task ShowBonusCardModal()
     {
+        Log.Information("Button <ShowBonusCardModal> clicked.");
+
         bonusCardModal?.ShowModal();
         return Task.CompletedTask;
     }

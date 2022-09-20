@@ -31,6 +31,8 @@ else
 
     private Task GiveLicense()
     {
+        Log.Information("Button <GiveLicense> clicked.");
+
         SupplierItem.License = true;
         SupplierInteractor.UpdateSupplier(SupplierItem);
 
@@ -39,6 +41,8 @@ else
 
     private Task TakeLicense()
     {
+        Log.Information("Button <TakeLicense> clicked.");
+
         SupplierItem.License = false;
         SupplierInteractor.UpdateSupplier(SupplierItem);
 

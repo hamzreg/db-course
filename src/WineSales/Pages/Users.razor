@@ -47,6 +47,7 @@ else
         nowUser = UserInteractor.GetNowUser();
         users = UserInteractor.GetAll();
 
+        Log.Information("Users initialized.");
         base.OnInitialized();
     }
 }

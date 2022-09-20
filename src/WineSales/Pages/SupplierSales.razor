@@ -66,6 +66,7 @@ else
 
         (wines, dates, prices) = SaleInteractor.GetBySupplierID(supplierID);
 
+        Log.Information("SupplierSales initialized.");
         base.OnInitialized();
     }
 }

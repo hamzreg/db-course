@@ -69,11 +69,14 @@
 
     private void GetSupplierInfo()
     {
+        Log.Information("Button <GetSupplierInfo> clicked.");
         supplierInfoModal.Show();
     }
 
     private Task BuyWine()
     {
+        Log.Information("Button <BuyWine> clicked.");
+
         User nowUser = UserInteractor.GetNowUser();
 
         Purchase purchase = new Purchase

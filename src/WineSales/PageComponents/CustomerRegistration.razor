@@ -89,6 +89,7 @@
 
     public void ShowModal()
     {
+        Log.Information("CustomerRegistration showed.");
         customerRegistrationModal.Show();
     }
 
@@ -104,11 +105,15 @@
                 UserInteractor.Register(loginDetails, "customer", createdCustomer.ID);
                 UserInteractor.SignIn(loginDetails);
 
+                Log.Information("User registered customer account.");
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await registrationValidations.ClearAll();
             }
             catch(UserException ex)
             {
+                Log.Error("UserException received.");
+
                 Customer createdCustomer = CustomerInteractor.GetByNameSurname(customer.Name, customer.Surname);
 
                 if (createdCustomer is not null)
@@ -131,6 +136,8 @@
             }
             catch(CustomerException ex)
             {
+                Log.Error("CustomerException received.");
+
                 var errorMsg = ex.Message;
 
                 if (errorMsg == "Customer: This customer already exists.")
@@ -246,6 +253,7 @@
 
     private Task HideModal()
     {
+        Log.Information("Button <HideModal> clicked.");
         return customerRegistrationModal.Hide();
     }
 }

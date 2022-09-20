@@ -142,6 +142,7 @@
 
     public void ShowModal()
     {
+        Log.Information("ModalAddWine showed.");
         addWineModal.Show();
     }
 
@@ -163,16 +164,22 @@
                 supplierWine.SupplierID = supplierID;
                 SupplierWineInteractor.CreateSupplierWine(supplierWine);
 
+                Log.Information("Wine added.");
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await wineValidations.ClearAll();
             }
             catch(WineException ex)
             {
+                Log.Error("WineException received.");
+
                 var errorMsg = ex.Message;
                 await wineValidations.ValidateAll();
             }
             catch(SupplierWineException ex)
             {
+                Log.Error("SupplierWineException received.");
+
                 var errorMsg = ex.Message;
 
                 if (errorMsg == "SupplierWine: This supplier already has this wine.")
@@ -305,6 +312,7 @@
 
     private Task HideModal()
     {
+        Log.Information("Button <HideModal> clicked.");
         return addWineModal.Hide();
     }
 }

@@ -88,6 +88,7 @@
 
     public void ShowModal()
     {
+        Log.Information("SupplierRegistration showed.");
         supplierRegistrationModal.Show();
     }
 
@@ -103,11 +104,15 @@
                 UserInteractor.Register(loginDetails, "supplier", createdSupplier.ID);
                 UserInteractor.SignIn(loginDetails);
 
+                Log.Information("User registered supplier account.");
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await registrationValidations.ClearAll();
             }
             catch(UserException ex)
             {
+                Log.Error("UserException received.");
+
                 Supplier createdSupplier = SupplierInteractor.GetByName(supplier.Name);
 
                 if (createdSupplier is not null)
@@ -130,6 +135,8 @@
             }
             catch(SupplierException ex)
             {
+                Log.Error("SupplierException received.");
+
                 var errorMsg = ex.Message;
 
                 if (errorMsg == "Supplier: This supplier already exists.")
@@ -230,6 +237,7 @@
 
     private Task HideModal()
     {
+        Log.Information("Button <HideModal> clicked.");
         return supplierRegistrationModal.Hide();
     }
 }

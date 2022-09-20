@@ -54,6 +54,7 @@ else
         nowUser = UserInteractor.GetNowUser();
         (wines, suppliers, prices) = SupplierWineInteractor.GetByAdmin();
 
+        Log.Information("AdminSupplierWines initialized.");
         base.OnInitialized();
     }
 }

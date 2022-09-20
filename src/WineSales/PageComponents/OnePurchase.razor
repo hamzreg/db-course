@@ -23,6 +23,8 @@
 
     private Task CancelPurchase()
     {
+        Log.Information("Button <CancelPurchase> clicked.");
+
         Sale sale = SaleInteractor.GetByPurchaseID(PurchaseID);
         SaleInteractor.DeleteSale(sale);
 

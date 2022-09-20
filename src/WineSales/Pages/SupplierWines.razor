@@ -83,12 +83,15 @@ else
 
         (wines, supplierWines) = SupplierWineInteractor.GetBySupplierID(supplierID);
 
+        Log.Information("SupplierWines initialized.");
         base.OnInitialized();
     }
 
     Task ShowModalAddWine()
     {
+        Log.Information("Button <ShowModalAddWine> clicled.");
         addWineModal?.ShowModal();
+
         return Task.CompletedTask;
     }
 }

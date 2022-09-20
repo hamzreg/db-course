@@ -11,6 +11,9 @@ using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 
+using Serilog;
+using Serilog.Core;
+
 void ConfigureServices(IServiceCollection services)
 {
     services.AddTransient<IBonusCardInteractor, BonusCardInteractor>();
@@ -30,15 +33,12 @@ void ConfigureServices(IServiceCollection services)
     services.AddTransient<ISupplierWineRepository, SupplierWineRepository>();
     services.AddSingleton<IUserRepository, UserRepository>();
     services.AddTransient<IWineRepository, WineRepository>();
-
-    // Bad way
-/*    services.AddDbContext<DataBaseContext>(
-        opts =>
-        {
-            opts.UseNpgsql(@"Server=localhost;Port=5432;Database=wine_sales;
-                User ID=postgres;Password=postgres");
-        });*/
 }
+
+Log.Logger = new LoggerConfiguration().
+                 Enrich.FromLogContext().
+                 WriteTo.File(@"log.txt").
+                 CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,18 +61,6 @@ builder.Services.AddDbContext<DataBaseContext>(options => options.UseNpgsql(
 
 
 var app = builder.Build();
-
-// Test db
-/*using (var serviceScope = app.Services.CreateScope())
-{
-    var services = serviceScope.ServiceProvider;
-
-    var myRepository = services.GetRequiredService<IBonusCardRepository>();
-
-    var card = myRepository.GetByID(1);
-    Console.WriteLine(card.Phone);
-}    */
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -84,7 +84,9 @@
 
     public Task ShowModal()
     {
+        Log.Information("updateWineModal showed.");
         updateWineModal.Show();
+
         return Task.CompletedTask;
     }
 
@@ -96,11 +98,15 @@
             {
                 SupplierWineInteractor.UpdateSupplierWine(SupplierWineItem);
 
+                Log.Information("Wine update.");
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await wineValidations.ClearAll();
             }
             catch(SupplierWineException ex)
             {
+                Log.Error("SupplierWineException received.");
+
                 var errorMsg = ex.Message;
 
                 if (errorMsg == "SupplierWine: This supplier doesn't have this wine.")
@@ -154,11 +160,14 @@
 
     private Task HideModal()
     {
+        Log.Information("Button <HideModal> clicked.");
         return updateWineModal.Hide();
     }
 
     private Task DeleteWine()
     {
+        Log.Information("Button <DeleteWine> clicked.");
+
         WineInteractor.DeleteWine(OneWine);
         SupplierWineInteractor.DeleteSupplierWine(SupplierWineItem);
 

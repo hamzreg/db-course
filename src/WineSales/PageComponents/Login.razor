@@ -57,6 +57,7 @@
 
     public void ShowModal()
     {
+        Log.Information("Login showed.");
         loginModal.Show();
     }
 
@@ -68,11 +69,15 @@
             {
                 UserInteractor.SignIn(loginDetails);
 
+                Log.Information("User logged in.");
+
                 NavigationManager.NavigateTo(NavigationManager.Uri, true);
                 await loginValidations.ClearAll();
             }
             catch(UserException ex)
             {
+                Log.Error("UserException received.");
+
                 var errorMsg = ex.Message;
 
                 if (errorMsg == "User: This user doesn't exist.")
@@ -139,6 +144,7 @@
 
     private Task HideModal()
     {
+        Log.Information("Button <HideModal> clicked.");
         return loginModal.Hide();
     }
 }
