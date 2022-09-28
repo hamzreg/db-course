@@ -27,8 +27,7 @@ namespace WineSales.Domain.Interactors
             if (Exist(check.SaleID))
                 throw new CheckException("This check already exists.");
 
-            check.ShiftNumber = new Random().Next(CheckConfig.MinShiftNumber, 
-                                                  CheckConfig.MaxShiftNumber);
+            check.ShiftNumber = CheckConfig.MinShiftNumber;
 
             checkRepository.Create(check);
         }
