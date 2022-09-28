@@ -20,3 +20,6 @@
 go.mod
 go.sum
 *.html
+
+# Log file
+src/WineSales/log.txt
